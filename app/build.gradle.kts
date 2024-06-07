@@ -42,6 +42,12 @@ android {
 dependencies {
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation (libs.logging.interceptor)
+    //koin
+    implementation (libs.koin.android)
 
     // UI layer libraries
     implementation(libs.ui.material)
