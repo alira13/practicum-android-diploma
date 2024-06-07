@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Vacancy Catcher</string>
+    <string name="team_header1">Команда</string>
+    <string name="team_header2">Над приложением \nработали</string>
+    <string name="developer1">Безгласная Ксения Александровна</string>
+    <string name="developer2">Кириллов Родион Александрович</string>
+    <string name="developer3">Куцык Александр Анатольевич</string>
+    <string name="developer4">Манжа Наталья Владимировна</string>
+    <string name="developer5">Сбоев Андрей Васильевич</string>
+    <string name="main">Главное</string>
+    <string name="favorites">Избранное</string>
+    <string name="search_vacancies">Поиск вакансий</string>
 </resources>
