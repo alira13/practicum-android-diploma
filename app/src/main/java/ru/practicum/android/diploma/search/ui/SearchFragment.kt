@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.util.BindingFragment
 
-class SearchFragment: BindingFragment<FragmentSearchBinding>() {
+class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
