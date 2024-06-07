@@ -54,14 +54,14 @@ dependencies {
     // Material Design
     implementation("com.google.android.material:material:1.11.0")
     // KOIN
-    implementation("io.insert-koin:koin-android:3.3.0")
+    //implementation("io.insert-koin:koin-android:3.3.0")
     // MVVM
     implementation("androidx.core:core-ktx:1.12.0")
     // GSON
     implementation("com.google.code.gson:gson:2.10.1")
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.10.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    //implementation("com.squareup.retrofit2:retrofit:2.10.0")
+    //implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // Fragment
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     // Jetpack Navigation Component

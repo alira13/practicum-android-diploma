@@ -1,15 +1,18 @@
-package ru.practicum.android.diploma.data.di
+package ru.practicum.android.diploma.search.data.di
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.data.api.HHApiService
+import ru.practicum.android.diploma.search.data.api.HHApiService
+import ru.practicum.android.diploma.search.data.api.NetworkClient
+import ru.practicum.android.diploma.search.data.network.RetrofitNetworkClient
 
-const val baseUrl = "https://api.hh.ru/"
+const val baseUrl = "http://api.hh.ru/"
 
 val searchRepositoryModule = module {
+
     single<HHApiService> {
         val client = OkHttpClient.Builder().addInterceptor(
             HttpLoggingInterceptor().apply {
@@ -24,5 +27,9 @@ val searchRepositoryModule = module {
             .build()
 
         retrofit.create(HHApiService::class.java)
+    }
+
+    single<NetworkClient> {
+        RetrofitNetworkClient(get())
     }
 }
