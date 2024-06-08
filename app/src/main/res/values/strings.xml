@@ -9,5 +9,11 @@
     <string name="developer5">Сбоев Андрей Васильевич</string>
     <string name="main">Главное</string>
     <string name="favorites">Избранное</string>
+    <string name="vacancy">Вакансия</string>
     <string name="search_vacancies">Поиск вакансий</string>
+    <string name="filter_settings">Настройки фильтрации</string>
+    <string name="filter_location">Выбор места работы</string>
+    <string name="filter_country">Выбор страны</string>
+    <string name="filter_region">Выбор региона</string>
+    <string name="filter_industry">Выбор отрасли</string>
 </resources>

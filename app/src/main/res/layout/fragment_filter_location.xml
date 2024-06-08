@@ -6,36 +6,36 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/s_tv_header"
+        android:id="@+id/fl_tv_header"
         style="@style/MediumTextStyle"
         android:paddingStart="@dimen/spacing_16"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_size_64"
-        android:text="@string/search_vacancies"
+        android:text="@string/filter_location"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/s_tv_testButton1"
+        android:id="@+id/fl_tv_testButton1"
         android:layout_width="160dp"
         android:layout_height="40dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/s_tv_header"
+        app:layout_constraintTop_toBottomOf="@id/fl_tv_header"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="20dp"
         android:background="@color/red"
         android:textColor="@color/white"
-        android:text="тестовая кнопка перехода в фильтры"/>
+        android:text="тестовая кнопка перехода - страна"/>
 
     <TextView
-        android:id="@+id/s_tv_testButton2"
+        android:id="@+id/fl_tv_testButton2"
         android:layout_width="160dp"
         android:layout_height="40dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/s_tv_testButton1"
+        app:layout_constraintTop_toBottomOf="@id/fl_tv_testButton1"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="20dp"
         android:background="@color/red"
         android:textColor="@color/white"
-        android:text="тестовая кнопка перехода к вакансии"/>
+        android:text="тестовая кнопка перехода - регионы"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
