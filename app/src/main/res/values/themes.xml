@@ -11,11 +11,11 @@
     <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />
 
     <style name="SnackbarStyle">
-        <item name="android:padding">@dimen/dimen_4dp</item>
-        <item name="android:radius">@dimen/dimen_12dp</item>
+        <item name="android:padding">@dimen/item_size_4dp</item>
+        <item name="android:radius">@dimen/item_size_12dp</item>
         <item name="android:background">@drawable/background_red_snackbar</item>
-        <item name="android:layout_marginHorizontal">@dimen/dimen_16dp</item>
-        <item name="android:layout_marginVertical">@dimen/dimen_16dp</item>
+        <item name="android:layout_marginHorizontal">@dimen/item_size_16dp</item>
+        <item name="android:layout_marginVertical">@dimen/item_size_16dp</item>
     </style>
 
 </resources>

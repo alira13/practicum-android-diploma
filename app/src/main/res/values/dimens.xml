@@ -4,8 +4,9 @@
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_22">22sp</dimen>
     <dimen name="text_size_32">32sp</dimen>
-    <dimen name="dimen_12dp">12dp</dimen>
-    <dimen name="dimen_4dp">12dp</dimen>
-    <dimen name="dimen_16dp">12dp</dimen>
-    <dimen name="dimen_20dp">12dp</dimen>
+
+    <dimen name="item_size_12dp">12dp</dimen>
+    <dimen name="item_size_4dp">4dp</dimen>
+    <dimen name="item_size_16dp">16dp</dimen>
+    <dimen name="item_size_20dp">20dp</dimen>
 </resources>
