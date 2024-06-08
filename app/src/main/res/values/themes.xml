@@ -1,11 +1,23 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
+  
     <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorOnSecondary">@color/grey</item>
+        <item name="colorAccent">@color/blue</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
-    </style>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="snackbarStyle">@style/SnackbarStyle</item>
+</style>
 
     <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />
+
+    <style name="SnackbarStyle">
+        <item name="android:padding">@dimen/item_size_4dp</item>
+        <item name="android:radius">@dimen/item_size_12dp</item>
+        <item name="android:background">@drawable/background_red_snackbar</item>
+        <item name="android:layout_marginHorizontal">@dimen/item_size_16dp</item>
+        <item name="android:layout_marginVertical">@dimen/item_size_16dp</item>
+    </style>
+
 </resources>
