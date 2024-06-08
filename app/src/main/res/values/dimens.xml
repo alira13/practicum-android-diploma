@@ -9,9 +9,17 @@
     <dimen name="item_size_56">56dp</dimen>
     <dimen name="item_size_64">64dp</dimen>
     <dimen name="item_size_92">92dp</dimen>
+    <dimen name="item_size_36dp">36dp</dimen>
+    <dimen name="item_size_20dp">20dp</dimen>
 
     <dimen name="spacing_8">8dp</dimen>
     <dimen name="spacing_10">10dp</dimen>
     <dimen name="spacing_16">16dp</dimen>
     <dimen name="spacing_24">24dp</dimen>
+    <dimen name="item_size_2dp">2dp</dimen>
+    <dimen name="item_size_12dp">12dp</dimen>
+    <dimen name="item_size_52dp">52dp</dimen>
+    <dimen name="item_size_22dp">22dp</dimen>
+    <dimen name="item_size_32dp">32dp</dimen>
+    <dimen name="item_size_44dp">44dp</dimen>
 </resources>

@@ -10,4 +10,10 @@
     <string name="main">Главное</string>
     <string name="favorites">Избранное</string>
     <string name="search_vacancies">Поиск вакансий</string>
+    <string name="filter_settings">Настройки фильтрации</string>
+    <string name="place_work">Место работы</string>
+    <string name="industry">Отрасль</string>
+    <string name="input_amount">Введите сумму</string>
+    <string name="expecting_salary">Ожидаемая зарплата</string>
+    <string name="dont_show_with_out_salary">Не показывать без зарплаты</string>
 </resources>
