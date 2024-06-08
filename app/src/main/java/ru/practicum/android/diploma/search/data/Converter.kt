@@ -17,23 +17,29 @@ class Converter {
                     name = item.name,
                     area = Area(item.area.id, item.area.name),
                     employer = Employer(item.employer.id, item.employer.name),
-                    salary = if (item.salary != null)
+                    salary = if (item.salary != null) {
                         Salary(
                             item.salary.currency,
                             item.salary.from,
                             item.salary.to
-                        ) else null
+                        )
+                    } else {
+                        null
+                    }
                 )
             },
             found = response.found,
             page = response.page,
             pages = response.pages,
             perPage = response.perPage,
-            suggests = if (response.suggests != null)
+            suggests = if (response.suggests != null) {
                 Suggests(
                     found = response.suggests.found,
                     value = response.suggests.value
-                ) else null
+                )
+            } else {
+                null
+            }
         )
     }
 }
