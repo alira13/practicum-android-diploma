@@ -19,6 +19,6 @@ class App : Application() {
     }
 
     companion object {
-        lateinit var INSTANCE: App
+        var INSTANCE: App? = null
     }
 }
