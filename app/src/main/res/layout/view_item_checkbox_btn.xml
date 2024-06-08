@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/item_value_tv"
+        style="@style/RegularTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:hint="@string/hint_value"
+        android:maxLines="1"
+        android:minHeight="48dp" />
+
+    <CheckBox
+        android:id="@+id/arrow_forward_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:buttonTint="?attr/colorAccent"
+        android:checked="false"
+        android:contentDescription="@string/forward_btn_description" />
+</LinearLayout>
