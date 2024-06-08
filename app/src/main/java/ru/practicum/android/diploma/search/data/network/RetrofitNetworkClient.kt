@@ -4,6 +4,10 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
+import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
+import ru.practicum.android.diploma.search.data.SERVER_ERROR
+import ru.practicum.android.diploma.search.data.SUCCESS
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
 import ru.practicum.android.diploma.search.data.dto.Response
@@ -24,9 +28,7 @@ class RetrofitNetworkClient(
 
         return withContext(Dispatchers.IO) {
             try {
-                val options: HashMap<String, String> = HashMap()
-                options["text"] = dto.expression
-                val response = apiService.searchVacancies(0, options = options)
+                val response = apiService.searchVacancies(dto.page, options = dto.options)
                 response.apply { resultCode = SUCCESS }
             } catch (e: HttpException) {
                 Log.e(TAG, "exception handled $e")
@@ -37,9 +39,5 @@ class RetrofitNetworkClient(
 
     companion object {
         const val TAG = "RetrofitNetworkClient"
-        const val INCORRECT_REQUEST = 400
-        const val SUCCESS = 200
-        const val SERVER_ERROR = 500
-        const val CONNECTION_ERROR = -1
     }
 }
