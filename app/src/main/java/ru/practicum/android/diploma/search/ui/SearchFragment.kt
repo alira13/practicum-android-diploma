@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.search.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
@@ -16,9 +17,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         return FragmentSearchBinding.inflate(inflater, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        /*testNavigation()*/
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        testNavigation()
+
     }
 
     private fun testNavigation() {
@@ -28,6 +32,5 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         binding.sTvTestButton2.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_vacancyFragment)
         }
-
     }
 }
