@@ -4,4 +4,14 @@
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_22">22sp</dimen>
     <dimen name="text_size_32">32sp</dimen>
+
+    <dimen name="item_size_1">1dp</dimen>
+    <dimen name="item_size_56">56dp</dimen>
+    <dimen name="item_size_64">64dp</dimen>
+    <dimen name="item_size_92">92dp</dimen>
+
+    <dimen name="spacing_8">8dp</dimen>
+    <dimen name="spacing_10">10dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_24">24dp</dimen>
 </resources>
