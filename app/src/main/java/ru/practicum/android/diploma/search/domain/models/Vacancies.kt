@@ -5,11 +5,5 @@ data class Vacancies(
     val found: Long,
     val page: Long,
     val pages: Long,
-    val perPage: Long,
-    val suggests: Suggests?
-)
-
-data class Suggests(
-    val found: Int,
-    val value: String
+    val perPage: Long
 )

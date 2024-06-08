@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.search.domain.models
 
+import ru.practicum.android.diploma.search.data.dto.LogoUrls
+
 data class Item(
     val id: String,
     val name: String,
@@ -14,7 +16,8 @@ data class Area(
 )
 data class Employer(
     val id: String,
-    val name: String
+    val name: String,
+    val logoUrls: LogoUrls?
 )
 data class Salary(
     val currency: String,

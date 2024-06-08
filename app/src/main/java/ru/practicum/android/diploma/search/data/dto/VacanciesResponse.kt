@@ -8,12 +8,8 @@ data class VacanciesResponse(
     val page: Long,
     val pages: Long,
     @SerializedName("per_page")
-    val perPage: Long,
-    val suggests: SuggestsDto?
+    val perPage: Long
 ) : Response()
 
-data class SuggestsDto(
-    val found: Int,
-    val value: String
-)
+
 
