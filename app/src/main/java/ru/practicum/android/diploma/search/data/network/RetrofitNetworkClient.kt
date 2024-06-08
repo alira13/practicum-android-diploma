@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.search.data.network
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
 import ru.practicum.android.diploma.search.data.dto.Response
@@ -12,9 +13,8 @@ class RetrofitNetworkClient(
     private val apiService: HHApiService
 ) : NetworkClient {
     override suspend fun doRequest(dto: Any): Response {
-
         if (dto !is VacancySearchRequest) {
-            return Response().apply { resultCode = 400 }
+            return Response().apply { resultCode = BAD_REQUEST }
         }
 
         return withContext(Dispatchers.IO) {
@@ -22,15 +22,18 @@ class RetrofitNetworkClient(
                 val options: HashMap<String, String> = HashMap()
                 options["text"] = dto.expression
                 val response = apiService.searchVacancies(0, options = options)
-                response.apply { resultCode = 200 }
-            } catch (e: Throwable) {
+                response.apply { resultCode = SUCCESS }
+            } catch (e: HttpException) {
                 Log.e(TAG, "exception handled $e")
-                Response().apply { resultCode = 500 }
+                Response().apply { resultCode = SERVER_ERROR }
             }
         }
     }
 
     companion object {
         const val TAG = "RetrofitNetworkClient"
+        const val BAD_REQUEST = 400
+        const val SUCCESS = 200
+        const val SERVER_ERROR = 500
     }
 }
