@@ -51,51 +51,11 @@ data class ItemDto(
         if (javaClass != other?.javaClass) return false
 
         other as ItemDto
-
-        if (acceptIncompleteResumes != other.acceptIncompleteResumes) return false
-        if (acceptTemporary != other.acceptTemporary) return false
-        if (address != other.address) return false
-        if (alternateUrl != other.alternateUrl) return false
-        if (applyAlternateUrl != other.applyAlternateUrl) return false
-        if (archived != other.archived) return false
-        if (area != other.area) return false
-        if (contacts != other.contacts) return false
-        if (createdAt != other.createdAt) return false
-        if (department != other.department) return false
-        if (employer != other.employer) return false
-        if (hasTest != other.hasTest) return false
-        if (id != other.id) return false
-        if (insiderInterview != other.insiderInterview) return false
-        if (metroStations != other.metroStations) return false
-        if (name != other.name) return false
-        if (premium != other.premium) return false
-        if (professionalRoles != other.professionalRoles) return false
-        if (publishedAt != other.publishedAt) return false
-        if (!relations.contentEquals(other.relations)) return false
-
-        return true
+        return relations.contentEquals(other.relations)
     }
 
     override fun hashCode(): Int {
         var result = acceptIncompleteResumes.hashCode()
-        result = 31 * result + (acceptTemporary?.hashCode() ?: 0)
-        result = 31 * result + address.hashCode()
-        result = 31 * result + alternateUrl.hashCode()
-        result = 31 * result + applyAlternateUrl.hashCode()
-        result = 31 * result + (archived?.hashCode() ?: 0)
-        result = 31 * result + area.hashCode()
-        result = 31 * result + contacts.hashCode()
-        result = 31 * result + createdAt.hashCode()
-        result = 31 * result + (department?.hashCode() ?: 0)
-        result = 31 * result + employer.hashCode()
-        result = 31 * result + hasTest.hashCode()
-        result = 31 * result + id.hashCode()
-        result = 31 * result + (insiderInterview?.hashCode() ?: 0)
-        result = 31 * result + metroStations.hashCode()
-        result = 31 * result + name.hashCode()
-        result = 31 * result + (premium?.hashCode() ?: 0)
-        result = 31 * result + professionalRoles.hashCode()
-        result = 31 * result + publishedAt.hashCode()
         result = 31 * result + relations.contentHashCode()
         return result
     }
@@ -120,6 +80,7 @@ data class Snippet(
     val requirement: String?,
     val responsibility: String?
 )
+
 data class Address(
     val building: String?,
     val city: String?,

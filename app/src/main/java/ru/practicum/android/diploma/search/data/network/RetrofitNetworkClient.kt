@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.data.network
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.search.data.api.HHApiService
@@ -9,7 +10,7 @@ import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 
 class RetrofitNetworkClient(
     private val apiService: HHApiService
-): NetworkClient {
+) : NetworkClient {
     override suspend fun doRequest(dto: Any): Response {
 
         if (dto !is VacancySearchRequest) {
@@ -23,8 +24,13 @@ class RetrofitNetworkClient(
                 val response = apiService.searchVacancies(0, options = options)
                 response.apply { resultCode = 200 }
             } catch (e: Throwable) {
+                Log.e(TAG, "exception handled $e")
                 Response().apply { resultCode = 500 }
             }
         }
+    }
+
+    companion object {
+        const val TAG = "RetrofitNetworkClient"
     }
 }

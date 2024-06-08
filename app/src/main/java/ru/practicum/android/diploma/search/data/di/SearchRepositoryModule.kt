@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
 import ru.practicum.android.diploma.search.data.network.RetrofitNetworkClient
 
-const val baseUrl = "https://api.hh.ru/"
+const val BASE_URL = "https://api.hh.ru/"
 
 val searchRepositoryModule = module {
 
@@ -21,7 +21,7 @@ val searchRepositoryModule = module {
         ).build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

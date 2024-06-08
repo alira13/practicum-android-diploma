@@ -18,7 +18,6 @@ interface HHApiService {
     suspend fun searchVacancies(
         @Query("page") page: Int,
         @Query("per_page") perPage: Int = ELEMENTS_COUNT,
-        /*@Query("text") searchField: String*/
         @QueryMap options: Map<String, String>
     ): VacanciesResponse
 }
