@@ -18,7 +18,9 @@ class RetrofitNetworkClient(
 
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.searchVacancies(0, searchField = dto.expression)
+                val options: HashMap<String, String> = HashMap()
+                options["text"] = dto.expression
+                val response = apiService.searchVacancies(0, options = options)
                 response.apply { resultCode = 200 }
             } catch (e: Throwable) {
                 Response().apply { resultCode = 500 }

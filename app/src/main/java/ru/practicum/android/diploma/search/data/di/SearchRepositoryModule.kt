@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
 import ru.practicum.android.diploma.search.data.network.RetrofitNetworkClient
 
-const val baseUrl = "http://api.hh.ru/"
+const val baseUrl = "https://api.hh.ru/"
 
 val searchRepositoryModule = module {
 
