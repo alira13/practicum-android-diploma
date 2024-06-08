@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.data.di
+package ru.practicum.android.diploma.di
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.search.data.network.RetrofitNetworkClient
 
 const val BASE_URL = "https://api.hh.ru/"
 
-val repositoryModule = module {
+val networkClientModule = module {
 
     single<HHApiService> {
         val client = OkHttpClient.Builder().addInterceptor(
