@@ -47,36 +47,35 @@ android {
 dependencies {
 
     // Glide
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("androidx.activity:activity-ktx:1.9.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
+    implementation(libs.material.v1120)
+    implementation(libs.glide)
+    implementation(libs.androidx.activity.ktx)
+    annotationProcessor(libs.compiler)
     // Material Design
-    implementation("com.google.android.material:material:1.11.0")
-    // KOIN
-    implementation("io.insert-koin:koin-android:3.3.0")
+    implementation(libs.material.v1110)
     // MVVM
-    implementation("androidx.core:core-ktx:1.12.0")
-    // GSON
-    implementation("com.google.code.gson:gson:2.10.1")
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.10.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.androidX.core)
     // Fragment
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation(libs.fragment.ktx)
     // Jetpack Navigation Component
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.fragment.ktx)
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.kotlinx.coroutines.android)
     // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
+    // retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    // koin
+    implementation(libs.koin.android)
 
     // UI layer libraries
     implementation(libs.ui.material)
@@ -89,5 +88,6 @@ dependencies {
     // region UI tests
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
+    // endregion
     // endregion
 }
