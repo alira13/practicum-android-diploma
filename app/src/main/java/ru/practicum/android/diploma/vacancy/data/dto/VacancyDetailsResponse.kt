@@ -30,8 +30,12 @@ data class VacancyDetailsResponse(
 
         other as VacancyDetailsResponse
 
-        if (id != other.id) return false
-        if (name != other.name) return false
+        if (id != other.id) {
+            return false
+        }
+        if (name != other.name) {
+            return false
+        }
         if (!keySkills.contentEquals(other.keySkills)) return false
 
         return true
@@ -75,17 +79,31 @@ data class ContactsDto(
     val phones: Array<PhoneDto>?
 ) {
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+        if (this === other) {
+            return true
+        }
+        if (javaClass != other?.javaClass) {
+            return false
+        }
 
         other as ContactsDto
 
-        if (email != other.email) return false
-        if (name != other.name) return false
+        if (email != other.email) {
+            return false
+        }
+        if (name != other.name) {
+            return false
+        }
         if (phones != null) {
-            if (other.phones == null) return false
-            if (!phones.contentEquals(other.phones)) return false
-        } else if (other.phones != null) return false
+            if (other.phones == null) {
+                return false
+            }
+            if (!phones.contentEquals(other.phones)) {
+                return false
+            }
+        } else if (other.phones != null) {
+            return false
+        }
 
         return true
     }
@@ -105,5 +123,3 @@ data class PhoneDto(
     val formatted: String,
     val number: String
 )
-
-

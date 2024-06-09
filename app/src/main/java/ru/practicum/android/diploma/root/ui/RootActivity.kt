@@ -18,8 +18,8 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsRequest
 
 class RootActivity : AppCompatActivity() {
 
-    private val vacancyDetailsInteractor by inject<VacancyDetailsInteractor>()
-    private val searchInteractor by inject<SearchInteractor>()
+    /*private val vacancyDetailsInteractor by inject<VacancyDetailsInteractor>()
+    private val searchInteractor by inject<SearchInteractor>()*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +43,12 @@ class RootActivity : AppCompatActivity() {
             binding.bottomNavigationView.isVisible = isVisible
             binding.line.isVisible = isVisible
         }
-        lifecycleScope.launch {
+        /*lifecycleScope.launch {
             Log.d("RootActivity","details response " +
                 "${vacancyDetailsInteractor.getVacancyDetails(VacancyDetailsRequest(id = "81430574"))}")
             Log.d("RootActivity","search response " +
                 "${searchInteractor.searchVacancies(VacanciesSearchRequest(page = 0, searchString = "разработчик"))}")
-        }
+        }*/
     }
 }
 
