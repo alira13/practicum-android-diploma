@@ -22,8 +22,6 @@ interface HHApiService {
         @Query("per_page") perPage: Int = ELEMENTS_COUNT,
         @QueryMap options: Map<String, String>
     ): VacanciesResponse
-
-
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
         "HH-User-Agent: $APP_NAME"

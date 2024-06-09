@@ -16,25 +16,25 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 class DetailsConverter {
     fun map(response: VacancyDetailsResponse): VacancyDetails {
 
-        val employer = if(response.employer == null) {
+        val employer = if (response.employer == null) {
             null
         } else {
             Employer(response.employer.id, response.employer.name, response.employer.logoUrls)
         }
 
-        val experience = if(response.experience == null) {
+        val experience = if (response.experience == null) {
             null
         } else {
             Experience(response.experience.id, response.experience.name)
         }
 
-        val salary = if(response.salary == null) {
+        val salary = if (response.salary == null) {
             null
         } else {
             Salary(response.salary.currency, response.salary.from, response.salary.to)
         }
 
-        val employment = if(response.employment == null) {
+        val employment = if (response.employment == null) {
             null
         } else {
             Employment(response.employment.id, response.employment.name)

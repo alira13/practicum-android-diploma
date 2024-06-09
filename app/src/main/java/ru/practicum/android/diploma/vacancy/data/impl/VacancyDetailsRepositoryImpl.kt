@@ -19,10 +19,12 @@ class VacancyDetailsRepositoryImpl(
 ) : VacancyDetailsRepository {
     override suspend fun getVacancyDetails(request: VacancyDetailsRequest): Resource<VacancyDetails> {
         val options: HashMap<String, String> = HashMap()
-        if (request.locale.isNotEmpty())
+        if (request.locale.isNotEmpty()) {
             options["locale"] = request.locale
-        if (request.host.isNotEmpty())
+        }
+        if (request.host.isNotEmpty()) {
             options["host"] = request.host
+        }
 
         val response = networkClient.doRequest(
             VacancyDetailsRequestDto(request.id, options)

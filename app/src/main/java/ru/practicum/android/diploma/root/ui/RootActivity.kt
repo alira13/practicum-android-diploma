@@ -44,8 +44,10 @@ class RootActivity : AppCompatActivity() {
             binding.line.isVisible = isVisible
         }
         lifecycleScope.launch {
-            Log.d("RootActivity","details response ${vacancyDetailsInteractor.getVacancyDetails(VacancyDetailsRequest(id = "81430574"))}")
-            Log.d("RootActivity","search response ${searchInteractor.searchVacancies(VacanciesSearchRequest(page = 0, searchString = "разработчик"))}")
+            Log.d("RootActivity","details response " +
+                "${vacancyDetailsInteractor.getVacancyDetails(VacancyDetailsRequest(id = "81430574"))}")
+            Log.d("RootActivity","search response " +
+                "${searchInteractor.searchVacancies(VacanciesSearchRequest(page = 0, searchString = "разработчик"))}")
         }
     }
 }

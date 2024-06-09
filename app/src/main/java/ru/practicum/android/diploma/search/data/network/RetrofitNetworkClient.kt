@@ -25,15 +25,17 @@ class RetrofitNetworkClient(
 
         return withContext(Dispatchers.IO) {
             try {
-                when(dto) {
+                when (dto) {
                     is VacancySearchRequest -> {
                         val response = apiService.searchVacancies(dto.page, options = dto.options)
                         response.apply { resultCode = SUCCESS }
                     }
+
                     is VacancyDetailsRequestDto -> {
                         val response = apiService.getVacancyDetails(dto.id, options = dto.options)
                         response.apply { resultCode = SUCCESS }
                     }
+
                     else -> {
                         Response().apply { resultCode = INCORRECT_REQUEST }
                     }
