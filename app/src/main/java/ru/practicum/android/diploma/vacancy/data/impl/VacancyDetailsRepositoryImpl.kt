@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.vacancy.data.DetailsConverter
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsRequestDto
-import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsResponse
+import ru.practicum.android.diploma.vacancy.data.dto.response.VacancyDetailsResponse
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsRequest
