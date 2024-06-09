@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.search.domain.models.Item
 import ru.practicum.android.diploma.search.domain.models.Salary
 import ru.practicum.android.diploma.search.domain.models.Vacancies
 
-class Converter {
+class VacancyConverter {
     fun map(response: VacanciesResponse): Vacancies {
         return Vacancies(
             items = response.items.map { item ->
