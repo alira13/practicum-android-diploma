@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.search.data
 
-import ru.practicum.android.diploma.search.data.dto.VacanciesResponse
+import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.search.domain.models.Area
 import ru.practicum.android.diploma.search.domain.models.Item
 import ru.practicum.android.diploma.search.domain.models.Vacancies

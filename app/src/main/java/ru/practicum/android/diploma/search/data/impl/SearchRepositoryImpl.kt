@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.search.data.VacancyConverter
 import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
 import ru.practicum.android.diploma.search.data.SUCCESS
 import ru.practicum.android.diploma.search.data.api.NetworkClient
-import ru.practicum.android.diploma.search.data.dto.VacanciesResponse
+import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.search.domain.models.Errors

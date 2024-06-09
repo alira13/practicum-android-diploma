@@ -6,7 +6,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
-import ru.practicum.android.diploma.search.data.dto.VacanciesResponse
+import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.vacancy.data.dto.response.VacancyDetailsResponse
 
 const val APP_NAME = "Vacancy Catcher (n.v.manzha@gmail.com)"

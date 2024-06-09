@@ -1,10 +1,10 @@
 package ru.practicum.android.diploma.vacancy.data.dto.response
 
 import com.google.gson.annotations.SerializedName
-import ru.practicum.android.diploma.search.data.dto.AreaDto
-import ru.practicum.android.diploma.search.data.dto.EmployerDto
-import ru.practicum.android.diploma.search.data.dto.Response
-import ru.practicum.android.diploma.search.data.dto.SalaryDto
+import ru.practicum.android.diploma.search.data.dto.reponse.AreaDto
+import ru.practicum.android.diploma.search.data.dto.reponse.EmployerDto
+import ru.practicum.android.diploma.search.data.dto.reponse.Response
+import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 
 data class VacancyDetailsResponse(
     val id: String,

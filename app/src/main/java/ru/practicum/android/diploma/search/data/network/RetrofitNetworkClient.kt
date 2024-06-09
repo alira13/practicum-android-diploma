@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.search.data.SERVER_ERROR
 import ru.practicum.android.diploma.search.data.SUCCESS
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
-import ru.practicum.android.diploma.search.data.dto.Response
+import ru.practicum.android.diploma.search.data.dto.reponse.Response
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.util.isConnected
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsRequestDto

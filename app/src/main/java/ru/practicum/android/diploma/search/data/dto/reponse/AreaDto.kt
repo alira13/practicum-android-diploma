@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.data.dto
+package ru.practicum.android.diploma.search.data.dto.reponse
 
 data class AreaDto(
     val id: String,
