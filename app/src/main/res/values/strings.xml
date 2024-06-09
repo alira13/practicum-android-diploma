@@ -16,6 +16,7 @@
     <string name="no_internet">Нет интернета</string>
     <string name="cant_get_vacancies">Не удалось получить список вакансий</string>
     <string name="clear_search_btn_description">Кнопка очистки поиска</string>
-    <string name="seacrh_screen_image_btn_description">Картинка главного экрана поиска</string>
+    <string name="search_screen_image_btn_description">Картинка главного экрана поиска</string>
     <string name="search_btn_description">Кнопка поиска</string>
+    <string name="search_image_description">Изображение главного экрана, которое заменяется на картинку ошибки</string>
 </resources>

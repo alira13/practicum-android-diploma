@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary">
@@ -19,8 +20,9 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95" />
 
+    <!--Заголовок Поиск вакансий-->
     <TextView
-        android:id="@+id/ff_tv_header"
+        android:id="@+id/search_header_tv"
         style="@style/MediumTextStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/item_size_64"
@@ -28,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <!--Кнопка фильтра в заголовке-->
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
@@ -36,12 +38,13 @@
         android:background="@null"
         android:contentDescription="@string/filter_image_description"
         android:src="@drawable/ic_filter_off"
-        app:layout_constraintBottom_toBottomOf="@+id/ff_tv_header"
+        app:layout_constraintBottom_toBottomOf="@+id/search_header_tv"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
-        app:layout_constraintTop_toTopOf="@+id/ff_tv_header" />
+        app:layout_constraintTop_toTopOf="@+id/search_header_tv" />
 
+    <!--Поисковый запрос с кнопкой поиска и очистки-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/search_tv_cl"
+        android:id="@+id/search_field_cl"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/spacing_4"
@@ -51,10 +54,10 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/ff_tv_header">
+        app:layout_constraintTop_toBottomOf="@+id/search_header_tv">
 
         <EditText
-            android:id="@+id/search_et"
+            android:id="@+id/search_field_et"
             style="@style/RegularTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -71,20 +74,20 @@
             android:textAppearance="@style/RegularTextStyle"
             android:textColor="@color/black"
             android:textColorHint="?attr/colorOnSecondary"
-            app:layout_constraintEnd_toStartOf="@+id/search_icon_iv"
+            app:layout_constraintEnd_toStartOf="@+id/search_field_icon_iv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/search_icon_iv"
+            android:id="@+id/search_field_icon_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_8"
             android:contentDescription="@string/search_btn_description"
             android:src="@drawable/ic_search"
-            app:layout_constraintBottom_toBottomOf="@+id/search_et"
+            app:layout_constraintBottom_toBottomOf="@+id/search_field_et"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/search_et" />
+            app:layout_constraintTop_toTopOf="@+id/search_field_et" />
 
         <ImageView
             android:id="@+id/clear_search_icon_iv"
@@ -94,13 +97,14 @@
             android:contentDescription="@string/clear_search_btn_description"
             android:src="@drawable/ic_close"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/search_et"
+            app:layout_constraintBottom_toBottomOf="@+id/search_field_et"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/search_et" />
+            app:layout_constraintTop_toTopOf="@+id/search_field_et" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--Надпись Таких вакансий нет-->
     <TextView
-        android:id="@+id/no_vacancies_tv"
+        android:id="@+id/search_result_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_vacancies"
@@ -114,63 +118,56 @@
         android:paddingVertical="4dp"
         android:textColor="@color/white"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/search_tv_cl" />
+        app:layout_constraintTop_toBottomOf="@id/search_field_cl" />
 
-
+    <!-- Изображение главного экрана, которое заменяется на картинку ошибки -->
     <ImageView
-        android:id="@+id/search_image_iv"
+        android:id="@+id/search_picture_iv"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="256dp"
+        android:contentDescription="@string/search_image_description"
+        android:scaleType="fitCenter"
         android:src="@drawable/placeholder_main"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/right_guideline"
-        app:layout_constraintStart_toEndOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/search_tv_cl"
-        android:contentDescription="@string/seacrh_screen_image_btn_description"/>
+        app:layout_constraintBottom_toTopOf="@id/search_picture_text_tv"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintStart_toStartOf="@id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/search_field_cl"
+        app:layout_constraintVertical_chainStyle="packed" />
 
+    <!-- Сообщение об ошибке, при старте поиска будет пустым -->
     <TextView
-        android:id="@+id/internet_error_tv"
+        android:id="@+id/search_picture_text_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:textAlignment="center"
+        android:textAppearance="@style/MediumTextStyle"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintStart_toStartOf="@id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/search_picture_iv"
+        tools:text="Сообщение об ошибке" />
+
+    <!--Список-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_list_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="top|center"
-        android:text="@string/no_internet"
-        android:visibility="gone"
-        app:drawableTopCompat="@drawable/placeholder_internet_error"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/no_vacancies_tv" />
+        app:layout_constraintTop_toBottomOf="@id/search_result_tv" />
 
-    <TextView
-        android:id="@+id/empty_list_error_tv"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="top|center"
-        android:text="@string/cant_get_vacancies"
-        android:visibility="gone"
-        app:drawableTopCompat="@drawable/placeholder_error"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toStartOf="@id/right_guideline"
-        app:layout_constraintStart_toEndOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/no_vacancies_tv" />
-
-    <ScrollView
-        android:id="@+id/scroll_v"
+    <!--Прогресс-бар-->
+    <ProgressBar
+        android:id="@+id/search_progress_pb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@id/right_guideline"
-        app:layout_constraintStart_toEndOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/no_vacancies_tv">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/vacancies_rv"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toStartOf="@id/right_guideline"
-            app:layout_constraintStart_toEndOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@id/no_vacancies_tv" />
-    </ScrollView>
+        android:layout_marginBottom="@dimen/spacing_24"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintStart_toStartOf="@id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/search_list_rv" />
 </androidx.constraintlayout.widget.ConstraintLayout>
