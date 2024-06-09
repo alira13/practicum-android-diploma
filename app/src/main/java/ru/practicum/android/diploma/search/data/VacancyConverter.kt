@@ -1,13 +1,13 @@
 package ru.practicum.android.diploma.search.data
 
-import ru.practicum.android.diploma.search.data.dto.VacanciesResponse
+import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.search.domain.models.Area
-import ru.practicum.android.diploma.search.domain.models.Employer
 import ru.practicum.android.diploma.search.domain.models.Item
-import ru.practicum.android.diploma.search.domain.models.Salary
 import ru.practicum.android.diploma.search.domain.models.Vacancies
+import ru.practicum.android.diploma.vacancy.domain.models.Employer
+import ru.practicum.android.diploma.vacancy.domain.models.Salary
 
-class Converter {
+class VacancyConverter {
     fun map(response: VacanciesResponse): Vacancies {
         return Vacancies(
             items = response.items.map { item ->

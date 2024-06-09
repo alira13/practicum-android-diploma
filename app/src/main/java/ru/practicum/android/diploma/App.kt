@@ -5,6 +5,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import ru.practicum.android.diploma.di.networkClientModule
 import ru.practicum.android.diploma.search.di.searchRepositoryModule
+import ru.practicum.android.diploma.vacancy.di.vacancyDetailsRepositoryModule
 
 class App : Application() {
 
@@ -15,7 +16,8 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 networkClientModule,
-                searchRepositoryModule
+                searchRepositoryModule,
+                vacancyDetailsRepositoryModule
             )
         }
     }
