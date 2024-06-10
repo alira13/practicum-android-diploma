@@ -1,5 +1,5 @@
 package ru.practicum.android.diploma.search.data.network
-// import android.util.Log
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -40,13 +40,8 @@ class RetrofitNetworkClient(
                     }
                 }
             } catch (e: HttpException) {
-//                Log.e(TAG, "exception handled $e")
                 Response().apply { resultCode = SERVER_ERROR }
             }
         }
     }
-
-//    companion object {
-//        const val TAG = "RetrofitNetworkClient"
-//    }
 }
