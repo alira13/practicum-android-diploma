@@ -15,10 +15,10 @@ class App : Application() {
         startKoin {
             androidContext(this@App)
             modules(
+                favoritesModule,
                 networkClientModule,
                 searchRepositoryModule,
 
-                favoritesModule,
             )
         }
     }
