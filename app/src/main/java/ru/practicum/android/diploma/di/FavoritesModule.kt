@@ -7,7 +7,6 @@ import ru.practicum.android.diploma.favorites.data.db.AppDatabase
 
 val favoritesModule = module {
 
-
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .fallbackToDestructiveMigration()
