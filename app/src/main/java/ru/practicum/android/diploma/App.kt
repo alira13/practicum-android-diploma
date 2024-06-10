@@ -17,7 +17,8 @@ class App : Application() {
             modules(
                 networkClientModule,
                 searchRepositoryModule,
-                favoritesModule
+
+                favoritesModule,
             )
         }
     }
