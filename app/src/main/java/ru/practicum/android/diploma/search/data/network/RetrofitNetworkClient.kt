@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.data.network
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -16,10 +15,10 @@ class RetrofitNetworkClient(
 ) : NetworkClient {
     override suspend fun doRequest(dto: Any): Response {
         if (!isConnected()) {
-            return Response().apply { resultCode = CONNECTION_ERROR }
+            Response().apply { resultCode = CONNECTION_ERROR }
         }
 
-        return withContext(Dispatchers.IO) {
+        val response =  withContext(Dispatchers.IO) {
             try {
                 when (dto) {
                     is VacancySearchRequest -> {
@@ -36,15 +35,16 @@ class RetrofitNetworkClient(
                         Response().apply { resultCode = INCORRECT_REQUEST }
                     }
                 }
+
             } catch (e: HttpException) {
-                Log.d(TAG, "exception handled $e")
+                println("exception handled $e")
                 Response().apply { resultCode = SERVER_ERROR }
             }
         }
+        return response
     }
 
     companion object {
-        const val TAG = "RetrofitNetworkClient"
         const val INCORRECT_REQUEST = 400
         const val SUCCESS = 200
         const val SERVER_ERROR = 500
