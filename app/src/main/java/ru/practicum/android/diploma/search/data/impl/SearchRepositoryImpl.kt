@@ -1,8 +1,6 @@
 package ru.practicum.android.diploma.search.data.impl
-import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
+
 import ru.practicum.android.diploma.search.data.VacancyConverter
-import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
-import ru.practicum.android.diploma.search.data.SUCCESS
 import ru.practicum.android.diploma.search.data.api.NetworkClient
 import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
@@ -41,5 +39,11 @@ class SearchRepositoryImpl(
                 Resource.Error(Errors.ServerError)
             }
         }
+    }
+
+    companion object {
+        const val INCORRECT_REQUEST = 400
+        const val SUCCESS = 200
+        const val CONNECTION_ERROR = -1
     }
 }
