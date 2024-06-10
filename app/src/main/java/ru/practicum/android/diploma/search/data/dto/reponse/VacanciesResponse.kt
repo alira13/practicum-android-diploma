@@ -10,6 +10,3 @@ data class VacanciesResponse(
     @SerializedName("per_page")
     val perPage: Long
 ) : Response()
-
-
-
