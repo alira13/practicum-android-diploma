@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.search.data.impl
 
-import ru.practicum.android.diploma.search.data.*
+import ru.practicum.android.diploma.search.data.VacancyConverter
 import ru.practicum.android.diploma.search.data.api.NetworkClient
-import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
+import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.search.domain.models.Vacancies
