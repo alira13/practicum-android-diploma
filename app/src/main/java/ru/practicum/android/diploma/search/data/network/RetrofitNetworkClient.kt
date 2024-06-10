@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.search.data.network
 
-//import android.util.Log
+// import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
