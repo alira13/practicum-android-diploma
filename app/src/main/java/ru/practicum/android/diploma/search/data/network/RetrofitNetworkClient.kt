@@ -5,20 +5,24 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
-import ru.practicum.android.diploma.search.data.dto.reponse.Response
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
+import ru.practicum.android.diploma.search.data.dto.reponse.Response
 import ru.practicum.android.diploma.util.isConnected
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsRequestDto
 
 class RetrofitNetworkClient(
-    private val apiService: HHApiService
+    private val apiService: HHApiService,
 ) : NetworkClient {
     override suspend fun doRequest(dto: Any): Response {
         if (!isConnected()) {
             Response().apply { resultCode = CONNECTION_ERROR }
         }
 
-        val response =  withContext(Dispatchers.IO) {
+        return getResponse(dto)
+    }
+
+    private suspend fun getResponse(dto: Any): Response {
+        return withContext(Dispatchers.IO) {
             try {
                 when (dto) {
                     is VacancySearchRequest -> {
@@ -41,7 +45,6 @@ class RetrofitNetworkClient(
                 Response().apply { resultCode = SERVER_ERROR }
             }
         }
-        return response
     }
 
     companion object {
