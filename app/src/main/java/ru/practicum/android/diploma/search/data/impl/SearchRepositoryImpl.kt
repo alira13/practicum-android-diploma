@@ -1,5 +1,4 @@
 package ru.practicum.android.diploma.search.data.impl
-
 import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
 import ru.practicum.android.diploma.search.data.VacancyConverter
 import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
