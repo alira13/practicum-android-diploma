@@ -16,4 +16,9 @@
     <string name="input_amount">Введите сумму</string>
     <string name="expecting_salary">Ожидаемая зарплата</string>
     <string name="dont_show_with_out_salary">Не показывать без зарплаты</string>
+    <string name="forward_btn_description">Стрелка вперед</string>
+    <string name="hint_value">Значение</string>
+    <string name="multi_string_hint_value">Какое-то очень-очень-очень-очень длинное многострочное значение</string>
+    <string name="radio_btn_description">Радиокнопка</string>
+    <string name="close_btn_description">Закрыть</string>
 </resources>

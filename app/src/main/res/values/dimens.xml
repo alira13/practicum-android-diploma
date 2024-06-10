@@ -22,4 +22,5 @@
     <dimen name="item_size_22dp">22dp</dimen>
     <dimen name="item_size_32dp">32dp</dimen>
     <dimen name="item_size_44dp">44dp</dimen>
+    <dimen name="item_size_4dp">4dp</dimen>
 </resources>
