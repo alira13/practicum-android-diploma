@@ -49,12 +49,11 @@
     <!--Поисковый запрос с кнопкой поиска и очистки-->
     <View
         android:id="@+id/search_field_cl"
+        style="@style/BackgroundSearchRequestStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/item_size_48"
         android:layout_marginVertical="@dimen/spacing_4"
         android:background="@drawable/background_edit_text"
-        android:backgroundTint="@color/grey_light"
-        android:backgroundTintMode="src_over"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/search_header_tv" />
@@ -78,8 +77,8 @@
         android:textColor="@color/black"
         android:textColorHint="?attr/colorOnSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/search_field_cl"
-        app:layout_constraintEnd_toStartOf="@+id/search_header_tv"
-        app:layout_constraintStart_toStartOf="@id/right_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/search_field_icon_iv"
+        app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toTopOf="@id/search_field_cl" />
 
     <!--эта кнопка не используется-->
