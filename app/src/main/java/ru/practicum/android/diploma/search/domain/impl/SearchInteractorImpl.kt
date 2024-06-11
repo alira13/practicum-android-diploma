@@ -2,11 +2,8 @@ package ru.practicum.android.diploma.search.domain.impl
 
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
-import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.search.domain.models.SearchResult
-import ru.practicum.android.diploma.search.domain.models.Vacancies
 import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
-import ru.practicum.android.diploma.util.Resource
 
 class SearchInteractorImpl(
     private val searchRepository: SearchRepository
