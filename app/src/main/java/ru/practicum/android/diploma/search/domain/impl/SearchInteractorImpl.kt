@@ -12,6 +12,8 @@ class SearchInteractorImpl(
     private val searchRepository: SearchRepository
 ) : SearchInteractor {
     override suspend fun searchVacancies(request: VacanciesSearchRequest): SearchResult {
+
+        // временное изменение до подключение конвертера
         /*return when (val resource = searchRepository.searchVacancies(request)) {
             is Resource.Success -> Pair(resource.data, null)
             is Resource.Error -> Pair(null, resource.error)
