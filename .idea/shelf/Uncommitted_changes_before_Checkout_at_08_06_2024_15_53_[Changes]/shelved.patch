@@ -1,0 +1,103 @@
+Index: app/src/main/res/values/styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n\r\n    <style name=\"BaseTextStyle\">\r\n        <item name=\"android:gravity\">center_vertical</item>\r\n    </style>\r\n\r\n    <style name=\"BoldTextStyle\" parent=\"BaseTextStyle\">\r\n        <item name=\"android:fontFamily\">@font/ys_display_bold</item>\r\n        <item name=\"android:textColor\">?attr/colorOnPrimary</item>\r\n        <item name=\"android:textSize\">@dimen/text_size_32</item>\r\n    </style>\r\n\r\n    <style name=\"MediumTextStyle\" parent=\"BaseTextStyle\">\r\n        <item name=\"android:fontFamily\">@font/ys_display_medium</item>\r\n        <item name=\"android:textColor\">?attr/colorOnPrimary</item>\r\n        <item name=\"android:textSize\">@dimen/text_size_22</item>\r\n    </style>\r\n\r\n    <style name=\"RegularTextStyle\" parent=\"BaseTextStyle\">\r\n        <item name=\"android:fontFamily\">@font/ys_display_regular</item>\r\n        <item name=\"android:textColor\">?attr/colorOnPrimary</item>\r\n        <item name=\"android:textSize\">@dimen/text_size_16</item>\r\n    </style>\r\n\r\n    <style name=\"SearchQueryTextStyle\" parent=\"RegularTextStyle\">\r\n        <item name=\"android:textColor\">@color/black</item>\r\n    </style>\r\n\r\n    <style name=\"SearchHintTextStyle\" parent=\"RegularTextStyle\">\r\n        <item name=\"android:textColor\">?attr/colorOnSecondary</item>\r\n    </style>\r\n\r\n    <style name=\"TextDevelopersStyle\" parent=\"MediumTextStyle\">\r\n        <item name=\"android:layout_marginBottom\">@dimen/spacing_16</item>\r\n        <item name=\"android:fontFamily\">@font/ys_display_medium</item>\r\n        <item name=\"android:gravity\">center_vertical</item>\r\n        <item name=\"android:paddingStart\">@dimen/spacing_16</item>\r\n        <item name=\"android:textSize\">@dimen/text_size_16</item>\r\n    </style>\r\n\r\n    <style name=\"BottomNavigationItemStyle\" parent=\"Base.Widget.Material3.BottomNavigationView\">\r\n        <item name=\"itemPaddingTop\">@dimen/spacing_8</item>\r\n        <item name=\"itemPaddingBottom\">@dimen/spacing_10</item>\r\n        <item name=\"android:background\">?attr/colorPrimary</item>\r\n        <item name=\"itemActiveIndicatorStyle\">@style/ItemActiveIndicatorStyle</item>\r\n        <item name=\"itemTextAppearanceActive\">@style/ItemTextAppearanceActiveStyle</item>\r\n        <item name=\"itemTextAppearanceInactive\">@style/ItemTextAppearanceInactiveStyle</item>\r\n        <item name=\"itemIconTint\">@color/item_color</item>\r\n        <item name=\"itemTextColor\">@color/item_color</item>\r\n    </style>\r\n\r\n    <style name=\"ItemTextAppearanceInactiveStyle\">\r\n        <item name=\"itemTextColor\">@color/grey</item>\r\n        <item name=\"fontFamily\">@font/ys_display_regular</item>\r\n        <item name=\"android:textSize\">12sp</item>\r\n        <item name=\"android:textStyle\">normal</item>\r\n    </style>\r\n\r\n    <style name=\"ItemTextAppearanceActiveStyle\" parent=\"ItemTextAppearanceInactiveStyle\">\r\n        <item name=\"itemTextColor\">@color/blue</item>\r\n    </style>\r\n\r\n    <style name=\"ItemActiveIndicatorStyle\">\r\n        <item name=\"itemIconTint\">@color/blue</item>\r\n    </style>\r\n\r\n    <style name=\"ItemInactiveIndicatorStyle\">\r\n        <item name=\"itemIconTint\">@color/grey</item>\r\n    </style>\r\n\r\n</resources>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/styles.xml b/app/src/main/res/values/styles.xml
+--- a/app/src/main/res/values/styles.xml	
++++ b/app/src/main/res/values/styles.xml	
+@@ -31,42 +31,17 @@
+         <item name="android:textColor">?attr/colorOnSecondary</item>
+     </style>
+ 
+-    <style name="TextDevelopersStyle" parent="MediumTextStyle">
+-        <item name="android:layout_marginBottom">@dimen/spacing_16</item>
+-        <item name="android:fontFamily">@font/ys_display_medium</item>
+-        <item name="android:gravity">center_vertical</item>
+-        <item name="android:paddingStart">@dimen/spacing_16</item>
++    <style name="TransparentButtonStyle">
++        <item name="fontFamily">@font/ys_display_medium</item>
+         <item name="android:textSize">@dimen/text_size_16</item>
+-    </style>
+-
+-    <style name="BottomNavigationItemStyle" parent="Base.Widget.Material3.BottomNavigationView">
+-        <item name="itemPaddingTop">@dimen/spacing_8</item>
+-        <item name="itemPaddingBottom">@dimen/spacing_10</item>
+-        <item name="android:background">?attr/colorPrimary</item>
+-        <item name="itemActiveIndicatorStyle">@style/ItemActiveIndicatorStyle</item>
+-        <item name="itemTextAppearanceActive">@style/ItemTextAppearanceActiveStyle</item>
+-        <item name="itemTextAppearanceInactive">@style/ItemTextAppearanceInactiveStyle</item>
+-        <item name="itemIconTint">@color/item_color</item>
+-        <item name="itemTextColor">@color/item_color</item>
+-    </style>
+-
+-    <style name="ItemTextAppearanceInactiveStyle">
+-        <item name="itemTextColor">@color/grey</item>
+-        <item name="fontFamily">@font/ys_display_regular</item>
+-        <item name="android:textSize">12sp</item>
+-        <item name="android:textStyle">normal</item>
+-    </style>
+-
+-    <style name="ItemTextAppearanceActiveStyle" parent="ItemTextAppearanceInactiveStyle">
+-        <item name="itemTextColor">@color/blue</item>
++        <item name="android:gravity">center</item>
++        <item name="android:textColor">@color/red</item>
++        <item name="android:clickable">true</item>
++        <item name="android:padding">20dp</item>
+     </style>
+ 
+-    <style name="ItemActiveIndicatorStyle">
+-        <item name="itemIconTint">@color/blue</item>
+-    </style>
+-
+-    <style name="ItemInactiveIndicatorStyle">
+-        <item name="itemIconTint">@color/grey</item>
++    <style name="BlueButtonStyle" parent="TransparentButtonStyle">
++        <item name="android:textColor">@color/white</item>
+     </style>
+ 
+ </resources>
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># IntelliJ\r\n*.iml\r\n/.idea/caches\r\n/.idea/libraries\r\n/.idea/modules.xml\r\n/.idea/workspace.xml\r\n/.idea/navEditor.xml\r\n/.idea/assetWizardSettings.xml\r\n/.idea/kotlinc.xml\r\n/.idea/gradle.xml\r\n/.idea/compiler.xml\r\n/.idea/misc.xml\r\n\r\n# Gradle files\r\n.gradle/\r\nbuild/\r\nout/\r\n\r\n# Local configuration file (sdk path, etc)\r\nlocal.properties\r\ndevelop.properties\r\n\r\n# Gradle-profiler data\r\nprofile-out*/\r\ngradle-user-home/\r\n*.hprof\r\n\r\n# Android Studio generated files and folders\r\ncaptures/\r\n.externalNativeBuild/\r\n.cxx/\r\noutput.json\r\n\r\n# Built application files\r\n*.apk\r\n*.aar\r\n*.ap_\r\n*.aab\r\n\r\n# Keystore files\r\n*.jks\r\n*.keystore\r\n\r\n# Google Services (e.g. APIs or Firebase)\r\ngoogle-services.json\r\n\r\n# OS specific\r\n.DS_Store\r\n*.log\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.gitignore b/.gitignore
+--- a/.gitignore	
++++ b/.gitignore	
+@@ -47,3 +47,5 @@
+ # OS specific
+ .DS_Store
+ *.log
++
++develop.properties
+Index: app/src/main/res/values/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <dimen name=\"text_size_12\">12sp</dimen>\r\n    <dimen name=\"text_size_16\">16sp</dimen>\r\n    <dimen name=\"text_size_22\">22sp</dimen>\r\n    <dimen name=\"text_size_32\">32sp</dimen>\r\n\r\n    <dimen name=\"item_size_1\">1dp</dimen>\r\n    <dimen name=\"item_size_56\">56dp</dimen>\r\n    <dimen name=\"item_size_64\">64dp</dimen>\r\n    <dimen name=\"item_size_92\">92dp</dimen>\r\n\r\n    <dimen name=\"spacing_8\">8dp</dimen>\r\n    <dimen name=\"spacing_10\">10dp</dimen>\r\n    <dimen name=\"spacing_16\">16dp</dimen>\r\n    <dimen name=\"spacing_24\">24dp</dimen>\r\n</resources>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/dimens.xml b/app/src/main/res/values/dimens.xml
+--- a/app/src/main/res/values/dimens.xml	
++++ b/app/src/main/res/values/dimens.xml	
+@@ -4,14 +4,5 @@
+     <dimen name="text_size_16">16sp</dimen>
+     <dimen name="text_size_22">22sp</dimen>
+     <dimen name="text_size_32">32sp</dimen>
+-
+-    <dimen name="item_size_1">1dp</dimen>
+-    <dimen name="item_size_56">56dp</dimen>
+-    <dimen name="item_size_64">64dp</dimen>
+-    <dimen name="item_size_92">92dp</dimen>
+-
+-    <dimen name="spacing_8">8dp</dimen>
+-    <dimen name="spacing_10">10dp</dimen>
+-    <dimen name="spacing_16">16dp</dimen>
+-    <dimen name="spacing_24">24dp</dimen>
++    <dimen name="dimen_12dp">12dp</dimen>
+ </resources>

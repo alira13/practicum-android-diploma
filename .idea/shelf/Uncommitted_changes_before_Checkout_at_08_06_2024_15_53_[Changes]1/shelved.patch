@@ -1,0 +1,18 @@
+Index: app/src/main/res/values/themes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources xmlns:tools=\"http://schemas.android.com/tools\">\r\n    <!-- Base application theme. -->\r\n    <style name=\"Base.Theme.PracticumAndroidDiploma\" parent=\"Theme.MaterialComponents.DayNight.NoActionBar\">\r\n        <item name=\"colorPrimary\">@color/white</item>\r\n        <item name=\"colorOnPrimary\">@color/black</item>\r\n        <item name=\"colorOnSecondary\">@color/grey</item>\r\n        <item name=\"android:statusBarColor\">?attr/colorPrimary</item>\r\n        <item name=\"android:windowLightStatusBar\">true</item>\r\n    </style>\r\n\r\n    <style name=\"Theme.PracticumAndroidDiploma\" parent=\"Base.Theme.PracticumAndroidDiploma\" />\r\n</resources>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/themes.xml b/app/src/main/res/values/themes.xml
+--- a/app/src/main/res/values/themes.xml	
++++ b/app/src/main/res/values/themes.xml	
+@@ -5,7 +5,6 @@
+         <item name="colorOnPrimary">@color/black</item>
+         <item name="colorOnSecondary">@color/grey</item>
+         <item name="android:statusBarColor">?attr/colorPrimary</item>
+-        <item name="android:windowLightStatusBar">true</item>
+     </style>
+ 
+     <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />

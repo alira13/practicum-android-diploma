@@ -1,14 +1,18 @@
 package ru.practicum.android.diploma.search.data.network
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
+import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
+import ru.practicum.android.diploma.search.data.SERVER_ERROR
+import ru.practicum.android.diploma.search.data.SUCCESS
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
-import ru.practicum.android.diploma.search.data.dto.Response
+import ru.practicum.android.diploma.search.data.dto.reponse.Response
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
 import ru.practicum.android.diploma.util.isConnected
+import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsRequestDto
 
 class RetrofitNetworkClient(
     private val apiService: HHApiService
@@ -18,28 +22,26 @@ class RetrofitNetworkClient(
             return Response().apply { resultCode = CONNECTION_ERROR }
         }
 
-        if (dto !is VacancySearchRequest) {
-            return Response().apply { resultCode = INCORRECT_REQUEST }
-        }
-
         return withContext(Dispatchers.IO) {
             try {
-                val options: HashMap<String, String> = HashMap()
-                options["text"] = dto.expression
-                val response = apiService.searchVacancies(0, options = options)
-                response.apply { resultCode = SUCCESS }
+                when (dto) {
+                    is VacancySearchRequest -> {
+                        val response = apiService.searchVacancies(dto.page, options = dto.options)
+                        response.apply { resultCode = SUCCESS }
+                    }
+
+                    is VacancyDetailsRequestDto -> {
+                        val response = apiService.getVacancyDetails(dto.id, options = dto.options)
+                        response.apply { resultCode = SUCCESS }
+                    }
+
+                    else -> {
+                        Response().apply { resultCode = INCORRECT_REQUEST }
+                    }
+                }
             } catch (e: HttpException) {
-                Log.e(TAG, "exception handled $e")
                 Response().apply { resultCode = SERVER_ERROR }
             }
         }
-    }
-
-    companion object {
-        const val TAG = "RetrofitNetworkClient"
-        const val INCORRECT_REQUEST = 400
-        const val SUCCESS = 200
-        const val SERVER_ERROR = 500
-        const val CONNECTION_ERROR = -1
     }
 }

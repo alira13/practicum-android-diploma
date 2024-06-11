@@ -23,6 +23,12 @@
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
+    <style name="SmallTextStyle" parent="BaseTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
     <style name="SearchQueryTextStyle" parent="RegularTextStyle">
         <item name="android:textColor">@color/black</item>
     </style>
@@ -67,6 +73,21 @@
 
     <style name="ItemInactiveIndicatorStyle">
         <item name="itemIconTint">@color/grey</item>
+    </style>
+
+    <style name="TransparentButtonStyle">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">@dimen/item_size_20dp</item>
+        <item name="android:background">@drawable/background_transparent_button</item>
+    </style>
+
+    <style name="BlueButtonStyle" parent="TransparentButtonStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/background_blue_button</item>
     </style>
 
 </resources>
