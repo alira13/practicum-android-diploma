@@ -5,10 +5,6 @@ sealed interface SearchResult {
         val vacancies: List<VacancyPreview>,
         val count: String
     ) : SearchResult
-
-    data class Error(
-        val error: Errors
-    ) : SearchResult
-
     object EmptyResult : SearchResult
+    data class Error(val error: Errors) : SearchResult
 }
