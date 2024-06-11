@@ -30,4 +30,7 @@
     <string name="multi_string_hint_value">Какое-то очень-очень-очень-очень длинное многострочное значение</string>
     <string name="radio_btn_description">Радиокнопка</string>
     <string name="close_btn_description">Закрыть</string>
+    <string name="salary_is_null">Зарплата не указана</string>
+    <string name="salary_from">от %d %s</string>
+    <string name="salary_from_to">от %d до %d %s</string>
 </resources>
