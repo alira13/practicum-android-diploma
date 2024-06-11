@@ -9,16 +9,14 @@ import ru.practicum.android.diploma.search.ui.models.SearchUiState
 
 class SearchVacanciesViewModel(
     private val searchInteractor: SearchInteractor
-): ViewModel() {
+) : ViewModel() {
 
-private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default)
+    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default)
     val uiState = _uiState.asStateFlow()
 
-    fun onUiEvent(event: SearchUiEvent){
-        when(event){
+    fun onUiEvent(event: SearchUiEvent) {
+        when (event) {
             SearchUiEvent.ClearText -> _uiState.value = SearchUiState.Default
         }
     }
-
-
 }

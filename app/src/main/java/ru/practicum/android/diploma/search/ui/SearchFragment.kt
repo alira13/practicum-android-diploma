@@ -83,7 +83,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         with(binding) {
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
-            searchPictureTextTv.apply{
+            searchPictureTextTv.apply {
                 isVisible = true
                 setText(R.string.no_vacancies)
             }
@@ -94,11 +94,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun onError(error: Errors){
+    private fun onError(error: Errors) {
         with(binding) {
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
-            searchPictureTextTv.apply{
+            searchPictureTextTv.apply {
                 isVisible = true
                 setText(R.string.no_internet)
             }
@@ -109,7 +109,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun showLoading(){
+    private fun showLoading() {
         with(binding) {
             searchListRv.isVisible = false
             searchPictureTextTv.isVisible = false
@@ -119,7 +119,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun setOnClickListeners() {
-        with(binding){
+        with(binding) {
             searchFilterBt.setOnClickListener {
                 findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
             }
