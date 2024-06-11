@@ -26,8 +26,9 @@
         style="@style/MediumTextStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/item_size_64"
+        android:layout_marginEnd="@dimen/spacing_8"
         android:text="@string/search_vacancies"
-        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintEnd_toStartOf="@id/imageButton"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toTopOf="parent" />
     <!--Кнопка фильтра в заголовке-->
@@ -35,9 +36,11 @@
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@null"
         android:contentDescription="@string/filter_image_description"
         android:src="@drawable/ic_filter_off"
+        android:background="@null"
+        android:padding="@dimen/spacing_4"
+        android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="@+id/search_header_tv"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/search_header_tv" />
