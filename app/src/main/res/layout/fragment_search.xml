@@ -34,76 +34,77 @@
     <!--Кнопка фильтра в заголовке-->
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/item_size_48"
+        android:layout_height="@dimen/item_size_48"
         android:contentDescription="@string/filter_image_description"
         android:src="@drawable/ic_filter_off"
         android:background="@null"
         android:padding="@dimen/spacing_4"
+        android:layout_margin="@dimen/spacing_4"
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="@+id/search_header_tv"
-        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/search_header_tv" />
 
     <!--Поисковый запрос с кнопкой поиска и очистки-->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <View
         android:id="@+id/search_field_cl"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/item_size_48"
         android:layout_marginVertical="@dimen/spacing_4"
         android:background="@drawable/background_edit_text"
         android:backgroundTint="@color/grey_light"
         android:backgroundTintMode="src_over"
-        android:orientation="horizontal"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/search_header_tv">
+        app:layout_constraintTop_toBottomOf="@+id/search_header_tv" />
 
-        <EditText
-            android:id="@+id/search_field_et"
-            style="@style/RegularTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/spacing_8"
-            android:autofillHints="name"
-            android:background="@android:color/transparent"
-            android:ellipsize="end"
-            android:hint="@string/enter_request"
-            android:inputType="text"
-            android:maxLength="40"
-            android:maxLines="1"
-            android:minHeight="@dimen/item_size_48"
-            android:singleLine="true"
-            android:textAppearance="@style/RegularTextStyle"
-            android:textColor="@color/black"
-            android:textColorHint="?attr/colorOnSecondary"
-            app:layout_constraintEnd_toStartOf="@+id/search_field_icon_iv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/search_field_et"
+        style="@style/RegularTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_8"
+        android:autofillHints="name"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:hint="@string/enter_request"
+        android:inputType="text"
+        android:maxLength="40"
+        android:maxLines="1"
+        android:minHeight="@dimen/item_size_48"
+        android:singleLine="true"
+        android:textAppearance="@style/RegularTextStyle"
+        android:textColor="@color/black"
+        android:textColorHint="?attr/colorOnSecondary"
+        app:layout_constraintBottom_toBottomOf="@+id/search_field_cl"
+        app:layout_constraintEnd_toStartOf="@+id/search_header_tv"
+        app:layout_constraintStart_toStartOf="@id/right_guideline"
+        app:layout_constraintTop_toTopOf="@id/search_field_cl" />
 
-        <ImageView
-            android:id="@+id/search_field_icon_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_8"
-            android:contentDescription="@string/search_btn_description"
-            android:src="@drawable/ic_search"
-            app:layout_constraintBottom_toBottomOf="@+id/search_field_et"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/search_field_et" />
+    <ImageView
+        android:id="@+id/search_field_icon_iv"
+        android:layout_width="@dimen/item_size_48"
+        android:layout_height="@dimen/item_size_48"
+        android:scaleType="center"
+        android:visibility="visible"
+        android:contentDescription="@string/search_btn_description"
+        android:src="@drawable/ic_search"
+        app:layout_constraintBottom_toBottomOf="@+id/search_field_et"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/search_field_et" />
 
-        <ImageView
-            android:id="@+id/clear_search_icon_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/clear_search_btn_description"
-            android:src="@drawable/ic_close"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/search_field_et"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/search_field_et" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/clear_search_icon_iv"
+        android:layout_width="@dimen/item_size_48"
+        android:layout_height="@dimen/item_size_48"
+        android:scaleType="center"
+        android:contentDescription="@string/clear_search_btn_description"
+        android:src="@drawable/ic_close"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/search_field_et"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/search_field_et" />
 
     <!--Надпись Таких вакансий нет-->
     <TextView
