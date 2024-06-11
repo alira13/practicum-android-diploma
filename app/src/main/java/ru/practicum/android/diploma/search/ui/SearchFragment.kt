@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.search.presentation.SearchVacanciesViewModel
 import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
@@ -20,6 +22,7 @@ import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private val viewModel: SearchVacanciesViewModel by viewModel()
+    private val page: Int? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -47,7 +50,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             SearchUiState.Default -> renderDefaultState()
             SearchUiState.EdittingRequest -> onEdittingRequest()
             SearchUiState.EmptyResult -> showEmptyResult()
-            SearchUiState.Error -> onError()
+            is SearchUiState.Error -> onError(state.error)
             SearchUiState.Loading -> showLoading()
             is SearchUiState.SearchResult -> TODO()
         }
@@ -91,7 +94,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun onError(){
+    private fun onError(error: Errors){
         with(binding) {
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
@@ -124,7 +127,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 viewModel.onUiEvent(SearchUiEvent.ClearText)
             }
         }
+    }
 
+    private fun showToast(message: String) {
+        Toast.makeText(
+            requireContext(),
+            message,
+            Toast.LENGTH_LONG
+        )
+            .show()
     }
 
     // клик на вакансию в списке
