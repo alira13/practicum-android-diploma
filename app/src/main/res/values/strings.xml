@@ -11,6 +11,15 @@
     <string name="favorites">Избранное</string>
     <string name="vacancy">Вакансия</string>
     <string name="search_vacancies">Поиск вакансий</string>
+    <string name="filter_image_description">Кнопка фильтра</string>
+    <string name="enter_request">Введите запрос</string>
+    <string name="no_vacancies">Таких вакансий нет</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="cant_get_vacancies">Не удалось получить список вакансий</string>
+    <string name="clear_search_btn_description">Кнопка очистки поиска</string>
+    <string name="search_screen_image_btn_description">Картинка главного экрана поиска</string>
+    <string name="search_btn_description">Кнопка поиска</string>
+    <string name="search_image_description">Изображение главного экрана, которое заменяется на картинку ошибки</string>
     <string name="filter_settings">Настройки фильтрации</string>
     <string name="filter_location">Выбор места работы</string>
     <string name="filter_country">Выбор страны</string>
