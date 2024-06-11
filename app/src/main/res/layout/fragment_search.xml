@@ -181,7 +181,7 @@
         android:layout_width="160dp"
         android:layout_height="40dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/s_tv_header"
+        app:layout_constraintTop_toBottomOf="@id/search_field_cl"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="20dp"
         android:background="@color/red"
