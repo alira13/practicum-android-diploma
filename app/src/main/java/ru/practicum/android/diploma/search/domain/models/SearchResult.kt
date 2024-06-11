@@ -8,7 +8,7 @@ sealed interface SearchResult {
 
     data class Error(
         val error: Errors
-    ): SearchResult
+    ) : SearchResult
 
-    object EmptyResult: SearchResult
+    object EmptyResult : SearchResult
 }
