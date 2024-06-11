@@ -28,12 +28,12 @@
         android:layout_height="@dimen/item_size_64"
         android:layout_marginEnd="@dimen/spacing_8"
         android:text="@string/search_vacancies"
-        app:layout_constraintEnd_toStartOf="@id/imageButton"
+        app:layout_constraintEnd_toStartOf="@id/search_filter_bt"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toTopOf="parent" />
     <!--Кнопка фильтра в заголовке-->
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/search_filter_bt"
         android:layout_width="@dimen/item_size_48"
         android:layout_height="@dimen/item_size_48"
         android:layout_margin="@dimen/spacing_4"
@@ -82,6 +82,7 @@
         app:layout_constraintStart_toStartOf="@id/right_guideline"
         app:layout_constraintTop_toTopOf="@id/search_field_cl" />
 
+    <!--эта кнопка не используется-->
     <ImageView
         android:id="@+id/search_field_icon_iv"
         android:layout_width="@dimen/item_size_48"
@@ -94,6 +95,7 @@
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/search_field_et" />
 
+    <!--у этой меняется ресурсное изображение-->
     <ImageView
         android:id="@+id/clear_search_icon_iv"
         android:layout_width="@dimen/item_size_48"
@@ -147,7 +149,7 @@
         android:layout_marginTop="@dimen/spacing_8"
         android:textAlignment="center"
         android:textAppearance="@style/MediumTextStyle"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
@@ -157,8 +159,8 @@
     <!--Список-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_list_rv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
@@ -184,18 +186,6 @@
         app:layout_constraintTop_toBottomOf="@+id/search_list_rv" />
 
     <TextView
-        android:id="@+id/s_tv_testButton1"
-        android:layout_width="160dp"
-        android:layout_height="40dp"
-        android:layout_margin="20dp"
-        android:background="@color/red"
-        android:gravity="center"
-        android:text="тестовая кнопка перехода в фильтры"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_field_cl" />
-
-    <TextView
         android:id="@+id/s_tv_testButton2"
         android:layout_width="160dp"
         android:layout_height="40dp"
@@ -205,5 +195,6 @@
         android:text="тестовая кнопка перехода к вакансии"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/s_tv_testButton1" />
+        app:layout_constraintTop_toTopOf="@id/search_field_et"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
