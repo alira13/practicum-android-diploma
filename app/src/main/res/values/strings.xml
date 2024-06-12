@@ -21,4 +21,9 @@
     <string name="multi_string_hint_value">Какое-то очень-очень-очень-очень длинное многострочное значение</string>
     <string name="radio_btn_description">Радиокнопка</string>
     <string name="close_btn_description">Закрыть</string>
+    <string name="place_work">Место работы</string>
+    <string name="industry">Отрасль</string>
+    <string name="input_amount">Введите сумму</string>
+    <string name="expecting_salary">Ожидаемая зарплата</string>
+    <string name="dont_show_with_out_salary">Не показывать без зарплаты</string>
 </resources>
