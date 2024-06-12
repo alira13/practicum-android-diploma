@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,7 +52,6 @@ class SearchVacanciesViewModel(
     }
 
     private fun search(searchRequest: String) {
-        Log.d("QQQ", "search ($lastSearchRequest) страница $pageToRequest")
         viewModelScope.launch {
             _uiState.value = SearchUiState.Loading
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))

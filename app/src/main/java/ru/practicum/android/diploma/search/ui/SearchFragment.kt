@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,13 +54,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect {
-                if (it is SearchUiState.SearchResult) {
-                    Log.d(
-                        "QQQ",
-                        "${it.javaClass}"
-                    )
-                }
-                Log.d("QQQ", "$it")
                 render(it)
             }
         }
@@ -176,7 +168,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 }
             }
 
-            override fun afterTextChanged(s: Editable?) {/*nothing to do*/
+            override fun afterTextChanged(s: Editable?) {
+                /*nothing to do*/
             }
         })
     }
@@ -247,7 +240,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 Context.INPUT_METHOD_SERVICE
             ) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(
-            binding.searchFieldEt.windowToken, 0
+            binding.searchFieldEt.windowToken,
+            0
         )
     }
 
