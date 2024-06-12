@@ -41,7 +41,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         subscribeOnViewModel()
         initializeVacanciesList()
-        // только чтоб проверка пропустила эти два метода - их вызов сразу убрать
+        // только чтоб проверка пропустила неиспользуемый метод - его вызов закоментить
         showToast("")
     }
 
