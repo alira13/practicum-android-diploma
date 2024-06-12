@@ -189,19 +189,21 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchPictureIv.isVisible = false
         }
 
-        binding.searchListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+        with(binding) {
+            searchListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
 
-                if (dy > 0) {
-                    val pos = (binding.searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    val itemsCount = vacanciesAdapter.itemCount
-                    if (pos >= itemsCount - 1) {
-                        viewModel.onLastItemReached(result.page, result.pages)
+                    if (dy > 0) {
+                        val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                        val itemsCount = vacanciesAdapter.itemCount
+                        if (pos >= itemsCount - 1) {
+                            viewModel.onLastItemReached(result.page, result.pages)
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
 
     private fun showToast(message: String) {
