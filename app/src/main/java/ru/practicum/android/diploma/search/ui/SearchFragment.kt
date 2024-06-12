@@ -7,13 +7,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.models.Errors
-import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.presentation.SearchVacanciesViewModel
 import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
@@ -94,7 +93,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         with(binding) {
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
-            searchResultTv.apply{
+            searchResultTv.apply {
                 setText(R.string.no_vacancies)
                 isVisible = true
             }
@@ -144,7 +143,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun initializeVacanciesList(){
+    private fun initializeVacanciesList() {
         vacanciesAdapter.vacancies = emptyList()
         binding.searchListRv.adapter = vacanciesAdapter
     }
@@ -160,8 +159,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun showSearchResult(result: SearchUiState.SearchResult){
-        with(binding){
+    private fun showSearchResult(result: SearchUiState.SearchResult) {
+        with(binding) {
             vacanciesAdapter.vacancies = result.vacancies
             searchListRv.apply {
                 adapter?.notifyDataSetChanged()

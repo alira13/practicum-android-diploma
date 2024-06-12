@@ -8,9 +8,9 @@ import ru.practicum.android.diploma.search.domain.models.VacancyPreview
 
 class VacanciesAdapter(
     private var onItemClickListener: ((VacancyPreview) -> Unit)
-): RecyclerView.Adapter<VacanciesViewHolder>() {
+) : RecyclerView.Adapter<VacanciesViewHolder>() {
 
-    lateinit var vacancies: List<VacancyPreview>
+    var vacancies = listOf<VacancyPreview>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacanciesViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)

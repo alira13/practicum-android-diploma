@@ -36,8 +36,11 @@ class SearchVacanciesViewModel(
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(1, "android"))
             _uiState.value = when (result) {
                 is SearchResult.Error -> SearchUiState.Error(result.error)
-                is SearchResult.SearchContent -> if (result.count == 0L) SearchUiState.EmptyResult else
+                is SearchResult.SearchContent -> if (result.count == 0L) {
+                    SearchUiState.EmptyResult
+                } else {
                     SearchUiState.SearchResult(result.vacancies, convert(result.count))
+                }
             }
         }
     }
