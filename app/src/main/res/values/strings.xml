@@ -45,4 +45,7 @@
     <string name="phone_title_text">Телефон</string>
     <string name="comment_title_text">Комментарий</string>
     <string name="empty_list">Список пуст</string>
+    <string name="vacancy_salary_text_full">от %1$s до %2$s %3$s</string>
+    <string name="vacancy_salary_text_from">от %1$s %2$s</string>
+    <string name="vacansy_salary_text_to">до %1$s %2$s</string>
 </resources>

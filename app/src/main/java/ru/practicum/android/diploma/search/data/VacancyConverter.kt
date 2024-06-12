@@ -33,13 +33,13 @@ class VacancyConverter(
 
     private fun parseSalary(salary: SalaryDto?): String {
         if (salary != null) {
-            return if (salary.to.toInt() == 0) {
+            return if (salary.to?.toInt() == 0) {
                 String.format(
                     context.getString(R.string.salary_from),
                     salary.from,
                     currencyEnd(salary.currency)
                 )
-            } else if (salary.from.toInt() == 0) {
+            } else if (salary.from?.toInt() == 0) {
                 String.format(
                     context.getString(R.string.salary_to),
                     salary.to,
@@ -58,13 +58,14 @@ class VacancyConverter(
         }
     }
 
-    private fun currencyEnd(currency: String): String {
+    private fun currencyEnd(currency: String?): String? {
         return when (currency) {
             RUR -> "₽"
             USD -> "$"
             EUR -> "€"
             KZT -> "₸"
             KGS -> "с"
+            null -> null
             else -> currency
         }
     }
