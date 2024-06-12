@@ -4,13 +4,8 @@ import android.content.Context
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
-import ru.practicum.android.diploma.search.domain.models.Area
-import ru.practicum.android.diploma.search.domain.models.Item
 import ru.practicum.android.diploma.search.domain.models.SearchResult
-import ru.practicum.android.diploma.search.domain.models.Vacancies
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
-import ru.practicum.android.diploma.vacancy.domain.models.Employer
-import ru.practicum.android.diploma.vacancy.domain.models.Salary
 
 class VacancyConverter(
     private val context: Context
@@ -21,7 +16,7 @@ class VacancyConverter(
                 VacancyPreview(
                     id = item.id,
                     iconUrl = if (item.employer.logoUrls != null) {
-                        item.employer.logoUrls.px90
+                        item.employer.logoUrls.px240
                     } else {
                         null
                     },
@@ -36,10 +31,16 @@ class VacancyConverter(
 
     private fun parseSalary(salary: SalaryDto?): String {
         if (salary != null) {
-            return if (salary.to == null) {
+            return if (salary.to.toInt() == 0) {
                 String.format(
                     context.getString(R.string.salary_from),
                     salary.from,
+                    currencyEnd(salary.currency)
+                )
+            } else if (salary.from.toInt() == 0) {
+                String.format(
+                    context.getString(R.string.salary_to),
+                    salary.to,
                     currencyEnd(salary.currency)
                 )
             } else {
@@ -60,6 +61,8 @@ class VacancyConverter(
             RUR -> "₽"
             USD -> "$"
             EUR -> "€"
+            KZT -> "₸"
+            KGS -> "с"
             else -> currency
         }
     }
@@ -68,5 +71,7 @@ class VacancyConverter(
         private const val RUR = "RUR"
         private const val USD = "USD"
         private const val EUR = "EUR"
+        private const val KZT = "KZT"
+        private const val KGS = "KGS"
     }
 }
