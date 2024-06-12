@@ -73,7 +73,7 @@ class SearchVacanciesViewModel(
         maxPage: Int
     ) {
         viewModelScope.launch {
-            if ((currentPage < maxPage) && isNextPageLoading) {
+            if (currentPage < maxPage && isNextPageLoading) {
                 nextPage = currentPage + 1
                 search()
                 isNextPageLoading = false

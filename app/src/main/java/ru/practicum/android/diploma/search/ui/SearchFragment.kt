@@ -196,7 +196,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 if (dy > 0) {
                     val pos = (binding.searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacanciesAdapter.itemCount
-                    if (pos >= itemsCount-1) {
+                    if (pos >= itemsCount - 1) {
                         viewModel.onLastItemReached(result.page, result.pages)
                     }
                 }
