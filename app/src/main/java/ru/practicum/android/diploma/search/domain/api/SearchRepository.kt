@@ -6,5 +6,5 @@ import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
 import ru.practicum.android.diploma.util.Resource
 
 interface SearchRepository {
-    suspend fun searchVacancies(request: VacanciesSearchRequest): Resource<SearchResult>
+    suspend fun searchVacancies(request: VacanciesSearchRequest): SearchResult
 }
