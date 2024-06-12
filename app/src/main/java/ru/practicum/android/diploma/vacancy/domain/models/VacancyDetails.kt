@@ -17,4 +17,3 @@ data class VacancyDetails(
     val professionalRoles: List<Role>,
     val contacts: Contacts?
 )
-
