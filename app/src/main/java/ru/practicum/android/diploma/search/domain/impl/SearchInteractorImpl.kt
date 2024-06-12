@@ -14,6 +14,6 @@ class SearchInteractorImpl(
             is Resource.Success -> Pair(resource.data, null)
             is Resource.Error -> Pair(null, resource.error)
         }*/
-        return SearchResult.EmptyResult
+        return searchRepository.searchVacancies(request)
     }
 }

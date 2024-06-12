@@ -7,7 +7,10 @@ sealed interface SearchUiState {
     object Default : SearchUiState
     object EdittingRequest : SearchUiState
     object Loading : SearchUiState
-    data class SearchResult(val vacancies: List<VacancyPreview>) : SearchUiState
+    data class SearchResult(
+        val vacancies: List<VacancyPreview>,
+        val count: String
+    ) : SearchUiState
     object EmptyResult : SearchUiState
     data class Error(val error: Errors) : SearchUiState
 }

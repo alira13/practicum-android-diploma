@@ -30,7 +30,7 @@ class VacancyConverter(
                     salary = parseSalary(item.salary)
                 )
             },
-            count = response.found.toString()
+            count = response.found
         )
     }
 
