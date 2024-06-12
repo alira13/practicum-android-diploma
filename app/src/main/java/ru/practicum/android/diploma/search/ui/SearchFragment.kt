@@ -1,11 +1,15 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -26,7 +30,6 @@ import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private val viewModel: SearchVacanciesViewModel by viewModel()
-    private val page: Int? = null
     private val vacanciesAdapter: VacanciesAdapter by lazy {
         VacanciesAdapter { vacancy ->
             toVacancyFullInfo(vacancy.id)
@@ -53,6 +56,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect {
+                if (it is SearchUiState.SearchResult)Log.d(
+                    "QQQ",
+                    "${it.javaClass} // ${it.page} из ${it.pages}")
+                Log.d("QQQ", "$it")
                 render(it)
             }
         }
@@ -191,11 +198,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun showSearchResult(result: SearchUiState.SearchResult) {
         with(binding) {
+            hideKeyboard()
             vacanciesAdapter.vacancies = result.vacancies
             searchListRv.apply {
                 adapter?.notifyDataSetChanged()
                 isVisible = true
-                smoothScrollToPosition(0)
+                /*smoothScrollToPosition(0)*/
             }
             searchResultTv.apply {
                 text = result.count
@@ -204,9 +212,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchProgressPb.isVisible = true
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
-        }
-
-        with(binding) {
             searchListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -215,7 +220,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                         val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                         val itemsCount = vacanciesAdapter.itemCount
                         if (pos >= itemsCount - 1) {
-                            viewModel.onLastItemReached(result.page, result.pages)
+                            viewModel.onUiEvent(
+                                SearchUiEvent.LastItemReached(result.page, result.pages)
+                            )
                         }
                     }
                 }
@@ -229,6 +236,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             message,
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(
+            binding.searchFieldEt.windowToken, 0)
     }
 
     private fun toVacancyFullInfo(vacancyID: String) {

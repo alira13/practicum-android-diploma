@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -19,7 +19,6 @@ class SearchVacanciesViewModel(
 ) : ViewModel() {
 
 
-
     private var nextPage = 0
     private var totalVacansiesList: MutableList<VacancyPreview> = mutableListOf()
     private var isNextPageLoading: Boolean = false
@@ -27,9 +26,7 @@ class SearchVacanciesViewModel(
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default)
     val uiState = _uiState.asStateFlow()
 
-    private val page = 1
-    private val lastSearchRequest: String? = null
-    private var searchJob: Job? = null
+    private var lastSearchRequest: String? = null
     private val searchDebounce = debounce<String>(
         delayMillis = SEARCH_DEBOUNCE_DELAY_MILLIS,
         coroutineScope = viewModelScope,
@@ -42,23 +39,26 @@ class SearchVacanciesViewModel(
         when (event) {
             SearchUiEvent.ClearText -> _uiState.value = SearchUiState.Default
             is SearchUiEvent.QueryInput -> onQueryInput(event.s)
+            is SearchUiEvent.LastItemReached -> onLastItemReached(
+                event.currentPage,
+                event.maxPage
+            )
         }
     }
 
-    private fun onQueryInput(s: CharSequence?){
-        if(!s.isNullOrEmpty()){
-            searchDebounce(s.toString())
-        }
-        else {
-            _uiState.value = SearchUiState.Default
+    private fun onQueryInput(s: CharSequence?) {
+        if (!s.isNullOrEmpty()) {
+            _uiState.value = SearchUiState.EditingRequest
+            lastSearchRequest = s.toString()
+            searchDebounce(lastSearchRequest!!)
         }
     }
 
-    // тестовый метод поиска
-    private fun search(expression: String) {
+    private fun search(searchRequest: String) {
+        Log.d("QQQ", "search ($lastSearchRequest)")
         viewModelScope.launch {
             _uiState.value = SearchUiState.Loading
-            val result = searchInteractor.searchVacancies(VacanciesSearchRequest(nextPage, "заполярье сочи"))
+            val result = searchInteractor.searchVacancies(VacanciesSearchRequest(nextPage, searchRequest))
             isNextPageLoading = true
             _uiState.value = when (result) {
                 is SearchResult.Error -> SearchUiState.Error(result.error)
@@ -72,8 +72,6 @@ class SearchVacanciesViewModel(
                         result.pages
                     )
                 }
-
-                SearchResult.EmptyResult -> TODO()
             }
         }
     }
@@ -88,21 +86,20 @@ class SearchVacanciesViewModel(
         return totalVacansiesList
     }
 
-    fun onLastItemReached(
+    private fun onLastItemReached(
         currentPage: Int,
         maxPage: Int
     ) {
         viewModelScope.launch {
             if (currentPage < maxPage && isNextPageLoading) {
                 nextPage = currentPage + 1
-                search()
+                search(lastSearchRequest!!)
                 isNextPageLoading = false
             } else {
                 _uiState.value = SearchUiState.FullLoaded
             }
         }
     }
-}
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
