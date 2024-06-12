@@ -99,7 +99,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
             }
         }
     }
-    
+
     private fun initializeFavoritesList() {
         vacanciesAdapter.vacancies = emptyList()
         binding.favRvVacancies.adapter = vacanciesAdapter
