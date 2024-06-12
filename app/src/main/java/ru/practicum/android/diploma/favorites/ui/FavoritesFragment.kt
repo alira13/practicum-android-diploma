@@ -41,7 +41,9 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
     private fun render(state: FavoritesUiState) {
         when (state) {
             is FavoritesUiState.Content -> showFavoriteVacancies(state.list)
+
             FavoritesUiState.Default -> renderDefaultState()
+
             FavoritesUiState.Empty -> showPlaceholder(
                 R.drawable.placeholder_favorites_empty,
                 R.string.empty_list
@@ -71,7 +73,6 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
             favPlaceholderIcon.isVisible = false
             favPlaceholderMessage.isVisible = false
         }
-
     }
 
     private fun showPlaceholder(
@@ -98,5 +99,4 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
             }
         binding.favRvVacancies.adapter = vacanciesAdapter
     }
-
 }

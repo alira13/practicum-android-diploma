@@ -20,100 +20,101 @@ class FavoritesViewModel : ViewModel() {
                 delay(1000L)
                 _uiState.value = FavoritesUiState.Empty
                 delay(1000L)
-                _uiState.value = FavoritesUiState.Default
-                delay(1000L)
                 _uiState.value = FavoritesUiState.Failure
                 delay(1000L)
                 _uiState.value = FavoritesUiState.Content(
-                    listOf(
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Мегамозг, возраст 25 лет, опыт 15",
-                            "Сказошный наниматель",
-                            "ну где-то около 20 000 руб."
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Аниматор для панд, Пекин",
-                            "Зоопарк",
-                            "15 бамбуковых листьев"
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Тестировщик матрасов, Сонвиль",
-                            "Матрасофф и Ко",
-                            "5 подушек в месяц"
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Упаковщик бананов",
-                            "ДельЭквадор",
-                            "з/п в бананах, оптом"
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Мегамозг, возраст 25 лет, опыт 15",
-                            "Сказошный наниматель",
-                            "ну где-то около 20 000 руб."
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Аниматор для панд, Пекин",
-                            "Зоопарк",
-                            "15 бамбуковых листьев"
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Тестировщик матрасов, Сонвиль",
-                            "Матрасофф и Ко",
-                            "5 подушек в месяц"
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Упаковщик бананов",
-                            "ДельЭквадор",
-                            "з/п в бананах, оптом"
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Мегамозг, возраст 25 лет, опыт 15",
-                            "Сказошный наниматель",
-                            "ну где-то около 20 000 руб."
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Аниматор для панд, Пекин",
-                            "Зоопарк",
-                            "15 бамбуковых листьев"
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Тестировщик матрасов, Сонвиль",
-                            "Матрасофф и Ко",
-                            "5 подушек в месяц"
-                        ),
-                        VacancyPreview(
-                            null.toString(),
-                            null,
-                            "Упаковщик бананов",
-                            "ДельЭквадор",
-                            "з/п в бананах, оптом"
-                        ),
-                    )
-                )
+                getFavList())
                 delay(10000L)
             }
         }
+    }
+
+    private fun getFavList():List<VacancyPreview>{
+        return listOf(
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Мегамозг, возраст 25 лет, опыт 15",
+                "Сказошный наниматель",
+                "ну где-то около 20 000 руб."
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Аниматор для панд, Пекин",
+                "Зоопарк",
+                "15 бамбуковых листьев"
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Тестировщик матрасов, Сонвиль",
+                "Матрасофф и Ко",
+                "5 подушек в месяц"
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Упаковщик бананов",
+                "ДельЭквадор",
+                "з/п в бананах, оптом"
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Мегамозг, возраст 25 лет, опыт 15",
+                "Сказошный наниматель",
+                "ну где-то около 20 000 руб."
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Аниматор для панд, Пекин",
+                "Зоопарк",
+                "15 бамбуковых листьев"
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Тестировщик матрасов, Сонвиль",
+                "Матрасофф и Ко",
+                "5 подушек в месяц"
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Упаковщик бананов",
+                "ДельЭквадор",
+                "з/п в бананах, оптом"
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Мегамозг, возраст 25 лет, опыт 15",
+                "Сказошный наниматель",
+                "ну где-то около 20 000 руб."
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Аниматор для панд, Пекин",
+                "Зоопарк",
+                "15 бамбуковых листьев"
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Тестировщик матрасов, Сонвиль",
+                "Матрасофф и Ко",
+                "5 подушек в месяц"
+            ),
+            VacancyPreview(
+                null.toString(),
+                null,
+                "Упаковщик бананов",
+                "ДельЭквадор",
+                "з/п в бананах, оптом"
+            )
+        )
     }
 }
