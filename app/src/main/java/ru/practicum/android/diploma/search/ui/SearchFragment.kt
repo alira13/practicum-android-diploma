@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.models.Errors
@@ -23,6 +23,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private val viewModel: SearchVacanciesViewModel by viewModel()
     private val page: Int? = null
+    private val vacanciesAdapter: VacanciesAdapter by lazy {
+        VacanciesAdapter { vacancy ->
+            toVacancyFullInfo(vacancy.id)
+        }
+    }
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -35,9 +40,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
         subscribeOnViewModel()
-        // только чтоб проверка пропустила эти два метода - их вызов сразу убрать
+        initializeVacanciesList()
+        // только чтоб проверка пропустила неиспользуемый метод - его вызов закоментить
         showToast("")
-        toVacancyFullInfo("10")
     }
 
     private fun subscribeOnViewModel() {
@@ -55,12 +60,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             SearchUiState.EmptyResult -> showEmptyResult()
             is SearchUiState.Error -> onError(state.error)
             SearchUiState.Loading -> showLoading()
-            is SearchUiState.SearchResult -> TODO()
+            is SearchUiState.SearchResult -> showSearchResult(state)
         }
     }
 
     private fun renderDefaultState() {
         with(binding) {
+            searchResultTv.isVisible = false
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
             searchPictureTextTv.isVisible = false
@@ -74,6 +80,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun onEditingRequest() {
         with(binding) {
+            searchResultTv.isVisible = false
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
             searchPictureTextTv.isVisible = false
@@ -86,6 +93,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         with(binding) {
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
+            searchResultTv.apply {
+                setText(R.string.no_vacancies)
+                isVisible = true
+            }
             searchPictureTextTv.apply {
                 isVisible = true
                 setText(R.string.no_vacancies)
@@ -99,6 +110,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun onError(error: Errors) {
         with(binding) {
+            searchResultTv.isVisible = false
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
             searchPictureIv.apply {
@@ -123,11 +135,17 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun showLoading() {
         with(binding) {
+            searchResultTv.isVisible = false
             searchListRv.isVisible = false
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
             searchProgressPb.isVisible = true
         }
+    }
+
+    private fun initializeVacanciesList() {
+        vacanciesAdapter.vacancies = emptyList()
+        binding.searchListRv.adapter = vacanciesAdapter
     }
 
     private fun setOnClickListeners() {
@@ -141,6 +159,24 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
+    private fun showSearchResult(result: SearchUiState.SearchResult) {
+        with(binding) {
+            vacanciesAdapter.vacancies = result.vacancies
+            searchListRv.apply {
+                adapter?.notifyDataSetChanged()
+                isVisible = true
+                smoothScrollToPosition(0)
+            }
+            searchResultTv.apply {
+                text = result.count
+                isVisible = true
+            }
+            searchProgressPb.isVisible = false
+            searchPictureTextTv.isVisible = false
+            searchPictureIv.isVisible = false
+        }
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(
             requireContext(),
@@ -149,7 +185,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         ).show()
     }
 
-    // клик на вакансию в списке
     private fun toVacancyFullInfo(vacancyID: String) {
         findNavController().navigate(
             R.id.action_searchFragment_to_vacancyFragment,
