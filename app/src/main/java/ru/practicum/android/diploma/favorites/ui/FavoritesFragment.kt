@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -15,11 +16,18 @@ import ru.practicum.android.diploma.favorites.presentation.FavoritesViewModel
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
 import ru.practicum.android.diploma.search.ui.VacanciesAdapter
 import ru.practicum.android.diploma.util.BindingFragment
+import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
 
 class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
 
     private val viewModel: FavoritesViewModel by viewModel()
-    private lateinit var vacanciesAdapter: VacanciesAdapter
+
+    private val vacanciesAdapter: VacanciesAdapter by lazy {
+        VacanciesAdapter { vacancy -> toVacancyFullInfo(vacancy.id) }
+            .apply {
+                vacancies = emptyList()
+            }
+    }
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -30,7 +38,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializeRV()
+        initializeFavoritesList()
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiStateFlow.collect {
                 render(it)
@@ -91,12 +99,16 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
             }
         }
     }
-
-    private fun initializeRV() {
-        vacanciesAdapter = VacanciesAdapter { element -> {/*пока ничего не происходит*/ } }
-            .apply {
-                vacancies = emptyList()
-            }
+    
+    private fun initializeFavoritesList() {
+        vacanciesAdapter.vacancies = emptyList()
         binding.favRvVacancies.adapter = vacanciesAdapter
+    }
+
+    private fun toVacancyFullInfo(vacancyID: String) {
+        findNavController().navigate(
+            R.id.action_favoritesFragment_to_vacancyFragment,
+            VacancyFragment.createArgs(vacancyID)
+        )
     }
 }
