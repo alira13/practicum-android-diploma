@@ -28,7 +28,7 @@ class FavoritesViewModel : ViewModel() {
         }
     }
 
-    private fun getFavList():List<VacancyPreview>{
+    private fun getFavList(): List<VacancyPreview> {
         return listOf(
             VacancyPreview(
                 null.toString(),

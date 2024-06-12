@@ -63,10 +63,10 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
         }
     }
 
-    private fun showFavoriteVacancies(list: List<VacancyPreview>){
+    private fun showFavoriteVacancies(list: List<VacancyPreview>) {
         vacanciesAdapter.vacancies = list
-        with(binding){
-            favRvVacancies.apply{
+        with(binding) {
+            favRvVacancies.apply {
                 adapter?.notifyDataSetChanged()
                 isVisible = true
             }
@@ -93,8 +93,8 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
     }
 
     private fun initializeRV() {
-        vacanciesAdapter = VacanciesAdapter { element -> {/*пока ничего не происходит*/}}
-            .apply{
+        vacanciesAdapter = VacanciesAdapter { element -> {/*пока ничего не происходит*/ } }
+            .apply {
                 vacancies = emptyList()
             }
         binding.favRvVacancies.adapter = vacanciesAdapter
