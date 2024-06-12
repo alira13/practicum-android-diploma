@@ -6,6 +6,7 @@ sealed interface SearchResult {
         val found: String,
         val page: Int,
         val pages: Int
+        val count: Long
     ) : SearchResult
     object EmptyResult : SearchResult
     data class Error(val error: Errors) : SearchResult
