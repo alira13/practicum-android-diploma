@@ -44,4 +44,5 @@
     <string name="email_title_text">E-mail</string>
     <string name="phone_title_text">Телефон</string>
     <string name="comment_title_text">Комментарий</string>
+    <string name="empty_list">Список пуст</string>
 </resources>
