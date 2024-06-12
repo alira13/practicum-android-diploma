@@ -22,8 +22,7 @@ class FavoritesViewModel : ViewModel() {
                 delay(1000L)
                 _uiState.value = FavoritesUiState.Failure
                 delay(1000L)
-                _uiState.value = FavoritesUiState.Content(
-                getFavList())
+                _uiState.value = FavoritesUiState.Content(getFavList())
                 delay(10000L)
             }
         }
@@ -44,76 +43,6 @@ class FavoritesViewModel : ViewModel() {
                 "Аниматор для панд, Пекин",
                 "Зоопарк",
                 "15 бамбуковых листьев"
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Тестировщик матрасов, Сонвиль",
-                "Матрасофф и Ко",
-                "5 подушек в месяц"
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Упаковщик бананов",
-                "ДельЭквадор",
-                "з/п в бананах, оптом"
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Мегамозг, возраст 25 лет, опыт 15",
-                "Сказошный наниматель",
-                "ну где-то около 20 000 руб."
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Аниматор для панд, Пекин",
-                "Зоопарк",
-                "15 бамбуковых листьев"
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Тестировщик матрасов, Сонвиль",
-                "Матрасофф и Ко",
-                "5 подушек в месяц"
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Упаковщик бананов",
-                "ДельЭквадор",
-                "з/п в бананах, оптом"
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Мегамозг, возраст 25 лет, опыт 15",
-                "Сказошный наниматель",
-                "ну где-то около 20 000 руб."
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Аниматор для панд, Пекин",
-                "Зоопарк",
-                "15 бамбуковых листьев"
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Тестировщик матрасов, Сонвиль",
-                "Матрасофф и Ко",
-                "5 подушек в месяц"
-            ),
-            VacancyPreview(
-                null.toString(),
-                null,
-                "Упаковщик бананов",
-                "ДельЭквадор",
-                "з/п в бананах, оптом"
             )
         )
     }
