@@ -1,13 +1,7 @@
-package ru.practicum.android.diploma.favorites.data.db.entity
+package ru.practicum.android.diploma.favorites.domain.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "vacancy_table")
-data class VacancyEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val vacancyId: String,
+class VacancyDetailsDB(
+    val id: String,
     val name: String,
     val currency: String,
     val salaryFrom: String,
