@@ -36,5 +36,13 @@
     <string name="salary_to">до %d %s</string>
     <string name="server_error_text">Ошибка сервера</string>
     <string name="incorrect_request_text">Некорректный запрос</string>
+    <string name="experience_title_text">Требуемый опыт</string>
+    <string name="vacancy_description_title_text">Описание вакансии</string>
+    <string name="key_skills_title_text">Ключевые навыки</string>
+    <string name="contacts_title_text">Контакты</string>
+    <string name="contact_person_title_text">Kонтактное лицо</string>
+    <string name="email_title_text">E-mail</string>
+    <string name="phone_title_text">Телефон</string>
+    <string name="comment_title_text">Комментарий</string>
     <string name="empty_list">Список пуст</string>
 </resources>
