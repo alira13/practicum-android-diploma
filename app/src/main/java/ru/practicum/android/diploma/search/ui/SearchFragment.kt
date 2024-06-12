@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -42,7 +44,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         subscribeOnViewModel()
         initializeVacanciesList()
         // только чтоб проверка пропустила неиспользуемый метод - его вызов закоментить
-        showToast("")
+//        showToast("")
+
     }
 
     private fun subscribeOnViewModel() {
@@ -60,6 +63,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             SearchUiState.EmptyResult -> showEmptyResult()
             is SearchUiState.Error -> onError(state.error)
             SearchUiState.Loading -> showLoading()
+            SearchUiState.FullLoaded -> showFullLoaded()
             is SearchUiState.SearchResult -> showSearchResult(state)
         }
     }
@@ -148,6 +152,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         binding.searchListRv.adapter = vacanciesAdapter
     }
 
+    private fun showFullLoaded() {
+        with(binding) {
+            searchListRv.isVisible = true
+            searchPictureTextTv.isVisible = false
+            searchPictureIv.isVisible = false
+            searchProgressPb.isVisible = false
+        }
+    }
+
     private fun setOnClickListeners() {
         with(binding) {
             searchFilterBt.setOnClickListener {
@@ -171,9 +184,25 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 text = result.count
                 isVisible = true
             }
-            searchProgressPb.isVisible = false
+            searchProgressPb.isVisible = true
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
+        }
+
+        with(binding) {
+            searchListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (dy > 0) {
+                        val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                        val itemsCount = vacanciesAdapter.itemCount
+                        if (pos >= itemsCount - 1) {
+                            viewModel.onLastItemReached(result.page, result.pages)
+                        }
+                    }
+                }
+            })
         }
     }
 
