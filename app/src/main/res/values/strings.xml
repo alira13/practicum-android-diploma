@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="app_name">Vacancy Catcher</string>
+    <string name="team_header1">Команда</string>
+    <string name="team_header2">Над приложением \nработали</string>
+    <string name="developer1">Безгласная Ксения Александровна</string>
+    <string name="developer2">Кириллов Родион Александрович</string>
+    <string name="developer3">Куцык Александр Анатольевич</string>
+    <string name="developer4">Манжа Наталья Владимировна</string>
+    <string name="developer5">Сбоев Андрей Васильевич</string>
+    <string name="main">Главное</string>
+    <string name="favorites">Избранное</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="search_vacancies">Поиск вакансий</string>
+    <string name="filter_settings">Настройки фильтрации</string>
+    <string name="filter_location">Выбор места работы</string>
+    <string name="filter_country">Выбор страны</string>
+    <string name="filter_region">Выбор региона</string>
+    <string name="filter_industry">Выбор отрасли</string>
+    <string name="forward_btn_description">Стрелка вперед</string>
+    <string name="hint_value">Значение</string>
+    <string name="multi_string_hint_value">Какое-то очень-очень-очень-очень длинное многострочное значение</string>
+    <string name="radio_btn_description">Радиокнопка</string>
+    <string name="close_btn_description">Закрыть</string>
 </resources>
