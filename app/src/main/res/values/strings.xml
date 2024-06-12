@@ -33,6 +33,7 @@
     <string name="salary_is_null">Зарплата не указана</string>
     <string name="salary_from">от %d %s</string>
     <string name="salary_from_to">от %d до %d %s</string>
+    <string name="salary_to">до %d %s</string>
     <string name="server_error_text">Ошибка сервера</string>
     <string name="incorrect_request_text">Некорректный запрос</string>
     <string name="experience_title_text">Требуемый опыт</string>

@@ -1,17 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/colorPrimary"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fav_left_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fav_right_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
 
     <TextView
-        android:id="@+id/ff_tv_header"
+        android:id="@+id/fav_tv_header"
         style="@style/MediumTextStyle"
-        android:paddingStart="@dimen/spacing_16"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/item_size_64"
         android:text="@string/favorites"
+        app:layout_constraintEnd_toStartOf="@id/fav_right_guideline"
+        app:layout_constraintStart_toEndOf="@id/fav_left_guideline"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_rv_vacancies"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toStartOf="@id/fav_right_guideline"
+        app:layout_constraintStart_toEndOf="@id/fav_left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fav_tv_header"
+        app:reverseLayout="false"
+        tools:itemCount="10"
+        tools:listitem="@layout/vacancy_item"
+        tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/fav_placeholder_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/fav_placeholder_message"
+        app:layout_constraintDimensionRatio="h,1.47:1"
+        app:layout_constraintEnd_toStartOf="@id/fav_right_guideline"
+        app:layout_constraintStart_toEndOf="@id/fav_left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fav_tv_header"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:src="@drawable/placeholder_favorites_empty"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/fav_placeholder_message"
+        style="@style/MediumTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fav_left_guideline"
+        app:layout_constraintEnd_toStartOf="@id/fav_right_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fav_placeholder_icon"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/no_vacancies"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

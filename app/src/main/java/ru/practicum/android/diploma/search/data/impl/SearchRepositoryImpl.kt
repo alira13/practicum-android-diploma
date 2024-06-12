@@ -11,13 +11,12 @@ import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
-import ru.practicum.android.diploma.util.Resource
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val converter: VacancyConverter
 ) : SearchRepository {
-    override suspend fun searchVacancies(request: VacanciesSearchRequest): Resource<SearchResult> {
+    override suspend fun searchVacancies(request: VacanciesSearchRequest): SearchResult {
         val options: HashMap<String, String> = HashMap()
         options["text"] = request.searchString
 
@@ -27,19 +26,19 @@ class SearchRepositoryImpl(
 
         return when (response.resultCode) {
             CONNECTION_ERROR -> {
-                Resource.Error(Errors.ConnectionError)
+                SearchResult.Error(Errors.ConnectionError)
             }
 
             SUCCESS -> {
-                Resource.Success(converter.map(response as VacanciesResponse))
+                converter.map(response as VacanciesResponse)
             }
 
             INCORRECT_REQUEST -> {
-                Resource.Error(Errors.IncorrectRequest)
+                SearchResult.Error(Errors.IncorrectRequest)
             }
 
             else -> {
-                Resource.Error(Errors.ServerError)
+                SearchResult.Error(Errors.ServerError)
             }
         }
     }
