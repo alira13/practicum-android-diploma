@@ -10,4 +10,5 @@ sealed interface SearchUiState {
     data class SearchResult(val vacancies: List<VacancyPreview>) : SearchUiState
     object EmptyResult : SearchUiState
     data class Error(val error: Errors) : SearchUiState
+    object FullLoaded : SearchUiState
 }

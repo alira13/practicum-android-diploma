@@ -9,6 +9,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -38,6 +40,20 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         // только чтоб проверка пропустила эти два метода - их вызов сразу убрать
         showToast("")
         toVacancyFullInfo("10")
+
+        binding.searchListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos = (binding.searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = vacancyAdapter.itemCount
+                    if (pos >= itemsCount-1) {
+                        viewModel.onLastItemReached()
+                    }
+                }
+            }
+        })
     }
 
     private fun subscribeOnViewModel() {
@@ -56,6 +72,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             is SearchUiState.Error -> onError(state.error)
             SearchUiState.Loading -> showLoading()
             is SearchUiState.SearchResult -> TODO()
+            SearchUiState.FullLoaded -> showFullLoaded()
         }
     }
 
@@ -118,6 +135,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
             searchProgressPb.isVisible = true
+        }
+    }
+
+    private fun showFullLoaded() {
+        with(binding) {
+            searchListRv.isVisible = true
+            searchPictureTextTv.isVisible = false
+            searchPictureIv.isVisible = false
+            searchProgressPb.isVisible = false
         }
     }
 

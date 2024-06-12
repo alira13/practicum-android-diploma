@@ -4,13 +4,8 @@ import android.content.Context
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
-import ru.practicum.android.diploma.search.domain.models.Area
-import ru.practicum.android.diploma.search.domain.models.Item
 import ru.practicum.android.diploma.search.domain.models.SearchResult
-import ru.practicum.android.diploma.search.domain.models.Vacancies
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
-import ru.practicum.android.diploma.vacancy.domain.models.Employer
-import ru.practicum.android.diploma.vacancy.domain.models.Salary
 
 class VacancyConverter(
     private val context: Context
@@ -30,7 +25,9 @@ class VacancyConverter(
                     salary = parseSalary(item.salary)
                 )
             },
-            count = response.found.toString()
+            found = response.found.toString(),
+            page = response.pages,
+            pages = response.pages
         )
     }
 
