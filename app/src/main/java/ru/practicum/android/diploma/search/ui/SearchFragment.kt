@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,6 +22,7 @@ import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
 import ru.practicum.android.diploma.util.BindingFragment
 import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
+import java.util.Locale
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
@@ -181,7 +184,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 smoothScrollToPosition(0)
             }
             searchResultTv.apply {
-                text = result.count
+                text = convertToPlurals(result.count.toInt())
                 isVisible = true
             }
             searchProgressPb.isVisible = true
@@ -219,5 +222,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             R.id.action_searchFragment_to_vacancyFragment,
             VacancyFragment.createArgs(vacancyID)
         )
+    }
+
+    private fun convertToPlurals(count: Int): String {
+        val languageTag = "ru"
+        AppCompatDelegate.setApplicationLocales(
+            LocaleListCompat.create(Locale.forLanguageTag(languageTag))
+        )
+        return resources.getQuantityString(R.plurals.vacancies_amount, count, count)
     }
 }

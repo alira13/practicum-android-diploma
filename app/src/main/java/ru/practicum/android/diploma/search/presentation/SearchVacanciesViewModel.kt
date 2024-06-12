@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
-import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
 
@@ -47,7 +47,7 @@ class SearchVacanciesViewModel(
                 } else {
                     SearchUiState.SearchResult(
                         addVacanciesToList(result.vacancies),
-                        convert(result.count),
+                        result.count.toString(),
                         result.page,
                         result.pages
                     )
@@ -58,10 +58,6 @@ class SearchVacanciesViewModel(
         }
     }
 
-    // тестовый метод
-    private fun convert(count: Int): String {
-        return "Найдено $count вакансий"
-    }
 
     private fun addVacanciesToList(newPartVacancies: List<VacancyPreview>): MutableList<VacancyPreview> {
         totalVacansiesList += newPartVacancies
