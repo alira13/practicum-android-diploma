@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -56,9 +55,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect {
-                if (it is SearchUiState.SearchResult)Log.d(
-                    "QQQ",
-                    "${it.javaClass} // ${it.page} из ${it.pages}")
+                if (it is SearchUiState.SearchResult) {
+                    Log.d(
+                        "QQQ",
+                        "${it.javaClass}"
+                    )
+                }
                 Log.d("QQQ", "$it")
                 render(it)
             }
@@ -165,14 +167,17 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun setRequestInputBehaviour() {
         binding.searchFieldEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                viewModel.onUiEvent(SearchUiEvent.QueryInput(s))
+                /*viewModel.onUiEvent(SearchUiEvent.QueryInput(s))*/
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onUiEvent(SearchUiEvent.QueryInput(s))
+                if (!s.isNullOrEmpty()) {
+                    viewModel.onUiEvent(SearchUiEvent.QueryInput(s))
+                }
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {/*nothing to do*/
+            }
         })
     }
 
@@ -220,9 +225,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                         val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                         val itemsCount = vacanciesAdapter.itemCount
                         if (pos >= itemsCount - 1) {
-                            viewModel.onUiEvent(
-                                SearchUiEvent.LastItemReached(result.page, result.pages)
-                            )
+                            viewModel.onUiEvent(SearchUiEvent.LastItemReached)
                         }
                     }
                 }
@@ -242,7 +245,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         val inputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(
-            binding.searchFieldEt.windowToken, 0)
+            binding.searchFieldEt.windowToken, 0
+        )
     }
 
     private fun toVacancyFullInfo(vacancyID: String) {

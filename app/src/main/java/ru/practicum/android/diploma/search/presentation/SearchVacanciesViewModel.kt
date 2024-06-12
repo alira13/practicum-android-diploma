@@ -18,8 +18,9 @@ class SearchVacanciesViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
-
-    private var nextPage = 0
+    private var pageToRequest = 0
+    private var currentPage = 0
+    private var maxPages = 1
     private var totalVacansiesList: MutableList<VacancyPreview> = mutableListOf()
     private var isNextPageLoading: Boolean = false
 
@@ -39,10 +40,7 @@ class SearchVacanciesViewModel(
         when (event) {
             SearchUiEvent.ClearText -> _uiState.value = SearchUiState.Default
             is SearchUiEvent.QueryInput -> onQueryInput(event.s)
-            is SearchUiEvent.LastItemReached -> onLastItemReached(
-                event.currentPage,
-                event.maxPage
-            )
+            is SearchUiEvent.LastItemReached -> onLastItemReached()
         }
     }
 
@@ -55,21 +53,21 @@ class SearchVacanciesViewModel(
     }
 
     private fun search(searchRequest: String) {
-        Log.d("QQQ", "search ($lastSearchRequest)")
+        Log.d("QQQ", "search ($lastSearchRequest) страница $pageToRequest")
         viewModelScope.launch {
             _uiState.value = SearchUiState.Loading
-            val result = searchInteractor.searchVacancies(VacanciesSearchRequest(nextPage, searchRequest))
+            val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
             _uiState.value = when (result) {
                 is SearchResult.Error -> SearchUiState.Error(result.error)
                 is SearchResult.SearchContent -> if (result.count == 0) {
                     SearchUiState.EmptyResult
                 } else {
+                    currentPage = result.page
+                    maxPages = result.pages
                     SearchUiState.SearchResult(
                         addVacanciesToList(result.vacancies),
-                        convert(result.count),
-                        result.page,
-                        result.pages
+                        convert(result.count)
                     )
                 }
             }
@@ -86,13 +84,10 @@ class SearchVacanciesViewModel(
         return totalVacansiesList
     }
 
-    private fun onLastItemReached(
-        currentPage: Int,
-        maxPage: Int
-    ) {
+    private fun onLastItemReached() {
         viewModelScope.launch {
-            if (currentPage < maxPage && isNextPageLoading) {
-                nextPage = currentPage + 1
+            if (pageToRequest < maxPages && isNextPageLoading) {
+                pageToRequest += 1
                 search(lastSearchRequest!!)
                 isNextPageLoading = false
             } else {
