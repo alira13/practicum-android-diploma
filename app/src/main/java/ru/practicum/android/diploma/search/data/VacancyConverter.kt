@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.search.data
 
 import android.content.Context
+import android.util.Log
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
@@ -25,8 +26,8 @@ class VacancyConverter(
                     salary = parseSalary(item.salary)
                 )
             },
-            found = response.found.toString(),
-            page = response.pages,
+            count = response.found,
+            page = response.page,
             pages = response.pages
         )
     }
