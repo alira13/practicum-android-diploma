@@ -57,7 +57,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun render(state: SearchUiState) {
         when (state) {
             SearchUiState.Default -> renderDefaultState()
-            SearchUiState.EdittingRequest -> onEdittingRequest()
+            SearchUiState.EditingRequest -> onEditingRequest()
             SearchUiState.EmptyResult -> showEmptyResult()
             is SearchUiState.Error -> onError(state.error)
             SearchUiState.Loading -> showLoading()
@@ -79,7 +79,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun onEdittingRequest() {
+    private fun onEditingRequest() {
         with(binding) {
             searchResultTv.isVisible = false
             searchProgressPb.isVisible = false
@@ -114,13 +114,22 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchResultTv.isVisible = false
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
-            searchPictureTextTv.apply {
-                isVisible = true
-                setText(R.string.no_internet)
-            }
             searchPictureIv.apply {
                 isVisible = true
                 setImageResource(R.drawable.placeholder_internet_error)
+            }
+            when (error) {
+                is Errors.ConnectionError -> {
+                    searchPictureTextTv.text = getString(R.string.no_internet)
+                }
+
+                is Errors.ServerError -> {
+                    searchPictureTextTv.text = getString(R.string.server_error_text)
+                }
+
+                is Errors.IncorrectRequest -> {
+                    searchPictureTextTv.text = getString(R.string.incorrect_request_text)
+                }
             }
         }
     }
@@ -174,8 +183,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             requireContext(),
             message,
             Toast.LENGTH_LONG
-        )
-            .show()
+        ).show()
     }
 
     private fun toVacancyFullInfo(vacancyID: String) {
