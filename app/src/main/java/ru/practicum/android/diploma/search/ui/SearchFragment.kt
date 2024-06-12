@@ -44,22 +44,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         subscribeOnViewModel()
         initializeVacanciesList()
         // только чтоб проверка пропустила неиспользуемый метод - его вызов закоментить
-        showToast("")
-        toVacancyFullInfo("10")
+//        showToast("")
 
-        binding.searchListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                if (dy > 0) {
-                    val pos = (binding.searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    val itemsCount = vacancyAdapter.itemCount
-                    if (pos >= itemsCount-1) {
-                        viewModel.onLastItemReached()
-                    }
-                }
-            }
-        })
     }
 
     private fun subscribeOnViewModel() {
@@ -77,7 +63,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             SearchUiState.EmptyResult -> showEmptyResult()
             is SearchUiState.Error -> onError(state.error)
             SearchUiState.Loading -> showLoading()
-            is SearchUiState.SearchResult -> TODO()
             SearchUiState.FullLoaded -> showFullLoaded()
             is SearchUiState.SearchResult -> showSearchResult(state)
         }
@@ -199,10 +184,24 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 text = result.count
                 isVisible = true
             }
-            searchProgressPb.isVisible = false
+            searchProgressPb.isVisible = true
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
         }
+
+        binding.searchListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos = (binding.searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = vacanciesAdapter.itemCount
+                    if (pos >= itemsCount-1) {
+                        viewModel.onLastItemReached(result.page, result.pages)
+                    }
+                }
+            }
+        })
     }
 
     private fun showToast(message: String) {
