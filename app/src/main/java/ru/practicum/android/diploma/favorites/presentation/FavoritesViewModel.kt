@@ -17,13 +17,13 @@ class FavoritesViewModel : ViewModel() {
         viewModelScope.launch {
             while (true) {
                 _uiState.value = FavoritesUiState.Default
-                delay(1000L)
+                delay(DELAY)
                 _uiState.value = FavoritesUiState.Empty
-                delay(1000L)
+                delay(DELAY)
                 _uiState.value = FavoritesUiState.Failure
-                delay(1000L)
+                delay(DELAY)
                 _uiState.value = FavoritesUiState.Content(getFavList())
-                delay(10000L)
+                delay(DELAY)
             }
         }
     }
@@ -45,5 +45,9 @@ class FavoritesViewModel : ViewModel() {
                 "15 бамбуковых листьев"
             )
         )
+    }
+
+    companion object {
+        private const val DELAY = 1000L
     }
 }
