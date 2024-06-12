@@ -16,6 +16,7 @@ class SearchVacanciesViewModel(
 ) : ViewModel() {
 
     init {
+        // проверка работоспособности поиска и отображения результата
         search()
     }
 

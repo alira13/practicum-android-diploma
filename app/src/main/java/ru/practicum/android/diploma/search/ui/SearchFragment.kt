@@ -43,7 +43,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         subscribeOnViewModel()
         initializeVacanciesList()
         // только чтоб проверка пропустила эти два метода - их вызов сразу убрать
-        /*showToast("")*/
+        showToast("")
     }
 
     private fun subscribeOnViewModel() {
