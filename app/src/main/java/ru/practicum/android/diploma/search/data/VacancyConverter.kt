@@ -25,7 +25,9 @@ class VacancyConverter(
                     salary = parseSalary(item.salary)
                 )
             },
-            count = response.found
+            count = response.found,
+            page = response.page,
+            pages = response.pages
         )
     }
 
