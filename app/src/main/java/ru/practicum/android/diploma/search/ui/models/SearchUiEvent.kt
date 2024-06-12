@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.ui.models
 
 interface SearchUiEvent {
-    object ClearText : SearchUiEvent
+    data object ClearText : SearchUiEvent
+    data class QueryInput(val s: CharSequence?) : SearchUiEvent
 }

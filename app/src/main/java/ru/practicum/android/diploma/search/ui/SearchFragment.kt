@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.search.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,8 +43,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         subscribeOnViewModel()
         initializeVacanciesList()
+        setRequestInputBehaviour()
         // только чтоб проверка пропустила неиспользуемый метод - его вызов закоментить
-        showToast("")
+        /*showToast("")*/
     }
 
     private fun subscribeOnViewModel() {
@@ -66,6 +69,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun renderDefaultState() {
         with(binding) {
+            searchFieldEt.text = null
             searchResultTv.isVisible = false
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
@@ -146,6 +150,20 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun initializeVacanciesList() {
         vacanciesAdapter.vacancies = emptyList()
         binding.searchListRv.adapter = vacanciesAdapter
+    }
+
+    private fun setRequestInputBehaviour() {
+        binding.searchFieldEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                viewModel.onUiEvent(SearchUiEvent.QueryInput(s))
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.onUiEvent(SearchUiEvent.QueryInput(s))
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun setOnClickListeners() {
