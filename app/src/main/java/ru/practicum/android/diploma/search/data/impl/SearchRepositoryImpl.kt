@@ -11,7 +11,6 @@ import ru.practicum.android.diploma.search.domain.api.SearchRepository
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
-import ru.practicum.android.diploma.util.Resource
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
