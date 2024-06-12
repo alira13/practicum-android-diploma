@@ -4,8 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
@@ -74,6 +78,21 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 salaryTv.isVisible = false
             }
             employerNameTv.text = details.employer?.name ?: ""
+            val address = details.address
+            if (address != null) {
+                areaNameTv.text =
+                    getString(R.string.vacancy_address_text, address.city, address.street, address.building)
+            } else {
+                areaNameTv.text = details.area.name
+            }
+            val logoUrls = details.employer?.logoUrls
+            if (logoUrls != null) {
+                provideLogo(employerLogoIv, logoUrls.px90)
+            } else {
+                employerLogoIv.setImageDrawable(
+                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_placeholder)
+                )
+            }
         }
     }
 
@@ -133,8 +152,17 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         )
     }
 
+    private fun provideLogo(imageView: ImageView, url: String) {
+        Glide.with(requireContext())
+            .load(url)
+            .placeholder(R.drawable.ic_placeholder)
+            .transform(RoundedCorners(CORNER_RADIUS))
+            .into(imageView)
+    }
+
     companion object {
         private const val VACANCY_ID = "vacancy_id"
+        const val CORNER_RADIUS = 12
 
         fun createArgs(vacancyID: String): Bundle =
             bundleOf(VACANCY_ID to vacancyID)
