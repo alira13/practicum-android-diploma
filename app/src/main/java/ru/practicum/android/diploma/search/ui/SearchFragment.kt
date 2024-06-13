@@ -45,21 +45,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
-        subscribeOnViewModel()
         initializeVacanciesList()
         setRequestInputBehaviour()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        subscribeOnViewModel()
     }
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect {
-                if (it is SearchUiState.SearchResult) {
-                    Log.d(
-                        "QQQ",
-                        "${it.javaClass}"
-                    )
-                }
-                Log.d("QQQ", "$it")
                 render(it)
             }
         }
@@ -71,7 +68,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             SearchUiState.EditingRequest -> onEditingRequest()
             SearchUiState.EmptyResult -> showEmptyResult()
             is SearchUiState.Error -> onError(state)
-            SearchUiState.Loading -> showLoading()
+            is SearchUiState.Loading -> showLoading(state.isItFirstPage)
             SearchUiState.FullLoaded -> showFullLoaded()
             is SearchUiState.SearchResult -> showSearchResult(state)
         }
@@ -157,14 +154,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun showLoading() {
-        hideKeyboard()
-        with(binding) {
-            searchResultTv.isVisible = false
-            searchListRv.isVisible = false
-            searchPictureTextTv.isVisible = false
-            searchPictureIv.isVisible = false
-            searchProgressPb.isVisible = true
+    private fun showLoading(isItFirstPage: Boolean) {
+        if (isItFirstPage) {
+            hideKeyboard()
+            with(binding) {
+                searchResultTv.isVisible = false
+                searchListRv.isVisible = false
+                searchPictureTextTv.isVisible = false
+                searchPictureIv.isVisible = false
+                searchProgressPb.isVisible = true
+            }
+        } else {
+            // отображение загрузки при запросе следующих страниц
         }
     }
 
@@ -180,7 +181,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 && text.toString() != lastRequest
             ) {
                 lastRequest = text.toString()
-                Log.d("QQQ", "изменение запроса $lastRequest")
                 viewModel.onUiEvent(SearchUiEvent.QueryInput(text))
             }
         }
@@ -207,7 +207,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun showSearchResult(result: SearchUiState.SearchResult) {
-        Log.d("QQQ", "отображение результата")
         with(binding) {
             vacanciesAdapter.vacancies = result.vacancies
             searchProgressPb.isVisible = false
@@ -218,18 +217,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 isVisible = true
             }
             searchListRv.apply {
-                Log.d("QQQ", "добрались до ресайклера")
                 adapter?.notifyDataSetChanged()
                 isVisible = true
-                Log.d("QQQ", "его видимость $visibility")
-                Log.d("QQQ", "размер списка ${vacanciesAdapter.vacancies.size}")
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
 
                         if (dy > 0) {
                             val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                            Log.d("QQQ", "pos = $pos")
                             val itemsCount = vacanciesAdapter.itemCount
                             if (pos >= itemsCount - 1) {
                                 viewModel.onUiEvent(SearchUiEvent.LastItemReached)

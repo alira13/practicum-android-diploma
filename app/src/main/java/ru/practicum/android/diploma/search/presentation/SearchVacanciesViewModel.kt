@@ -61,7 +61,7 @@ class SearchVacanciesViewModel(
 
     private fun search(searchRequest: String) {
         viewModelScope.launch {
-            _uiState.value = SearchUiState.Loading
+            _uiState.value = SearchUiState.Loading(isItFirstPage = pageToRequest == 0)
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
             _uiState.value = when (result) {
@@ -69,6 +69,7 @@ class SearchVacanciesViewModel(
                     error = result.error,
                     isItFirstPage = pageToRequest == 0
                 )
+
                 is SearchResult.SearchContent -> if (result.count == 0) {
                     SearchUiState.EmptyResult
                 } else {

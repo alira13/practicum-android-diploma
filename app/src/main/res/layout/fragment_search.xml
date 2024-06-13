@@ -108,8 +108,11 @@
         android:text="@string/no_vacancies"
         android:textColor="@color/white"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0"
         app:layout_constraintTop_toBottomOf="@id/search_field_cl" />
 
     <!-- Изображение главного экрана, которое заменяется на картинку ошибки -->
@@ -126,7 +129,7 @@
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toBottomOf="@id/search_field_cl"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
     <!-- Сообщение об ошибке, при старте поиска будет пустым -->
     <TextView
@@ -151,16 +154,16 @@
         android:id="@+id/search_list_rv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_8"
+        android:layout_marginTop="164dp"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/search_result_tv"
+        app:layout_constraintTop_toTopOf="parent"
         app:reverseLayout="false"
         tools:itemCount="10"
         tools:listitem="@layout/vacancy_item"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/search_progress_pb"
@@ -168,7 +171,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_24"
         android:indeterminateTint="@color/blue"
-        android:visibility="visible"
+        android:visibility="gone"
+        tools:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
