@@ -4,6 +4,8 @@ import androidx.room.Room
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.favorites.data.db.AppDatabase
+import ru.practicum.android.diploma.favorites.data.db.impl.VacancyRepositoryImpl
+import ru.practicum.android.diploma.favorites.domain.impl.VacancyInteractorImpl
 
 val favoritesModule = module {
     single {
@@ -11,4 +13,13 @@ val favoritesModule = module {
             .fallbackToDestructiveMigration()
             .build()
     }
+
+    single {
+        VacancyRepositoryImpl(
+            get(),
+            get()
+        )
+    }
+
+    single { VacancyInteractorImpl(get()) }
 }
