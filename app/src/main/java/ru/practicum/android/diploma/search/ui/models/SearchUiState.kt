@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.search.domain.models.VacancyPreview
 sealed interface SearchUiState {
     data object Default : SearchUiState
     data object EditingRequest : SearchUiState
-    data object Loading : SearchUiState
+    data class Loading(val isItFirstPage: Boolean) : SearchUiState
     data class SearchResult(
         val vacancies: List<VacancyPreview>,
         val count: String
