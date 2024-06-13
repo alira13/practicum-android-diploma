@@ -17,6 +17,7 @@ import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.search.domain.models.Errors
+import ru.practicum.android.diploma.share.domain.models.EmailData
 import ru.practicum.android.diploma.util.BindingFragment
 import ru.practicum.android.diploma.util.currencyUTF
 import ru.practicum.android.diploma.util.formatter
@@ -31,6 +32,7 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         parametersOf(vacancyID)
     }
     private var vacancyID: String? = null
+    private var vacancyUrl: String = ""
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -48,6 +50,32 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
         viewModel.getUIState().observe(viewLifecycleOwner) { state ->
             render(state)
+        }
+        setClickListeners()
+    }
+
+    private fun setClickListeners() {
+        binding.apply {
+            emailTextTv.setOnClickListener {
+                val email = emailTextTv.text.toString()
+                Log.d("VacancyFragment", "mail to $email")
+                val emailData = EmailData(
+                    extraMail = arrayOf(email),
+                    "",
+                    ""
+                )
+                viewModel.sendEmail(emailData)
+            }
+            shareIc.setOnClickListener {
+                if (vacancyUrl.isNotEmpty()) {
+                    viewModel.shareVacancy(vacancyUrl)
+                }
+            }
+            phoneTextTv.setOnClickListener {
+                val phone = phoneTextTv.text.toString()
+                viewModel.callTo(phone)
+            }
+            favoriteIc.setOnClickListener { }
         }
     }
 
@@ -118,7 +146,6 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 keySkillsTitleTv.visibility = View.GONE
             }
             val contacts = details.contacts
-            Log.d("VacancyFragment", "contacts ${contacts.toString()}")
             if (contacts != null) {
                 val name = contacts.name
                 val email = contacts.email
@@ -164,6 +191,7 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 commentTextTv.visibility = View.GONE
             }
         }
+        vacancyUrl = details.alternateUrl
     }
 
     private fun showError(error: Errors?) {
@@ -233,7 +261,6 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             .transform(RoundedCorners(CORNER_RADIUS))
             .into(imageView)
     }
-
 
 
     companion object {

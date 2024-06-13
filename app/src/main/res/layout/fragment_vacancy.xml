@@ -30,13 +30,13 @@
                 android:text="@string/vacancy"/>
 
             <ImageView
-                android:id="@+id/favorite_ic"
+                android:id="@+id/share_ic"
                 style="@style/VacancyToolBarIconsStyle"
                 android:layout_marginStart="@dimen/spacing_4"
                 android:src="@drawable/ic_sharing"/>
 
             <ImageView
-                android:id="@+id/share_ic"
+                android:id="@+id/favorite_ic"
                 style="@style/VacancyToolBarIconsStyle"
                 android:src="@drawable/ic_favorites_off"
                 android:layout_marginHorizontal="@dimen/spacing_4"/>
