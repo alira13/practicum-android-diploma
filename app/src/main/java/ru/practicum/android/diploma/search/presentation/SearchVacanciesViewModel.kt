@@ -1,15 +1,14 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
+import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
-import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
 import ru.practicum.android.diploma.util.debounce
