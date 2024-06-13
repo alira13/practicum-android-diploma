@@ -157,7 +157,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-
     private fun showLoading() {
         hideKeyboard()
         with(binding) {
