@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.favorites.domain.models
 
-class VacancyDetailsDB(
+data class VacancyDetailsDB(
     val id: String,
     val name: String,
     val currency: String,
@@ -16,4 +16,6 @@ class VacancyDetailsDB(
     val keySkills: String,
     val contactName: String,
     val contactEmail: String,
+    val contactPhone: String,
+    val comment: String,
 )

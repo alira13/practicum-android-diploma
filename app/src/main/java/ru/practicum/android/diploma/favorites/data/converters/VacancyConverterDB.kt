@@ -21,6 +21,8 @@ class VacancyConverterDB {
             entity.keySkills,
             entity.contactName,
             entity.contactEmail,
+            entity.contactPhone,
+            entity.comment
         )
 
     fun mapModelToEntity(model: VacancyDetailsDB): VacancyEntity =
@@ -41,6 +43,8 @@ class VacancyConverterDB {
             model.keySkills,
             model.contactName,
             model.contactEmail,
+            model.contactPhone,
+            model.comment
         )
 }
 
