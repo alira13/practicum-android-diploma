@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,9 +47,17 @@ class SearchVacanciesViewModel(
     private fun onQueryInput(s: CharSequence?) {
         if (!s.isNullOrEmpty()) {
             _uiState.value = SearchUiState.EditingRequest
-            lastSearchRequest = s.toString()
+            resetSearchParams(s.toString())
             searchDebounce(lastSearchRequest!!)
         }
+    }
+
+    private fun resetSearchParams(request: String) {
+        lastSearchRequest = request
+        pageToRequest = 0
+        currentPage = 0
+        maxPages = 0
+        totalVacansiesList = mutableListOf()
     }
 
     private fun search(searchRequest: String) {

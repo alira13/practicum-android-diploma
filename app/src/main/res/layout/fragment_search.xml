@@ -88,7 +88,7 @@
         android:layout_height="@dimen/item_size_48"
         android:contentDescription="@string/clear_search_btn_description"
         android:scaleType="center"
-        android:src="@drawable/ic_search"
+        android:src="@drawable/ic_close"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/search_field_et"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"

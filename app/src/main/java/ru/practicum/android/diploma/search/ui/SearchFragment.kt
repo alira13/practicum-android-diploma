@@ -4,12 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +29,7 @@ import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
+    private var lastRequest: String? = null
     private val viewModel: SearchVacanciesViewModel by viewModel()
     private val vacanciesAdapter: VacanciesAdapter by lazy {
         VacanciesAdapter { vacancy ->
@@ -54,6 +57,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect {
+                if (it is SearchUiState.SearchResult) {
+                    Log.d(
+                        "QQQ",
+                        "${it.javaClass}"
+                    )
+                }
+                Log.d("QQQ", "$it")
                 render(it)
             }
         }
@@ -73,12 +83,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun renderDefaultState() {
         with(binding) {
-            searchFieldEt.text = null
+            searchFieldEt.apply {
+                text = null
+                clearFocus()
+            }
             searchResultTv.isVisible = false
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
             searchPictureTextTv.isVisible = false
-            clearSearchIconIv.setImageResource(R.drawable.ic_search)
+            clearSearchIconIv.apply {
+                isEnabled = false
+                setImageResource(R.drawable.ic_search)
+            }
             searchPictureIv.apply {
                 isVisible = true
                 setImageResource(R.drawable.placeholder_main)
@@ -92,7 +108,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchProgressPb.isVisible = false
             searchListRv.isVisible = false
             searchPictureTextTv.isVisible = false
-            clearSearchIconIv.setImageResource(R.drawable.ic_close)
+            clearSearchIconIv.apply {
+                isEnabled = true
+                setImageResource(R.drawable.ic_close)
+            }
             searchPictureIv.isVisible = false
         }
     }
@@ -157,21 +176,16 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun setRequestInputBehaviour() {
-        binding.searchFieldEt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                /*viewModel.onUiEvent(SearchUiEvent.QueryInput(s))*/
+        binding.searchFieldEt.doOnTextChanged { text, start, before, count ->
+            if (
+                text != null
+                && text.toString() != lastRequest
+            ) {
+                lastRequest = text.toString()
+                Log.d("QQQ", "изменение запроса $lastRequest")
+                viewModel.onUiEvent(SearchUiEvent.QueryInput(text))
             }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.isNullOrEmpty()) {
-                    viewModel.onUiEvent(SearchUiEvent.QueryInput(s))
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                /*nothing to do*/
-            }
-        })
+        }
     }
 
     private fun showFullLoaded() {
@@ -195,34 +209,38 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun showSearchResult(result: SearchUiState.SearchResult) {
+        Log.d("QQQ", "отображение результата")
         with(binding) {
             hideKeyboard()
             vacanciesAdapter.vacancies = result.vacancies
-            searchListRv.apply {
-                adapter?.notifyDataSetChanged()
-                isVisible = true
-                /*smoothScrollToPosition(0)*/
-            }
+            searchProgressPb.isVisible = false
+            searchPictureTextTv.isVisible = false
+            searchPictureIv.isVisible = false
             searchResultTv.apply {
                 text = result.count
                 isVisible = true
             }
-            searchProgressPb.isVisible = true
-            searchPictureTextTv.isVisible = false
-            searchPictureIv.isVisible = false
-            searchListRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
+            searchListRv.apply {
+                Log.d("QQQ", "добрались до ресайклера")
+                adapter?.notifyDataSetChanged()
+                isVisible = true
+                Log.d("QQQ", "его видимость $visibility")
+                Log.d("QQQ", "размер списка ${vacanciesAdapter.vacancies.size}")
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
 
-                    if (dy > 0) {
-                        val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                        val itemsCount = vacanciesAdapter.itemCount
-                        if (pos >= itemsCount - 1) {
-                            viewModel.onUiEvent(SearchUiEvent.LastItemReached)
+                        if (dy > 0) {
+                            val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                            val itemsCount = vacanciesAdapter.itemCount
+                            if (pos >= itemsCount - 1) {
+                                searchProgressPb.isVisible = true
+                                viewModel.onUiEvent(SearchUiEvent.LastItemReached)
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
         }
     }
 
