@@ -9,7 +9,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,17 +49,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
-    }
-
-    override fun onStart() {
-        super.onStart()
         subscribeOnViewModel()
     }
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect {
-                render(it)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    render(it)
+                }
             }
         }
     }
