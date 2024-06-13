@@ -181,31 +181,8 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 val name = contacts.name
                 val email = contacts.email
                 val phones = contacts.phones
-                if (name != null) {
-                    contactPersonTextTv.text = contacts.name
-                } else {
-                    contactPersonTitleTv.visibility = View.GONE
-                    contactPersonTextTv.visibility = View.GONE
-                }
-                if (email != null) {
-                    emailTextTv.text = contacts.email
-                } else {
-                    emailTextTv.visibility = View.GONE
-                    emailTitleTv.visibility = View.GONE
-                }
-                if (!phones.isNullOrEmpty()) {
-                    val phone = contacts.phones.first()
-                    phoneTextTv.text = phone.number
-                    val comment = phone.comment
-                    if (!comment.isNullOrEmpty()) {
-                        commentTextTv.text = comment
-                    } else {
-                        commentTextTv.visibility = View.GONE
-                    }
-                } else {
-                    phoneTextTv.visibility = View.GONE
-                    phoneTitleTv.visibility = View.GONE
-                }
+                showNamesAndEmails(details)
+                showPhones(details)
                 if (name == null && email == null && phones.isNullOrEmpty()) {
                     contactsTitleTv.visibility = View.GONE
                     commentTitleTv.visibility = View.GONE
@@ -220,6 +197,44 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 phoneTitleTv.visibility = View.GONE
                 commentTitleTv.visibility = View.GONE
                 commentTextTv.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun showNamesAndEmails(details: VacancyDetails) {
+        binding.apply {
+            val name = details.contacts?.name
+            val email = details.contacts?.email
+            if (name != null) {
+                contactPersonTextTv.text = name
+            } else {
+                contactPersonTitleTv.visibility = View.GONE
+                contactPersonTextTv.visibility = View.GONE
+            }
+            if (email != null) {
+                emailTextTv.text = email
+            } else {
+                emailTextTv.visibility = View.GONE
+                emailTitleTv.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun showPhones(details: VacancyDetails) {
+        binding.apply {
+            val phones = details.contacts?.phones
+            if (!phones.isNullOrEmpty()) {
+                val phone = phones.first()
+                phoneTextTv.text = phone.number
+                val comment = phone.comment
+                if (!comment.isNullOrEmpty()) {
+                    commentTextTv.text = comment
+                } else {
+                    commentTextTv.visibility = View.GONE
+                }
+            } else {
+                phoneTextTv.visibility = View.GONE
+                phoneTitleTv.visibility = View.GONE
             }
         }
     }
@@ -291,7 +306,6 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             .transform(RoundedCorners(CORNER_RADIUS))
             .into(imageView)
     }
-
 
     companion object {
         private const val VACANCY_ID = "vacancy_id"
