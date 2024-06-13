@@ -121,17 +121,16 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
     private fun showSalary(details: VacancyDetails) {
         binding.apply {
             val salary = details.salary
-            if (salary != null) {
-                if (salary.from != null && salary.to != null) {
-                    salaryTv.text = salaryFromAndToText(salary)
-                }
-                if (salary.from != null && salary.to == null) {
-                    salaryTv.text = salaryFromText(salary)
-                }
-                if (salary.from == null && salary.to != null) {
-                    salaryTv.text = salaryToText(salary)
-                }
-            } else {
+            if (salary?.from != null && salary.to != null) {
+                salaryTv.text = salaryFromAndToText(salary)
+            }
+            if (salary?.from != null && salary.to == null) {
+                salaryTv.text = salaryFromText(salary)
+            }
+            if (salary?.from == null && salary?.to != null) {
+                salaryTv.text = salaryToText(salary)
+            }
+            if (salary == null) {
                 salaryTv.text = getString(R.string.vacancy_salary_not_specified_text)
             }
         }
