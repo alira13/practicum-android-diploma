@@ -2,15 +2,14 @@ package ru.practicum.android.diploma.search.data.network
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
 import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
 import ru.practicum.android.diploma.search.data.SERVER_ERROR
 import ru.practicum.android.diploma.search.data.SUCCESS
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
-import ru.practicum.android.diploma.search.data.dto.reponse.Response
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
+import ru.practicum.android.diploma.search.data.dto.reponse.Response
 import ru.practicum.android.diploma.util.isConnected
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsRequestDto
 
@@ -39,7 +38,7 @@ class RetrofitNetworkClient(
                         Response().apply { resultCode = INCORRECT_REQUEST }
                     }
                 }
-            } catch (e: HttpException) {
+            } catch (e: Exception) {
                 Response().apply { resultCode = SERVER_ERROR }
             }
         }

@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.util
 
+import java.text.DecimalFormat
+
 private const val RUR = "RUR"
 private const val USD = "USD"
 private const val EUR = "EUR"
@@ -23,5 +25,11 @@ fun currencyUTF(currency: String?): String? {
         null -> null
         else -> currency
     }
+}
+
+fun formatter(n: Long): String {
+    return DecimalFormat("#,###")
+        .format(n)
+        .replace(",", " ")
 }
 

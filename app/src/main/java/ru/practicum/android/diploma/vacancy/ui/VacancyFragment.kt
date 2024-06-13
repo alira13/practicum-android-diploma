@@ -1,13 +1,15 @@
 package ru.practicum.android.diploma.vacancy.ui
 
 import android.os.Bundle
+import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.android.ext.android.inject
@@ -17,6 +19,7 @@ import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.util.BindingFragment
 import ru.practicum.android.diploma.util.currencyUTF
+import ru.practicum.android.diploma.util.formatter
 import ru.practicum.android.diploma.vacancy.domain.models.Salary
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 import ru.practicum.android.diploma.vacancy.presentation.VacancyDetailsViewModel
@@ -39,6 +42,10 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vacancyID = requireArguments().getString(VACANCY_ID)
+        val toolbar = binding.vacancyToolbar
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         viewModel.getUIState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
@@ -62,6 +69,8 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
     private fun showContent(details: VacancyDetails) {
         binding.apply {
+            progressBar.isVisible = false
+            scrollViewContent.isVisible = true
             vacancyNameTv.text = details.name
             val salary = details.salary
             if (salary != null) {
@@ -75,23 +84,84 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                     salaryTv.text = salaryToText(salary)
                 }
             } else {
-                salaryTv.isVisible = false
+                salaryTv.text = getString(R.string.vacancy_salary_not_specified_text)
             }
             employerNameTv.text = details.employer?.name ?: ""
             val address = details.address
-            if (address != null) {
+            if (address?.city != null) {
                 areaNameTv.text =
                     getString(R.string.vacancy_address_text, address.city, address.street, address.building)
             } else {
                 areaNameTv.text = details.area.name
             }
             val logoUrls = details.employer?.logoUrls
-            if (logoUrls != null) {
-                provideLogo(employerLogoIv, logoUrls.px90)
+            provideLogo(employerLogoIv, logoUrls?.px240)
+            val experience = details.experience
+            if (experience?.name != null) {
+                experienceTv.text = experience.name
+            }
+            val employment = details.employment
+            if (employment != null) {
+                employmentTv.text = employment.name
+            }
+            val description = details.description
+            vacancyDescriptionTv.text = Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT)
+            val keySkills = details.keySkills
+            if (keySkills.isNotEmpty()) {
+                var skillsString = ""
+                keySkills.forEach { skill ->
+                    skillsString += "\u00B7 ${skill.name}\n"
+                }
+                keySkillsTextTv.text = skillsString
             } else {
-                employerLogoIv.setImageDrawable(
-                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_placeholder)
-                )
+                keySkillsTitleTv.visibility = View.GONE
+                keySkillsTitleTv.visibility = View.GONE
+            }
+            val contacts = details.contacts
+            Log.d("VacancyFragment", "contacts ${contacts.toString()}")
+            if (contacts != null) {
+                val name = contacts.name
+                val email = contacts.email
+                val phones = contacts.phones
+                if (name != null) {
+                    contactPersonTextTv.text = contacts.name
+                } else {
+                    contactPersonTitleTv.visibility = View.GONE
+                    contactPersonTextTv.visibility = View.GONE
+                }
+                if (email != null) {
+                    emailTextTv.text = contacts.email
+                } else {
+                    emailTextTv.visibility = View.GONE
+                    emailTitleTv.visibility = View.GONE
+                }
+                if (!phones.isNullOrEmpty()) {
+                    val phone = contacts.phones.first()
+                    phoneTextTv.text = phone.number
+                    val comment = phone.comment
+                    if (!comment.isNullOrEmpty()) {
+                        commentTextTv.text = comment
+                    } else {
+                        commentTextTv.visibility = View.GONE
+                    }
+                } else {
+                    phoneTextTv.visibility = View.GONE
+                    phoneTitleTv.visibility = View.GONE
+                }
+                if (name == null && email == null && phones.isNullOrEmpty()) {
+                    contactsTitleTv.visibility = View.GONE
+                    commentTitleTv.visibility = View.GONE
+                }
+            } else {
+                contactsTitleTv.visibility = View.GONE
+                contactPersonTitleTv.visibility = View.GONE
+                contactPersonTextTv.visibility = View.GONE
+                emailTextTv.visibility = View.GONE
+                emailTitleTv.visibility = View.GONE
+                phoneTextTv.visibility = View.GONE
+                phoneTitleTv.visibility = View.GONE
+                commentTitleTv.visibility = View.GONE
+                commentTextTv.visibility = View.GONE
             }
         }
     }
@@ -128,37 +198,43 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
     }
 
     private fun salaryFromAndToText(salary: Salary): String {
+        val from = salary.from?.let { formatter(it) }
+        val to = salary.to?.let { formatter(it) }
         return getString(
             R.string.vacancy_salary_text_full,
-            salary.from.toString(),
-            salary.to.toString(),
+            from,
+            to,
             currencyUTF(salary.currency)
         )
     }
 
     private fun salaryFromText(salary: Salary): String {
+        val from = salary.from?.let { formatter(it) }
         return getString(
             R.string.vacancy_salary_text_from,
-            salary.from.toString(),
+            from,
             currencyUTF(salary.currency)
         )
     }
 
     private fun salaryToText(salary: Salary): String {
+        val to = salary.to?.let { formatter(it) }
         return getString(
             R.string.vacansy_salary_text_to,
-            salary.to.toString(),
+            to,
             currencyUTF(salary.currency)
         )
     }
 
-    private fun provideLogo(imageView: ImageView, url: String) {
+    private fun provideLogo(imageView: ImageView, url: String?) {
         Glide.with(requireContext())
             .load(url)
             .placeholder(R.drawable.ic_placeholder)
             .transform(RoundedCorners(CORNER_RADIUS))
             .into(imageView)
     }
+
+
 
     companion object {
         private const val VACANCY_ID = "vacancy_id"
