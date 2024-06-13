@@ -16,6 +16,4 @@ class VacancyDetailsDB(
     val keySkills: String,
     val contactName: String,
     val contactEmail: String,
-    val contactPhone: String,
-    val comment: String,
 )
