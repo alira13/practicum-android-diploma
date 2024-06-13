@@ -153,12 +153,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_list_rv"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="164dp"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/search_progress_pg"
         app:layout_constraintTop_toTopOf="parent"
         app:reverseLayout="false"
         tools:itemCount="10"
@@ -177,5 +178,15 @@
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/search_list_rv" />
+    
+    <ProgressBar
+        android:id="@+id/search_progress_pg"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/search_list_rv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/left_guideline"
+        app:layout_constraintEnd_toStartOf="@id/right_guideline"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
