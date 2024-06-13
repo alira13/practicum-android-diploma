@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.search.data.network
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
 import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
 import ru.practicum.android.diploma.search.data.SERVER_ERROR
@@ -38,7 +40,8 @@ class RetrofitNetworkClient(
                         Response().apply { resultCode = INCORRECT_REQUEST }
                     }
                 }
-            } catch (e: Exception) {
+            } catch (e: HttpException) {
+                Log.e("RetrofitNetworkClient", "exception handled $e")
                 Response().apply { resultCode = SERVER_ERROR }
             }
         }

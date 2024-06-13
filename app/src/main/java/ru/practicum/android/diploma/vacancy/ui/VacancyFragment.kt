@@ -100,6 +100,26 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             progressBar.isVisible = false
             scrollViewContent.isVisible = true
             vacancyNameTv.text = details.name
+            showSalary(details)
+            employerNameTv.text = details.employer?.name ?: ""
+            showArea(details)
+            val logoUrls = details.employer?.logoUrls
+            provideLogo(employerLogoIv, logoUrls?.px240)
+            showExperience(details)
+            val employment = details.employment
+            if (employment != null) {
+                employmentTv.text = employment.name
+            }
+            val description = details.description
+            vacancyDescriptionTv.text = Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT)
+            showKeySkills(details)
+            showContacts(details)
+        }
+        vacancyUrl = details.alternateUrl
+    }
+
+    private fun showSalary(details: VacancyDetails) {
+        binding.apply {
             val salary = details.salary
             if (salary != null) {
                 if (salary.from != null && salary.to != null) {
@@ -114,7 +134,11 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             } else {
                 salaryTv.text = getString(R.string.vacancy_salary_not_specified_text)
             }
-            employerNameTv.text = details.employer?.name ?: ""
+        }
+    }
+
+    private fun showArea(details: VacancyDetails) {
+        binding.apply {
             val address = details.address
             if (address?.city != null) {
                 areaNameTv.text =
@@ -122,18 +146,20 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             } else {
                 areaNameTv.text = details.area.name
             }
-            val logoUrls = details.employer?.logoUrls
-            provideLogo(employerLogoIv, logoUrls?.px240)
+        }
+    }
+
+    private fun showExperience(details: VacancyDetails) {
+        binding.apply {
             val experience = details.experience
             if (experience?.name != null) {
                 experienceTv.text = experience.name
             }
-            val employment = details.employment
-            if (employment != null) {
-                employmentTv.text = employment.name
-            }
-            val description = details.description
-            vacancyDescriptionTv.text = Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT)
+        }
+    }
+
+    private fun showKeySkills(details: VacancyDetails) {
+        binding.apply {
             val keySkills = details.keySkills
             if (keySkills.isNotEmpty()) {
                 var skillsString = ""
@@ -145,6 +171,11 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 keySkillsTitleTv.visibility = View.GONE
                 keySkillsTitleTv.visibility = View.GONE
             }
+        }
+    }
+
+    private fun showContacts(details: VacancyDetails) {
+        binding.apply {
             val contacts = details.contacts
             if (contacts != null) {
                 val name = contacts.name
@@ -191,7 +222,6 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 commentTextTv.visibility = View.GONE
             }
         }
-        vacancyUrl = details.alternateUrl
     }
 
     private fun showError(error: Errors?) {
