@@ -50,8 +50,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         subscribeOnViewModel()
         initializeVacanciesList()
         setRequestInputBehaviour()
-        // только чтоб проверка пропустила неиспользуемый метод - его вызов закоментить
-        showToast("")
     }
 
     private fun subscribeOnViewModel() {
@@ -74,7 +72,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             SearchUiState.Default -> renderDefaultState()
             SearchUiState.EditingRequest -> onEditingRequest()
             SearchUiState.EmptyResult -> showEmptyResult()
-            is SearchUiState.Error -> onError(state.error)
+            is SearchUiState.Error -> onError(state)
             SearchUiState.Loading -> showLoading()
             SearchUiState.FullLoaded -> showFullLoaded()
             is SearchUiState.SearchResult -> showSearchResult(state)
@@ -135,26 +133,32 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun onError(error: Errors) {
+    private fun onError(state: SearchUiState.Error) {
+        val errorMessage = when (state.error) {
+            is Errors.ConnectionError -> getString(R.string.no_internet)
+            is Errors.ServerError -> getString(R.string.server_error_text)
+            is Errors.IncorrectRequest -> getString(R.string.incorrect_request_text)
+        }
         hideKeyboard()
-        with(binding) {
-            searchResultTv.isVisible = false
-            searchProgressPb.isVisible = false
-            searchListRv.isVisible = false
-            searchPictureIv.apply {
-                isVisible = true
-                setImageResource(R.drawable.placeholder_internet_error)
-            }
-            searchPictureTextTv.apply {
-                isVisible = true
-                text = when (error) {
-                    is Errors.ConnectionError -> getString(R.string.no_internet)
-                    is Errors.ServerError -> getString(R.string.server_error_text)
-                    is Errors.IncorrectRequest -> getString(R.string.incorrect_request_text)
+        if (state.isItFirstPage) {
+            with(binding) {
+                searchResultTv.isVisible = false
+                searchProgressPb.isVisible = false
+                searchListRv.isVisible = false
+                searchPictureIv.apply {
+                    isVisible = true
+                    setImageResource(R.drawable.placeholder_internet_error)
+                }
+                searchPictureTextTv.apply {
+                    isVisible = true
+                    text = errorMessage
                 }
             }
+        } else {
+            showToast(errorMessage)
         }
     }
+
 
     private fun showLoading() {
         hideKeyboard()

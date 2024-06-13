@@ -12,6 +12,9 @@ sealed interface SearchUiState {
         val count: String
     ) : SearchUiState
     data object EmptyResult : SearchUiState
-    data class Error(val error: Errors) : SearchUiState
+    data class Error(
+        val error: Errors,
+        val isItFirstPage: Boolean
+    ) : SearchUiState
     object FullLoaded : SearchUiState
 }

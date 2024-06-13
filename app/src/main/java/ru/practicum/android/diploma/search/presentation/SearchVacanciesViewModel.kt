@@ -66,7 +66,10 @@ class SearchVacanciesViewModel(
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
             _uiState.value = when (result) {
-                is SearchResult.Error -> SearchUiState.Error(result.error)
+                is SearchResult.Error -> SearchUiState.Error(
+                    error = result.error,
+                    isItFirstPage = pageToRequest == 0
+                )
                 is SearchResult.SearchContent -> if (result.count == 0) {
                     SearchUiState.EmptyResult
                 } else {
