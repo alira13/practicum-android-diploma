@@ -136,6 +136,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun onError(error: Errors) {
+        hideKeyboard()
         with(binding) {
             searchResultTv.isVisible = false
             searchProgressPb.isVisible = false
@@ -144,23 +145,19 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 isVisible = true
                 setImageResource(R.drawable.placeholder_internet_error)
             }
-            when (error) {
-                is Errors.ConnectionError -> {
-                    searchPictureTextTv.text = getString(R.string.no_internet)
-                }
-
-                is Errors.ServerError -> {
-                    searchPictureTextTv.text = getString(R.string.server_error_text)
-                }
-
-                is Errors.IncorrectRequest -> {
-                    searchPictureTextTv.text = getString(R.string.incorrect_request_text)
+            searchPictureTextTv.apply {
+                isVisible = true
+                text = when (error) {
+                    is Errors.ConnectionError -> getString(R.string.no_internet)
+                    is Errors.ServerError -> getString(R.string.server_error_text)
+                    is Errors.IncorrectRequest -> getString(R.string.incorrect_request_text)
                 }
             }
         }
     }
 
     private fun showLoading() {
+        hideKeyboard()
         with(binding) {
             searchResultTv.isVisible = false
             searchListRv.isVisible = false
@@ -211,7 +208,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun showSearchResult(result: SearchUiState.SearchResult) {
         Log.d("QQQ", "отображение результата")
         with(binding) {
-            hideKeyboard()
             vacanciesAdapter.vacancies = result.vacancies
             searchProgressPb.isVisible = false
             searchPictureTextTv.isVisible = false
@@ -232,9 +228,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
                         if (dy > 0) {
                             val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                            Log.d("QQQ", "pos = $pos")
                             val itemsCount = vacanciesAdapter.itemCount
                             if (pos >= itemsCount - 1) {
-                                searchProgressPb.isVisible = true
                                 viewModel.onUiEvent(SearchUiEvent.LastItemReached)
                             }
                         }
