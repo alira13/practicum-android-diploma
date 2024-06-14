@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -27,6 +29,7 @@ import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
 import ru.practicum.android.diploma.util.BindingFragment
 import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
+import java.util.Locale
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
@@ -216,7 +219,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchPictureIv.isVisible = false
             binding.searchProgressPg.isVisible = false
             searchResultTv.apply {
-                text = result.count
+                text = convertToPlurals(result.count.toInt())
                 isVisible = true
             }
             searchListRv.apply {
@@ -269,4 +272,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         )
     }
 
+    private fun convertToPlurals(count: Int): String {
+        val languageTag = "ru"
+        AppCompatDelegate.setApplicationLocales(
+            LocaleListCompat.create(Locale.forLanguageTag(languageTag))
+        )
+        return resources.getQuantityString(R.plurals.vacancies_amount, count, count)
+    }
 }

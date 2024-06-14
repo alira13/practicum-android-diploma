@@ -77,17 +77,15 @@ class SearchVacanciesViewModel(
                     maxPages = result.pages
                     SearchUiState.SearchResult(
                         addVacanciesToList(result.vacancies),
-                        convert(result.count)
+                        result.count.toString(),
+                        result.page,
+                        result.pages
                     )
                 }
             }
         }
     }
 
-    // тестовый метод
-    private fun convert(count: Int): String {
-        return "Найдено $count вакансий"
-    }
 
     private fun addVacanciesToList(newPartVacancies: List<VacancyPreview>): MutableList<VacancyPreview> {
         totalVacansiesList += newPartVacancies
