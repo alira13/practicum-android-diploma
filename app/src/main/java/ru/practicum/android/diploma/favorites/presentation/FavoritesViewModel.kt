@@ -16,7 +16,6 @@ class FavoritesViewModel(private val interactor: VacansyInteractor) : ViewModel(
     val uiStateFlow = _uiState
 
     init {
-        //addToFav()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 interactor.getVacancies().collect { vacancies ->
@@ -40,46 +39,5 @@ class FavoritesViewModel(private val interactor: VacansyInteractor) : ViewModel(
             employer = vacancyDetails.employerName,
             salary = vacancyDetails.salaryTo
         )
-    }
-
-    private fun convert(vacancyDetails: VacancyPreview): VacancyDetailsDB {
-        return VacancyDetailsDB(
-            vacancyDetails.id,
-            vacancyDetails.description,
-            "",
-            vacancyDetails.salary,
-            vacancyDetails.salary,
-            vacancyDetails.employer,
-            vacancyDetails.iconUrl,
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
-        )
-    }
-
-    fun addToFav() {
-        viewModelScope.launch {
-            val fav = VacancyPreview(
-                "11",
-                null,
-                "Мегамозг, возраст 25 лет, опыт 15",
-                "Сказошный наниматель",
-                "ну где-то около 20 000 руб."
-            )
-            interactor.insertVacancy(convert(fav))
-        }
-    }
-
-    fun deleteFromFavorites(vacancy: VacancyDetailsDB) {
-        viewModelScope.launch {
-            interactor.deleteVacancy(vacancy)
-        }
     }
 }
