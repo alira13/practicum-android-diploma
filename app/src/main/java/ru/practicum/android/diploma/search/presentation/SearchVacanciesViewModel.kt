@@ -77,9 +77,7 @@ class SearchVacanciesViewModel(
                     maxPages = result.pages
                     SearchUiState.SearchResult(
                         addVacanciesToList(result.vacancies),
-                        result.count.toString(),
-                        result.page,
-                        result.pages
+                        result.count.toString()
                     )
                 }
             }
