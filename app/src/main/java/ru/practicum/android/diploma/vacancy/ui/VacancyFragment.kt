@@ -21,8 +21,7 @@ import ru.practicum.android.diploma.share.domain.models.EmailData
 import ru.practicum.android.diploma.util.BindingFragment
 import ru.practicum.android.diploma.util.currencyUTF
 import ru.practicum.android.diploma.util.formatter
-import ru.practicum.android.diploma.vacancy.domain.models.Salary
-import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
+import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsR
 import ru.practicum.android.diploma.vacancy.presentation.VacancyDetailsViewModel
 import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
@@ -95,145 +94,130 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
     }
 
-    private fun showContent(details: VacancyDetails) {
+    private fun showContent(details: VacancyDetailsR) {
         binding.apply {
             progressBar.isVisible = false
             scrollViewContent.isVisible = true
             vacancyNameTv.text = details.name
             showSalary(details)
-            employerNameTv.text = details.employer?.name ?: ""
+            employerNameTv.text = details.employerName ?: ""
             showArea(details)
-            val logoUrls = details.employer?.logoUrls
-            provideLogo(employerLogoIv, logoUrls?.px240)
+            val logoUrls = details.employerLogo
+            provideLogo(employerLogoIv, logoUrls)
             showExperience(details)
             val employment = details.employment
             if (employment != null) {
-                employmentTv.text = employment.name
+                employmentTv.text = employment
             }
             val description = details.description
             vacancyDescriptionTv.text = Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT)
-            showKeySkills(details)
+            showKeySkills(details.keySkills)
             showContacts(details)
         }
         vacancyUrl = details.alternateUrl
     }
 
-    private fun showSalary(details: VacancyDetails) {
+    private fun showSalary(details: VacancyDetailsR) {
         binding.apply {
-            val salary = details.salary
-            if (salary?.from != null && salary.to != null) {
-                salaryTv.text = salaryFromAndToText(salary)
-            }
-            if (salary?.from != null && salary.to == null) {
-                salaryTv.text = salaryFromText(salary)
-            }
-            if (salary?.from == null && salary?.to != null) {
-                salaryTv.text = salaryToText(salary)
-            }
-            if (salary == null) {
+            val salaryFrom = details.salaryFrom
+            val salaryTo = details.salaryTo
+            val currency = details.currency
+            if (salaryFrom != null && salaryTo != null) {
+                salaryTv.text = salaryFromAndToText(salaryFrom, salaryTo, currency)
+            } else if (salaryFrom != null) {
+                salaryTv.text = salaryFromText(salaryFrom, currency)
+            } else if (salaryTo != null) {
+                salaryTv.text = salaryToText(salaryTo, currency)
+            } else  {
                 salaryTv.text = getString(R.string.vacancy_salary_not_specified_text)
             }
         }
     }
 
-    private fun showArea(details: VacancyDetails) {
+    private fun showArea(details: VacancyDetailsR) {
         binding.apply {
             val address = details.address
-            if (address?.city != null) {
-                areaNameTv.text =
-                    getString(R.string.vacancy_address_text, address.city, address.street, address.building)
+            if (address != null) {
+                areaNameTv.text = address
             } else {
-                areaNameTv.text = details.area.name
+                areaNameTv.text = details.areaName
             }
         }
     }
 
-    private fun showExperience(details: VacancyDetails) {
+    private fun showExperience(details: VacancyDetailsR) {
         binding.apply {
             val experience = details.experience
-            if (experience?.name != null) {
-                experienceTv.text = experience.name
+            if (experience != null) {
+                experienceTv.text = experience
             }
         }
     }
 
-    private fun showKeySkills(details: VacancyDetails) {
+    private fun showKeySkills(keySkills: String?) {
         binding.apply {
-            val keySkills = details.keySkills
-            if (keySkills.isNotEmpty()) {
-                var skillsString = ""
-                keySkills.forEach { skill ->
-                    skillsString += "\u00B7 ${skill.name}\n"
-                }
-                keySkillsTextTv.text = skillsString
+            if (keySkills?.isNotEmpty() == true) {
+                keySkillsTextTv.text = keySkills
             } else {
-                keySkillsTitleTv.visibility = View.GONE
-                keySkillsTitleTv.visibility = View.GONE
+                keySkillsTitleTv.isVisible = false
+                keySkillsTitleTv.isVisible = false
             }
         }
     }
 
-    private fun showContacts(details: VacancyDetails) {
+    private fun showContacts(details: VacancyDetailsR) {
         binding.apply {
-            val contacts = details.contacts
-            if (contacts != null) {
-                val name = contacts.name
-                val email = contacts.email
-                val phones = contacts.phones
-                showNamesAndEmails(details)
+            val name = details.contactName
+            val email = details.contactEmail
+            val phone = details.contactPhone
+            if (name == null && email == null && phone.isNullOrEmpty()) {
+                contactsTitleTv.isVisible = false
+                contactPersonTitleTv.isVisible = false
+                contactPersonTextTv.isVisible = false
+                emailTextTv.isVisible = false
+                emailTitleTv.isVisible = false
+                phoneTextTv.isVisible = false
+                phoneTitleTv.isVisible = false
+                commentTitleTv.isVisible = false
+                commentTextTv.isVisible = false
+            } else {
+                showNamesAndEmails(name, email)
                 showPhones(details)
-                if (name == null && email == null && phones.isNullOrEmpty()) {
-                    contactsTitleTv.visibility = View.GONE
-                    commentTitleTv.visibility = View.GONE
-                }
-            } else {
-                contactsTitleTv.visibility = View.GONE
-                contactPersonTitleTv.visibility = View.GONE
-                contactPersonTextTv.visibility = View.GONE
-                emailTextTv.visibility = View.GONE
-                emailTitleTv.visibility = View.GONE
-                phoneTextTv.visibility = View.GONE
-                phoneTitleTv.visibility = View.GONE
-                commentTitleTv.visibility = View.GONE
-                commentTextTv.visibility = View.GONE
             }
         }
     }
 
-    private fun showNamesAndEmails(details: VacancyDetails) {
+    private fun showNamesAndEmails(name: String?, email: String?) {
         binding.apply {
-            val name = details.contacts?.name
-            val email = details.contacts?.email
             if (name != null) {
                 contactPersonTextTv.text = name
             } else {
-                contactPersonTitleTv.visibility = View.GONE
-                contactPersonTextTv.visibility = View.GONE
+                contactPersonTitleTv.isVisible = false
+                contactPersonTextTv.isVisible = false
             }
             if (email != null) {
                 emailTextTv.text = email
             } else {
-                emailTextTv.visibility = View.GONE
-                emailTitleTv.visibility = View.GONE
+                emailTextTv.isVisible = false
+                emailTitleTv.isVisible = false
             }
         }
     }
 
-    private fun showPhones(details: VacancyDetails) {
+    private fun showPhones(details: VacancyDetailsR) {
         binding.apply {
-            val phones = details.contacts?.phones
-            if (!phones.isNullOrEmpty()) {
-                val phone = phones.first()
-                phoneTextTv.text = phone.number
-                val comment = phone.comment
+            val phone = details.contactPhone
+            if (!phone.isNullOrEmpty()) {
+                phoneTextTv.text = phone
+                val comment = details.comment
                 if (!comment.isNullOrEmpty()) {
                     commentTextTv.text = comment
                 } else {
-                    commentTextTv.visibility = View.GONE
+                    commentTextTv.isVisible = false
                 }
             } else {
-                phoneTextTv.visibility = View.GONE
-                phoneTitleTv.visibility = View.GONE
+                phoneTextTv.isVisible = false
+                phoneTitleTv.isVisible = false
             }
         }
     }
@@ -269,32 +253,32 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
     }
 
-    private fun salaryFromAndToText(salary: Salary): String {
-        val from = salary.from?.let { formatter(it) }
-        val to = salary.to?.let { formatter(it) }
+    private fun salaryFromAndToText(salaryFrom: Long, salaryTo: Long, currency: String?): String {
+        val from = formatter(salaryFrom)
+        val to = formatter(salaryTo)
         return getString(
             R.string.vacancy_salary_text_full,
             from,
             to,
-            currencyUTF(salary.currency)
+            currencyUTF(currency)
         )
     }
 
-    private fun salaryFromText(salary: Salary): String {
-        val from = salary.from?.let { formatter(it) }
+    private fun salaryFromText(salaryFrom: Long, currency: String?): String {
+        val from =formatter(salaryFrom)
         return getString(
             R.string.vacancy_salary_text_from,
             from,
-            currencyUTF(salary.currency)
+            currencyUTF(currency)
         )
     }
 
-    private fun salaryToText(salary: Salary): String {
-        val to = salary.to?.let { formatter(it) }
+    private fun salaryToText(salaryTo: Long, currency: String?): String {
+        val to = formatter(salaryTo)
         return getString(
             R.string.vacansy_salary_text_to,
             to,
-            currencyUTF(salary.currency)
+            currencyUTF(currency)
         )
     }
 

@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.share.domain.api.SharingInteractor
 import ru.practicum.android.diploma.share.domain.models.EmailData
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsInteractor
-import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
+import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsR
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsRequest
 import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
@@ -48,7 +48,7 @@ class VacancyDetailsViewModel(
         sharingInteractor.callTo(number)
     }
 
-    private fun processResult(details: VacancyDetails?, errors: Errors?) {
+    private fun processResult(details: VacancyDetailsR?, errors: Errors?) {
         if (details != null) {
             vacancyDetailsState.value = VacancyDetailsUIState.Content(details)
         } else {

@@ -1,88 +1,50 @@
 package ru.practicum.android.diploma.vacancy.data
 
-import ru.practicum.android.diploma.search.domain.models.Area
+import android.content.Context
+import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.vacancy.data.dto.response.AddressDto
+import ru.practicum.android.diploma.vacancy.data.dto.response.SkillDto
 import ru.practicum.android.diploma.vacancy.data.dto.response.VacancyDetailsResponse
-import ru.practicum.android.diploma.vacancy.domain.models.Address
-import ru.practicum.android.diploma.vacancy.domain.models.Contacts
-import ru.practicum.android.diploma.vacancy.domain.models.Employer
-import ru.practicum.android.diploma.vacancy.domain.models.Employment
-import ru.practicum.android.diploma.vacancy.domain.models.Experience
-import ru.practicum.android.diploma.vacancy.domain.models.Phone
-import ru.practicum.android.diploma.vacancy.domain.models.Role
-import ru.practicum.android.diploma.vacancy.domain.models.Salary
-import ru.practicum.android.diploma.vacancy.domain.models.Schedule
-import ru.practicum.android.diploma.vacancy.domain.models.Skill
-import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
+import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsR
 
-class DetailsConverter {
-    fun map(response: VacancyDetailsResponse): VacancyDetails {
-        return VacancyDetails(
+class DetailsConverter(
+    private val context: Context
+) {
+    fun map(response: VacancyDetailsResponse): VacancyDetailsR {
+        return VacancyDetailsR(
             id = response.id,
             name = response.name,
-            employer = getEmployer(response),
             alternateUrl = response.alternateUrl,
-            area = Area(response.area.id, response.area.name),
-            address = Address(response.address?.building, response.address?.city, response.address?.street),
-            experience = getExperience(response),
-            salary = getSalary(response),
-            schedule = Schedule(response.schedule.id, response.schedule.name),
-            employment = getEmployment(response),
+            currency = response.salary?.currency,
+            salaryFrom = response.salary?.from,
+            salaryTo = response.salary?.to,
+            employerName = response.employer?.name,
+            employerLogo = response.employer?.logoUrls?.px90,
+            areaName = response.area.name,
+            address = getAddress(response.address),
+            experience = response.experience?.name,
+            employment = response.employment?.name,
+            schedule = response.schedule.name,
             description = response.description,
-            keySkills = response.keySkills.map { Skill(it.name) },
-            professionalRoles = response.professionalRoles.map { Role(it.id, it.name) },
-            contacts = getContacts(response)
+            keySkills = getKeySkills(response.keySkills),
+            contactName = response.contacts?.name,
+            contactEmail = response.contacts?.email,
+            contactPhone = response.contacts?.phones?.firstOrNull()?.number,
+            comment = response.contacts?.phones?.firstOrNull()?.comment
         )
     }
 
-    private fun getEmployer(response: VacancyDetailsResponse): Employer? {
-        return if (response.employer == null) {
-            null
-        } else {
-            Employer(response.employer.id, response.employer.name, response.employer.logoUrls)
-        }
+    private fun getAddress(address: AddressDto?): String? {
+       return address?.let {
+           context.getString(R.string.vacancy_address_text, address.city, address.street, address.building)
+       }
     }
 
-    private fun getExperience(response: VacancyDetailsResponse): Experience? {
-        return if (response.experience == null) {
-            null
-        } else {
-            Experience(response.experience.id, response.experience.name)
+    private fun getKeySkills(keySkills: Array<SkillDto>): String {
+        var skillsString = ""
+        keySkills.forEach { skill ->
+            skillsString += "\u00B7 ${skill.name}\n"
         }
-    }
-
-    private fun getSalary(response: VacancyDetailsResponse): Salary? {
-        return if (response.salary == null) {
-            null
-        } else {
-            Salary(response.salary.currency, response.salary.from, response.salary.to)
-        }
-    }
-
-    private fun getEmployment(response: VacancyDetailsResponse): Employment? {
-        return if (response.employment == null) {
-            null
-        } else {
-            Employment(response.employment.id, response.employment.name)
-        }
-    }
-
-    private fun getContacts(response: VacancyDetailsResponse): Contacts? {
-        return if (response.contacts == null) {
-            null
-        } else {
-            Contacts(
-                email = response.contacts.email,
-                name = response.contacts.name,
-                phones = response.contacts.phones?.map {
-                    Phone(
-                        city = it.city,
-                        comment = it.comment,
-                        country = it.country,
-                        formatted = it.formatted,
-                        number = it.number
-                    )
-                }
-            )
-        }
+        return skillsString
     }
 }
