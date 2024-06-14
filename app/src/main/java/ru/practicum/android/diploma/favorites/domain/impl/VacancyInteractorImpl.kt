@@ -14,7 +14,7 @@ class VacancyInteractorImpl(private val vacancyRepository: VacancyRepository) : 
         vacancyRepository.deleteVacancy(vacancy)
     }
 
-    override suspend fun getVacancies(): Flow<List<VacancyDetailsDB>> {
+    override suspend fun getVacancies(): Flow<List<VacancyDetailsDB>?> {
         return vacancyRepository.getVacancies()
     }
 
