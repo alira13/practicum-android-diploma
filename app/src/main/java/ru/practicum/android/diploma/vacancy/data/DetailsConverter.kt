@@ -47,11 +47,12 @@ class DetailsConverter(
         } else if (salary?.from != null) {
             salaryFromText(salary)
         } else if (salary?.to != null) {
-             salaryToText(salary)
+            salaryToText(salary)
         } else {
             context.getString(R.string.vacancy_salary_not_specified_text)
         }
     }
+
     private fun salaryFromAndToText(salary: SalaryDto): String {
         val from = salary.from?.let { formatter(it) }
         val to = salary.to?.let { formatter(it) }
