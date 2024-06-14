@@ -98,6 +98,4 @@ class DetailsConverter(
     private fun getComment(response: VacancyDetailsResponse): String? {
         return response.contacts?.phones?.firstOrNull()?.comment
     }
-
-
 }
