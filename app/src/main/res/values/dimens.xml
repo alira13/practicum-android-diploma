@@ -28,5 +28,6 @@
 
     <dimen name="radius_10dp">10dp</dimen>
     <dimen name="radius_12dp">12dp</dimen>
+    <dimen name="item_size_164dp">164dp</dimen>
 
 </resources>

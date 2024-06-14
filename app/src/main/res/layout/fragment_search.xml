@@ -100,7 +100,7 @@
         style="@style/RegularTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/spacing_16"
         android:background="@drawable/background_edit_text"
         android:backgroundTint="@color/blue"
         android:paddingHorizontal="12dp"
@@ -153,8 +153,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_list_rv"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="164dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/item_size_164dp"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
@@ -164,7 +164,9 @@
         app:reverseLayout="false"
         tools:itemCount="10"
         tools:listitem="@layout/vacancy_item"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:paddingBottom="168dp"
+        />
 
     <ProgressBar
         android:id="@+id/search_progress_pb"

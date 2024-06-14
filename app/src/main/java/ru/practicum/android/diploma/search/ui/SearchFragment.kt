@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -46,17 +49,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
-    }
-
-    override fun onStart() {
-        super.onStart()
         subscribeOnViewModel()
     }
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect {
-                render(it)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    render(it)
+                }
             }
         }
     }
@@ -237,11 +238,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(
-            requireContext(),
-            message,
-            Toast.LENGTH_LONG
-        ).show()
+        val snackBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
+        snackBar.setTextColor(requireContext().getColor(R.color.white))
+        snackBar.show()
+        val viewSnackbar = snackBar.view
+        val textSnackbar: TextView =
+            viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
+        textSnackbar.textAlignment = View.TEXT_ALIGNMENT_CENTER
     }
 
     private fun hideKeyboard() {
@@ -261,4 +264,5 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             VacancyFragment.createArgs(vacancyID)
         )
     }
+
 }
