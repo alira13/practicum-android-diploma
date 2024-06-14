@@ -153,7 +153,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_list_rv"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/spacing_164dp"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
@@ -164,9 +164,7 @@
         app:reverseLayout="false"
         tools:itemCount="10"
         tools:listitem="@layout/vacancy_item"
-        tools:visibility="visible"
-        android:paddingBottom="168dp"
-        />
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
