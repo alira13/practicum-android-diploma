@@ -1,9 +1,10 @@
 package ru.practicum.android.diploma.favorites.data.converters
 
+import com.google.gson.Gson
 import ru.practicum.android.diploma.favorites.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.favorites.domain.models.VacancyDetailsDB
 
-class VacancyConverterDB {
+class VacancyConverterDB(private val gson: Gson) {
     fun mapEntityToModel(entity: VacancyEntity): VacancyDetailsDB =
         VacancyDetailsDB(
             entity.vacancyId,
@@ -18,33 +19,33 @@ class VacancyConverterDB {
             entity.employment,
             entity.schedule,
             entity.description,
-            entity.keySkills,
+            gson.fromJson(entity.keySkills, Array<String>::class.java).toList(),
             entity.contactName,
             entity.contactEmail,
-            entity.contactPhone,
-            entity.comment
+            gson.fromJson(entity.contactPhone, Array<String>::class.java).toList(),
+            gson.fromJson(entity.comment, Array<String>::class.java).toList()
         )
 
     fun mapModelToEntity(model: VacancyDetailsDB): VacancyEntity =
         VacancyEntity(
             id = 0,
-            model.id,
-            model.name,
-            model.currency,
-            model.salaryFrom,
-            model.salaryTo,
-            model.employerName,
-            model.employerLogo,
-            model.areaName,
-            model.experience,
-            model.employment,
-            model.schedule,
-            model.description,
-            model.keySkills,
-            model.contactName,
-            model.contactEmail,
-            model.contactPhone,
-            model.comment
+            vacancyId = model.id,
+            name = model.name,
+            currency = model.currency,
+            salaryFrom = model.salaryFrom,
+            salaryTo = model.salaryTo,
+            employerName = model.employerName,
+            employerLogo = model.employerLogo,
+            areaName = model.areaName,
+            experience = model.experience,
+            employment = model.employment,
+            schedule = model.schedule,
+            description = model.description,
+            keySkills = gson.toJson(model.keySkills),
+            contactName = model.contactName,
+            contactEmail = model.contactEmail,
+            contactPhone = gson.toJson(model.contactPhone),
+            comment = gson.toJson(model.comment)
         )
 }
 
