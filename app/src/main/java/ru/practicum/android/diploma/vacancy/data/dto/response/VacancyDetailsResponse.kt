@@ -13,6 +13,7 @@ data class VacancyDetailsResponse(
     @SerializedName("alternate_url")
     val alternateUrl: String,
     val area: AreaDto,
+    val address: AddressDto?,
     val experience: ExperienceDto?,
     val salary: SalaryDto?,
     val schedule: ScheduleDto,

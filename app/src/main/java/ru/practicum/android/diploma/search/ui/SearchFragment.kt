@@ -82,7 +82,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 clearFocus()
             }
             searchResultTv.isVisible = false
-            searchProgressPb.isVisible = false
+            progressBar.isVisible = false
             searchListRv.isVisible = false
             searchPictureTextTv.isVisible = false
             clearSearchIconIv.apply {
@@ -99,7 +99,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun onEditingRequest() {
         with(binding) {
             searchResultTv.isVisible = false
-            searchProgressPb.isVisible = false
+            progressBar.isVisible = false
             searchListRv.isVisible = false
             searchPictureTextTv.isVisible = false
             clearSearchIconIv.apply {
@@ -112,7 +112,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun showEmptyResult() {
         with(binding) {
-            searchProgressPb.isVisible = false
+            progressBar.isVisible = false
             searchListRv.isVisible = false
             searchResultTv.apply {
                 setText(R.string.no_vacancies)
@@ -139,7 +139,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         if (state.isItFirstPage) {
             with(binding) {
                 searchResultTv.isVisible = false
-                searchProgressPb.isVisible = false
+                progressBar.isVisible = false
                 searchListRv.isVisible = false
                 searchPictureIv.apply {
                     isVisible = true
@@ -163,7 +163,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 searchListRv.isVisible = false
                 searchPictureTextTv.isVisible = false
                 searchPictureIv.isVisible = false
-                searchProgressPb.isVisible = true
+                progressBar.isVisible = true
             }
         } else {
             binding.searchProgressPg.isVisible = true
@@ -192,7 +192,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchListRv.isVisible = true
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
-            searchProgressPb.isVisible = false
+            progressBar.isVisible = false
         }
     }
 
@@ -211,7 +211,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun showSearchResult(result: SearchUiState.SearchResult) {
         with(binding) {
             vacanciesAdapter.vacancies = result.vacancies
-            searchProgressPb.isVisible = false
+            progressBar.isVisible = false
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
             binding.searchProgressPg.isVisible = false

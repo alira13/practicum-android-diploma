@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.vacancy.data
 
 import ru.practicum.android.diploma.search.domain.models.Area
 import ru.practicum.android.diploma.vacancy.data.dto.response.VacancyDetailsResponse
+import ru.practicum.android.diploma.vacancy.domain.models.Address
 import ru.practicum.android.diploma.vacancy.domain.models.Contacts
 import ru.practicum.android.diploma.vacancy.domain.models.Employer
 import ru.practicum.android.diploma.vacancy.domain.models.Employment
@@ -21,6 +22,7 @@ class DetailsConverter {
             employer = getEmployer(response),
             alternateUrl = response.alternateUrl,
             area = Area(response.area.id, response.area.name),
+            address = Address(response.address?.building, response.address?.city, response.address?.street),
             experience = getExperience(response),
             salary = getSalary(response),
             schedule = Schedule(response.schedule.id, response.schedule.name),
