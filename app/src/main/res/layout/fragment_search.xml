@@ -154,7 +154,7 @@
         android:id="@+id/search_list_rv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/item_size_164dp"
+        android:layout_marginTop="@dimen/spacing_164dp"
         android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"

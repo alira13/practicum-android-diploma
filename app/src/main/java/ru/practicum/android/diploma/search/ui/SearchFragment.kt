@@ -240,7 +240,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         val snackBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
         snackBar.setTextColor(requireContext().getColor(R.color.white))
         snackBar.show()
-        val viewSnackbar = snackBar.view
+        val viewSnackbar = snackBar.view.apply{
+            setBackgroundResource(R.drawable.background_red_snackbar)
+        }
         val textSnackbar: TextView =
             viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
         textSnackbar.textAlignment = View.TEXT_ALIGNMENT_CENTER
