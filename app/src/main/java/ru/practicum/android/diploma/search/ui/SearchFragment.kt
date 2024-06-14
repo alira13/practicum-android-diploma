@@ -165,7 +165,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 searchProgressPb.isVisible = true
             }
         } else {
-            // отображение загрузки при запросе следующих страниц
+            binding.searchProgressPg.isVisible = true
         }
     }
 
@@ -212,6 +212,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchProgressPb.isVisible = false
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
+            binding.searchProgressPg.isVisible = false
             searchResultTv.apply {
                 text = result.count
                 isVisible = true
