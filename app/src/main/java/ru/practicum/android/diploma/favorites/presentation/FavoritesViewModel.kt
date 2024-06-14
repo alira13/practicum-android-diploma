@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.favorites.presentation
 
 import android.database.SQLException
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,6 +28,7 @@ class FavoritesViewModel(private val interactor: VacansyInteractor) : ViewModel(
                 }
             } catch (e: SQLException) {
                 _uiState.postValue(FavoritesUiState.Failure)
+                Log.e("AppHandledExceptionTag", e.stackTraceToString())
             }
         }
     }
