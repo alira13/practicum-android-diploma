@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.vacancy.di
+package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
 import ru.practicum.android.diploma.vacancy.data.DetailsConverter

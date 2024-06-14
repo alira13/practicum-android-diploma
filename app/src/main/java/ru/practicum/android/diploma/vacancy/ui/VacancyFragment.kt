@@ -115,8 +115,8 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             if (details.keySkills?.isNotEmpty() == true) {
                 keySkillsTextTv.text = details.keySkills
             } else {
-                keySkillsTitleTv.visibility = View.GONE
-                keySkillsTitleTv.visibility = View.GONE
+                keySkillsTitleTv.isVisible = false
+                keySkillsTitleTv.isVisible = false
             }
         }
     }
@@ -129,17 +129,17 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             showNamesAndEmails(details)
             showPhones(details)
             if (name == null && email == null && phones.isNullOrEmpty()) {
-                contactsTitleTv.visibility = View.GONE
-                commentTitleTv.visibility = View.GONE
-                contactsTitleTv.visibility = View.GONE
-                contactPersonTitleTv.visibility = View.GONE
-                contactPersonTextTv.visibility = View.GONE
-                emailTextTv.visibility = View.GONE
-                emailTitleTv.visibility = View.GONE
-                phoneTextTv.visibility = View.GONE
-                phoneTitleTv.visibility = View.GONE
-                commentTitleTv.visibility = View.GONE
-                commentTextTv.visibility = View.GONE
+                contactsTitleTv.isVisible = false
+                commentTitleTv.isVisible = false
+                contactsTitleTv.isVisible = false
+                contactPersonTitleTv.isVisible = false
+                contactPersonTextTv.isVisible = false
+                emailTextTv.isVisible = false
+                emailTitleTv.isVisible = false
+                phoneTextTv.isVisible = false
+                phoneTitleTv.isVisible = false
+                commentTitleTv.isVisible = false
+                commentTextTv.isVisible = false
             }
         }
     }
@@ -151,14 +151,14 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             if (name != null) {
                 contactPersonTextTv.text = name
             } else {
-                contactPersonTitleTv.visibility = View.GONE
-                contactPersonTextTv.visibility = View.GONE
+                contactPersonTitleTv.isVisible = false
+                contactPersonTextTv.isVisible = false
             }
             if (email != null) {
                 emailTextTv.text = email
             } else {
-                emailTextTv.visibility = View.GONE
-                emailTitleTv.visibility = View.GONE
+                emailTextTv.isVisible = false
+                emailTitleTv.isVisible = false
             }
         }
     }
@@ -172,11 +172,11 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 if (!comment.isNullOrEmpty()) {
                     commentTextTv.text = comment
                 } else {
-                    commentTextTv.visibility = View.GONE
+                    commentTextTv.isVisible = false
                 }
             } else {
-                phoneTextTv.visibility = View.GONE
-                phoneTitleTv.visibility = View.GONE
+                phoneTextTv.isVisible = false
+                phoneTitleTv.isVisible = false
             }
         }
     }
