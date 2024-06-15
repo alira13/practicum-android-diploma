@@ -16,5 +16,5 @@ data class VacancyDetails(
     val phone: String?,
     val email: String?,
     val comment: String?,
-    var isFavorite: Boolean,
+    val isFavorite: Boolean,
 )

@@ -6,7 +6,6 @@ import ru.practicum.android.diploma.favorites.domain.api.FavoriteInteractor
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 
 class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository) : FavoriteInteractor {
-
     override suspend fun insertFavoriteVacancy(vacancy: VacancyDetails) {
         favoriteRepository.insertFavoriteVacancy(vacancy)
     }

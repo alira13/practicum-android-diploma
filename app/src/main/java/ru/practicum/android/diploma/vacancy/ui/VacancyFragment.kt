@@ -26,7 +26,7 @@ import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
 class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
-    private val viewModel:VacancyDetailsViewModel by viewModel {
+    private val viewModel: VacancyDetailsViewModel by viewModel {
         parametersOf(vacancyID)
     }
     private var vacancyID: String? = null

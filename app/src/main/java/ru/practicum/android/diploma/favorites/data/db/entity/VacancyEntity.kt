@@ -22,5 +22,5 @@ data class VacancyEntity(
     val contactPhone: String?,
     val contactEmail: String?,
     val comment: String?,
-    var isFavorite: Boolean,
+    val isFavorite: Boolean,
 )
