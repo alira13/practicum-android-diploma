@@ -18,9 +18,8 @@ class VacancyRepositoryImpl(
         appDatabase.vacancyDao().insertVacancy(vacancyEntity)
     }
 
-    override suspend fun deleteVacancy(vacancy: VacancyDetailsDB) {
-        val vacancyEntity = vacancyConverter.mapModelToEntity(vacancy)
-        appDatabase.vacancyDao().deleteVacancy(vacancyEntity)
+    override suspend fun deleteVacancy(vacancyId: String) {
+        appDatabase.vacancyDao().deleteVacancy(vacancyId)
     }
 
     override suspend fun getVacancies(): Flow<List<VacancyDetailsDB>> = flow {
