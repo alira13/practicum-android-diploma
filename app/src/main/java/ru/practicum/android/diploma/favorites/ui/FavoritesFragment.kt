@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
@@ -23,7 +21,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
     private val viewModel: FavoritesViewModel by viewModel()
 
     private val vacanciesAdapter: VacanciesAdapter by lazy {
-        VacanciesAdapter { vacancy -> toVacancyFullInfo(vacancy.id) }
+        VacanciesAdapter { vacancy -> toVacancyDetails(vacancy.id) }
             .apply {
                 vacancies = emptyList()
             }
@@ -39,39 +37,29 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeFavoritesList()
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiStateFlow.collect {
-                render(it)
-            }
+
+        viewModel.uiStateFlow.observe(viewLifecycleOwner) { state ->
+            render(state)
         }
     }
 
     private fun render(state: FavoritesUiState) {
         when (state) {
-            is FavoritesUiState.Content -> showFavoriteVacancies(state.list)
+            is FavoritesUiState.Content -> showContent(state.list)
 
-            FavoritesUiState.Default -> renderDefaultState()
-
-            FavoritesUiState.Empty -> showPlaceholder(
+            FavoritesUiState.Empty -> showError(
                 R.drawable.placeholder_favorites_empty,
                 R.string.empty_list
             )
 
-            FavoritesUiState.Failure -> showPlaceholder(
+            FavoritesUiState.Failure -> showError(
                 R.drawable.placeholder_error,
                 R.string.no_vacancies
             )
         }
     }
 
-    private fun renderDefaultState() {
-        with(binding) {
-            favPlaceholderIcon.isVisible = false
-            favPlaceholderMessage.isVisible = false
-        }
-    }
-
-    private fun showFavoriteVacancies(list: List<VacancyPreview>) {
+    private fun showContent(list: List<VacancyPreview>) {
         vacanciesAdapter.vacancies = list
         with(binding) {
             favRvVacancies.apply {
@@ -83,7 +71,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
         }
     }
 
-    private fun showPlaceholder(
+    private fun showError(
         imageRes: Int,
         textRes: Int
     ) {
@@ -105,7 +93,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
         binding.favRvVacancies.adapter = vacanciesAdapter
     }
 
-    private fun toVacancyFullInfo(vacancyID: String) {
+    private fun toVacancyDetails(vacancyID: String) {
         findNavController().navigate(
             R.id.action_favoritesFragment_to_vacancyFragment,
             VacancyFragment.createArgs(vacancyID)
