@@ -19,30 +19,47 @@ import ru.practicum.android.diploma.vacancy.domain.impl.VacancyDetailsInteractor
 val domainModule = module {
 
     single<VacancyDetailsRepository> {
-        VacancyDetailsRepositoryImpl(get(), get())
+        VacancyDetailsRepositoryImpl(
+            networkClient = get(),
+            converter = get()
+        )
     }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(get(), get())
+        SearchRepositoryImpl(
+            networkClient = get(),
+            converter = get()
+        )
     }
 
     single<VacancyRepository> {
-        VacancyRepositoryImpl(get(), get())
+        VacancyRepositoryImpl(
+            appDatabase = get(),
+            vacancyConverter = get()
+        )
     }
 
     single<SharingInteractor> {
-        SharingInteractorImpl(get())
+        SharingInteractorImpl(
+            externalNavigator = get()
+        )
     }
 
     single<VacancyDetailsInteractor> {
-        VacancyDetailsInteractorImpl(get())
+        VacancyDetailsInteractorImpl(
+            vacancyDetailsRepository = get()
+        )
     }
 
     single<SearchInteractor> {
-        SearchInteractorImpl(get())
+        SearchInteractorImpl(
+            searchRepository = get()
+        )
     }
 
     single<VacansyInteractor> {
-        VacancyInteractorImpl(get())
+        VacancyInteractorImpl(
+            vacancyRepository = get()
+        )
     }
 }

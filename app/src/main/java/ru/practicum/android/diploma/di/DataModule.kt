@@ -26,7 +26,8 @@ val dataModule = module {
 
     factory {
         DetailsConverter(
-            context = get())
+            context = get()
+        )
     }
 
     single {
