@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
@@ -25,7 +26,7 @@ import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
 class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
-    private val viewModel by inject<VacancyDetailsViewModel> {
+    private val viewModel:VacancyDetailsViewModel by viewModel {
         parametersOf(vacancyID)
     }
     private var vacancyID: String? = null

@@ -25,7 +25,7 @@ val viewModelModule = module {
             id = params.get(),
             vacancyDetailsInteractor = get(),
             sharingInteractor = get(),
-            get()
+            favoriteInteractor = get(),
         )
     }
 }

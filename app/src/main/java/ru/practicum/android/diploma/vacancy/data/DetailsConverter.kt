@@ -12,27 +12,27 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 class DetailsConverter(
     private val context: Context,
     private val appDatabase: AppDatabase,
-    ) {
+) {
 
     suspend fun map(response: VacancyDetailsResponse): VacancyDetails {
         return VacancyDetails(
-                id = response.id,
-                name = response.name,
-                employer = response.employer?.name,
-                logoUrls = response.employer?.logoUrls?.px240,
-                alternateUrl = response.alternateUrl,
-                area = getArea(response),
-                experience = response.experience?.name,
-                salary = getSalary(response),
+            id = response.id,
+            name = response.name,
+            employer = response.employer?.name,
+            logoUrls = response.employer?.logoUrls?.px240,
+            alternateUrl = response.alternateUrl,
+            area = getArea(response),
+            experience = response.experience?.name,
+            salary = getSalary(response),
             employment = response.employment?.name + ", " + response.schedule.name,
-                description = response.description,
-                keySkills = getKeySkills(response),
-                contactName = response.contacts?.name,
-                phone = getPhone(response),
-                email = response.contacts?.email,
-                comment = getComment(response),
-                isFavorite = checkIsFavorite(response.id)
-            )
+            description = response.description,
+            keySkills = getKeySkills(response),
+            contactName = response.contacts?.name,
+            phone = getPhone(response),
+            email = response.contacts?.email,
+            comment = getComment(response),
+            isFavorite = checkIsFavorite(response.id)
+        )
     }
 
     private fun getArea(response: VacancyDetailsResponse): String {

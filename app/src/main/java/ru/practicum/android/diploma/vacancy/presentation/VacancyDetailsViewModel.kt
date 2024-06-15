@@ -21,7 +21,7 @@ class VacancyDetailsViewModel(
     private val favoriteInteractor: FavoriteInteractor,
 ) : ViewModel() {
 
-    val idVacancy = id
+    private val idVacancy = id
 
     private val vacancyDetailsState: MutableLiveData<VacancyDetailsUIState> = MutableLiveData()
     fun getUIState(): LiveData<VacancyDetailsUIState> = vacancyDetailsState
