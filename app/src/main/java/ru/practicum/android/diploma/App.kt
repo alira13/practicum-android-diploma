@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.di.networkClientModule
 import ru.practicum.android.diploma.di.viewModelModule
 import ru.practicum.android.diploma.search.di.searchRepositoryModule
 import ru.practicum.android.diploma.share.di.shareModule
-import ru.practicum.android.diploma.vacancy.di.vacancyDetailsRepositoryModule
+import ru.practicum.android.diploma.di.vacancyDetailsRepositoryModule
 
 class App : Application() {
 

@@ -10,11 +10,11 @@ class VacancyInteractorImpl(private val vacancyRepository: VacancyRepository) : 
         vacancyRepository.insertVacancy(vacancy)
     }
 
-    override suspend fun deleteVacancy(vacancy: VacancyDetailsDB) {
-        vacancyRepository.deleteVacancy(vacancy)
+    override suspend fun deleteVacancy(vacancyId: String) {
+        vacancyRepository.deleteVacancy(vacancyId)
     }
 
-    override suspend fun getVacancies(): Flow<List<VacancyDetailsDB>> {
+    override suspend fun getVacancies(): Flow<List<VacancyDetailsDB>?> {
         return vacancyRepository.getVacancies()
     }
 

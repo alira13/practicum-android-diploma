@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.vacancy.di
+package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
 import ru.practicum.android.diploma.vacancy.data.DetailsConverter
@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.vacancy.domain.impl.VacancyDetailsInteractor
 
 val vacancyDetailsRepositoryModule = module {
     factory {
-        DetailsConverter()
+        DetailsConverter(get())
     }
     single<VacancyDetailsRepository> {
         VacancyDetailsRepositoryImpl(get(), get())
