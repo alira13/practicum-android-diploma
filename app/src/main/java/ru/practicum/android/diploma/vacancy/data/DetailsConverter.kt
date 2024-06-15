@@ -21,7 +21,7 @@ class DetailsConverter(
             area = getArea(response),
             experience = response.experience?.name,
             salary = getSalary(response),
-            employment = response.employment?.name,
+            employment = response.employment?.name + ", " + response.schedule.name,
             description = response.description,
             keySkills = getKeySkills(response),
             contactName = response.contacts?.name,
