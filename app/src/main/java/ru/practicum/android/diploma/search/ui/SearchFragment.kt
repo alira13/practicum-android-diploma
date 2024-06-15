@@ -3,19 +3,14 @@ package ru.practicum.android.diploma.search.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,18 +25,9 @@ import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
 import ru.practicum.android.diploma.util.BindingFragment
 import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
-import java.util.Locale
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
-    private var lastRequest: String? = null
-       set(value) {
-            Log.d("QQQ", "set() $value")
-            field = value
-        }
-        get() = field.also{
-            Log.d("QQQ", "get() $it")
-        }
     private val viewModel: SearchVacanciesViewModel by viewModel()
     private val vacanciesAdapter: VacanciesAdapter by lazy {
         VacanciesAdapter { vacancy ->
@@ -61,7 +47,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
-
     }
 
     override fun onStart() {
@@ -71,11 +56,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.uiState.collect {
-                    render(it)
-                    if(it is SearchUiState.SearchResult) Log.d("QQQ", "${it.javaClass}")
-                    else Log.d("QQQ","$it")
-                /*}*/
+            viewModel.uiState.collect {
+                render(it)
             }
         }
     }
@@ -193,17 +175,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun setRequestInputBehaviour() {
-        binding.searchInputEt.doOnTextChanged { text, start, before, count ->
-            if (
-                !text.isNullOrEmpty()
-                && text.toString() != lastRequest
-            ) {
-                lastRequest = text.toString()
-                viewModel.onUiEvent(SearchUiEvent.QueryInput(text))
-                Log.d("QQQ", "отправлен запрос $text")
-            } else {
-                viewModel.onUiEvent(SearchUiEvent.ClearText)
-            }
+        binding.searchInputEt.doOnTextChanged { s, _, _, _ ->
+            viewModel.onUiEvent(SearchUiEvent.QueryInput(s.toString()))
         }
     }
 
@@ -235,7 +208,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchPlaceholderImageIv.isVisible = false
             binding.searchProgressBarPg.isVisible = false
             searchCountTv.apply {
-                text = convertToPlurals(result.count.toInt())
+                text = result.count
                 isVisible = true
             }
             searchListRv.apply {
@@ -287,13 +260,5 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             R.id.action_searchFragment_to_vacancyFragment,
             VacancyFragment.createArgs(vacancyID)
         )
-    }
-
-    private fun convertToPlurals(count: Int): String {
-        val languageTag = "ru"
-        AppCompatDelegate.setApplicationLocales(
-            LocaleListCompat.create(Locale.forLanguageTag(languageTag))
-        )
-        return resources.getQuantityString(R.plurals.vacancies_amount, count, count)
     }
 }

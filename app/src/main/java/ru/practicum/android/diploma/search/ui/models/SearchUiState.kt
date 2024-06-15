@@ -16,5 +16,5 @@ sealed interface SearchUiState {
         val error: Errors,
         val isItFirstPage: Boolean
     ) : SearchUiState
-    object FullLoaded : SearchUiState
+    data object FullLoaded : SearchUiState
 }

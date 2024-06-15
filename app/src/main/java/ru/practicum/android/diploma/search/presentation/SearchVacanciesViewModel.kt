@@ -2,8 +2,8 @@ package ru.practicum.android.diploma.search.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,6 @@ import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
 import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
-import ru.practicum.android.diploma.util.debounce
 
 class SearchVacanciesViewModel(
     private val searchInteractor: SearchInteractor
@@ -35,7 +34,7 @@ class SearchVacanciesViewModel(
     fun onUiEvent(event: SearchUiEvent) {
         when (event) {
             SearchUiEvent.ClearText -> onRequestCleared()
-            is SearchUiEvent.QueryInput -> onQueryInput(event.s)
+            is SearchUiEvent.QueryInput -> onQueryInput(event.expression)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
         }
     }
@@ -45,14 +44,17 @@ class SearchVacanciesViewModel(
         _uiState.value = SearchUiState.Default
     }
 
-    private fun onQueryInput(s: CharSequence?) {
-        if (!s.isNullOrEmpty()) {
-            _uiState.value = SearchUiState.EditingRequest
-            resetSearchParams(s.toString())
-            search(lastSearchRequest!!, true)
-        }
-        else {
+    private fun onQueryInput(expression: String) {
+        if(
+            expression.isEmpty()
+            || expression == "null") {
             onRequestCleared()
+        }
+        else if (expression != lastSearchRequest){
+            _uiState.value = SearchUiState.EditingRequest
+            resetSearchParams(expression)
+            searchJob?.cancel()
+            search(lastSearchRequest!!, true)
         }
     }
 
@@ -68,8 +70,7 @@ class SearchVacanciesViewModel(
         searchRequest: String,
         withDelay: Boolean
     ) {
-        searchJob = viewModelScope.launch {
-            searchJob?.cancel()
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
             if (withDelay) {
                 delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
@@ -82,20 +83,19 @@ class SearchVacanciesViewModel(
                     isItFirstPage = pageToRequest == 0
                 )
 
-                is SearchResult.SearchContent -> if (result.count == 0) {
+                is SearchResult.SearchContent -> if (result.vacancies.isEmpty()) {
                     SearchUiState.EmptyResult
                 } else {
                     currentPage = result.page
                     maxPages = result.pages
                     SearchUiState.SearchResult(
                         addVacanciesToList(result.vacancies),
-                        result.count.toString()
+                        result.count
                     )
                 }
             }
         }
     }
-
 
     private fun addVacanciesToList(newPartVacancies: List<VacancyPreview>): MutableList<VacancyPreview> {
         totalVacansiesList += newPartVacancies
@@ -103,7 +103,7 @@ class SearchVacanciesViewModel(
     }
 
     private fun onLastItemReached() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (pageToRequest < maxPages && isNextPageLoading) {
                 pageToRequest += 1
                 search(lastSearchRequest!!, false)
