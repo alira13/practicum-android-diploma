@@ -2,6 +2,9 @@ package ru.practicum.android.diploma.search.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -22,32 +25,34 @@ class SearchVacanciesViewModel(
     private var maxPages = 1
     private var totalVacansiesList: MutableList<VacancyPreview> = mutableListOf()
     private var isNextPageLoading: Boolean = false
+    private var searchJob: Job? = null
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default)
     val uiState = _uiState.asStateFlow()
 
     private var lastSearchRequest: String? = null
-    private val searchDebounce = debounce<String>(
-        delayMillis = SEARCH_DEBOUNCE_DELAY_MILLIS,
-        coroutineScope = viewModelScope,
-        useLastParam = true
-    ) { searchRequest ->
-        search(searchRequest)
-    }
 
     fun onUiEvent(event: SearchUiEvent) {
         when (event) {
-            SearchUiEvent.ClearText -> _uiState.value = SearchUiState.Default
+            SearchUiEvent.ClearText -> onRequestCleared()
             is SearchUiEvent.QueryInput -> onQueryInput(event.s)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
         }
+    }
+
+    private fun onRequestCleared() {
+        searchJob?.cancel()
+        _uiState.value = SearchUiState.Default
     }
 
     private fun onQueryInput(s: CharSequence?) {
         if (!s.isNullOrEmpty()) {
             _uiState.value = SearchUiState.EditingRequest
             resetSearchParams(s.toString())
-            searchDebounce(lastSearchRequest!!)
+            search(lastSearchRequest!!, true)
+        }
+        else {
+            onRequestCleared()
         }
     }
 
@@ -59,8 +64,15 @@ class SearchVacanciesViewModel(
         totalVacansiesList = mutableListOf()
     }
 
-    private fun search(searchRequest: String) {
-        viewModelScope.launch {
+    private fun search(
+        searchRequest: String,
+        withDelay: Boolean
+    ) {
+        searchJob = viewModelScope.launch {
+            searchJob?.cancel()
+            if (withDelay) {
+                delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
+            }
             _uiState.value = SearchUiState.Loading(isItFirstPage = pageToRequest == 0)
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
@@ -94,7 +106,7 @@ class SearchVacanciesViewModel(
         viewModelScope.launch {
             if (pageToRequest < maxPages && isNextPageLoading) {
                 pageToRequest += 1
-                search(lastSearchRequest!!)
+                search(lastSearchRequest!!, false)
                 isNextPageLoading = false
             } else {
                 _uiState.value = SearchUiState.FullLoaded

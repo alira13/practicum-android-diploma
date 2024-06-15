@@ -35,13 +35,13 @@ import java.util.Locale
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private var lastRequest: String? = null
-        /*set(value) {
+       set(value) {
             Log.d("QQQ", "set() $value")
             field = value
         }
         get() = field.also{
             Log.d("QQQ", "get() $it")
-        }*/
+        }
     private val viewModel: SearchVacanciesViewModel by viewModel()
     private val vacanciesAdapter: VacanciesAdapter by lazy {
         VacanciesAdapter { vacancy ->
@@ -200,6 +200,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             ) {
                 lastRequest = text.toString()
                 viewModel.onUiEvent(SearchUiEvent.QueryInput(text))
+                Log.d("QQQ", "отправлен запрос $text")
+            } else {
+                viewModel.onUiEvent(SearchUiEvent.ClearText)
             }
         }
     }
