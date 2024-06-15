@@ -1,13 +1,7 @@
 package ru.practicum.android.diploma.vacancy.data
 
 import android.content.Context
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.di.viewModelModule
 import ru.practicum.android.diploma.favorites.data.db.AppDatabase
 import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 import ru.practicum.android.diploma.util.currencyUTF
@@ -18,7 +12,6 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 class DetailsConverter(
     private val context: Context,
     private val appDatabase: AppDatabase,
-
     ) {
 
     suspend fun map(response: VacancyDetailsResponse): VacancyDetails {
@@ -31,7 +24,7 @@ class DetailsConverter(
                 area = getArea(response),
                 experience = response.experience?.name,
                 salary = getSalary(response),
-                employment = response.employment?.name,
+            employment = response.employment?.name + ", " + response.schedule.name,
                 description = response.description,
                 keySkills = getKeySkills(response),
                 contactName = response.contacts?.name,
@@ -40,7 +33,6 @@ class DetailsConverter(
                 comment = getComment(response),
                 isFavorite = checkIsFavorite(response.id)
             )
-
     }
 
     private fun getArea(response: VacancyDetailsResponse): String {
