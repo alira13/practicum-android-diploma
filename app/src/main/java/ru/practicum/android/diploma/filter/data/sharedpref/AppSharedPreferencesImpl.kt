@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.data.sharedPreferences
+package ru.practicum.android.diploma.filter.data.sharedpref
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
@@ -17,7 +17,7 @@ class AppSharedPreferencesImpl(
     }
 
     override fun getFilter(): FilterDto {
-        val jsonString = sharedPreferences.getString(FILTER, null) ?: return FilterDto()
+        val jsonString = sharedPreferences.getString(FILTER, null)
         val token = object : TypeToken<FilterDto>() {}.type
         return json.fromJson(jsonString, token)
     }

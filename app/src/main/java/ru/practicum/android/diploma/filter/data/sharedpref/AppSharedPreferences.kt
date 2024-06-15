@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.data.sharedPreferences
+package ru.practicum.android.diploma.filter.data.sharedpref
 
 import ru.practicum.android.diploma.filter.data.dto.FilterDto
 

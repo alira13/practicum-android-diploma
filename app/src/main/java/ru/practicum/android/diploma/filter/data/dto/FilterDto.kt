@@ -1,4 +1,3 @@
 package ru.practicum.android.diploma.filter.data.dto
 
-class FilterDto {
-}
+data class FilterDto(val filter1: Boolean)
