@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.search.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,13 @@ import java.util.Locale
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private var lastRequest: String? = null
+        /*set(value) {
+            Log.d("QQQ", "set() $value")
+            field = value
+        }
+        get() = field.also{
+            Log.d("QQQ", "get() $it")
+        }*/
     private val viewModel: SearchVacanciesViewModel by viewModel()
     private val vacanciesAdapter: VacanciesAdapter by lazy {
         VacanciesAdapter { vacancy ->
@@ -53,15 +61,21 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         subscribeOnViewModel()
     }
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     render(it)
-                }
+                    if(it is SearchUiState.SearchResult) Log.d("QQQ", "${it.javaClass}")
+                    else Log.d("QQQ","$it")
+                /*}*/
             }
         }
     }
@@ -80,19 +94,19 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun renderDefaultState() {
         with(binding) {
-            searchFieldEt.apply {
+            searchInputEt.apply {
                 text = null
                 clearFocus()
             }
-            searchResultTv.isVisible = false
-            progressBar.isVisible = false
+            searchCountTv.isVisible = false
+            searchProgressBar.isVisible = false
             searchListRv.isVisible = false
-            searchPictureTextTv.isVisible = false
-            clearSearchIconIv.apply {
+            searchPlaceholderMessageTv.isVisible = false
+            searchClearIv.apply {
                 isEnabled = false
                 setImageResource(R.drawable.ic_search)
             }
-            searchPictureIv.apply {
+            searchPlaceholderImageIv.apply {
                 isVisible = true
                 setImageResource(R.drawable.placeholder_main)
             }
@@ -101,31 +115,31 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun onEditingRequest() {
         with(binding) {
-            searchResultTv.isVisible = false
-            progressBar.isVisible = false
+            searchCountTv.isVisible = false
+            searchProgressBar.isVisible = false
             searchListRv.isVisible = false
-            searchPictureTextTv.isVisible = false
-            clearSearchIconIv.apply {
+            searchPlaceholderMessageTv.isVisible = false
+            searchClearIv.apply {
                 isEnabled = true
                 setImageResource(R.drawable.ic_close)
             }
-            searchPictureIv.isVisible = false
+            searchPlaceholderImageIv.isVisible = false
         }
     }
 
     private fun showEmptyResult() {
         with(binding) {
-            progressBar.isVisible = false
+            searchProgressBar.isVisible = false
             searchListRv.isVisible = false
-            searchResultTv.apply {
+            searchCountTv.apply {
                 setText(R.string.no_vacancies)
                 isVisible = true
             }
-            searchPictureTextTv.apply {
+            searchPlaceholderMessageTv.apply {
                 isVisible = true
                 setText(R.string.no_vacancies)
             }
-            searchPictureIv.apply {
+            searchPlaceholderImageIv.apply {
                 isVisible = true
                 setImageResource(R.drawable.placeholder_error)
             }
@@ -141,14 +155,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         hideKeyboard()
         if (state.isItFirstPage) {
             with(binding) {
-                searchResultTv.isVisible = false
-                progressBar.isVisible = false
+                searchCountTv.isVisible = false
+                searchProgressBar.isVisible = false
                 searchListRv.isVisible = false
-                searchPictureIv.apply {
+                searchPlaceholderImageIv.apply {
                     isVisible = true
                     setImageResource(R.drawable.placeholder_internet_error)
                 }
-                searchPictureTextTv.apply {
+                searchPlaceholderMessageTv.apply {
                     isVisible = true
                     text = errorMessage
                 }
@@ -162,14 +176,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         if (isItFirstPage) {
             hideKeyboard()
             with(binding) {
-                searchResultTv.isVisible = false
+                searchCountTv.isVisible = false
                 searchListRv.isVisible = false
-                searchPictureTextTv.isVisible = false
-                searchPictureIv.isVisible = false
-                progressBar.isVisible = true
+                searchPlaceholderMessageTv.isVisible = false
+                searchPlaceholderImageIv.isVisible = false
+                searchProgressBar.isVisible = true
             }
         } else {
-            binding.searchProgressPg.isVisible = true
+            binding.searchProgressBarPg.isVisible = true
         }
     }
 
@@ -179,9 +193,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun setRequestInputBehaviour() {
-        binding.searchFieldEt.doOnTextChanged { text, start, before, count ->
+        binding.searchInputEt.doOnTextChanged { text, start, before, count ->
             if (
-                text != null
+                !text.isNullOrEmpty()
                 && text.toString() != lastRequest
             ) {
                 lastRequest = text.toString()
@@ -193,9 +207,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun showFullLoaded() {
         with(binding) {
             searchListRv.isVisible = true
-            searchPictureTextTv.isVisible = false
-            searchPictureIv.isVisible = false
-            progressBar.isVisible = false
+            searchPlaceholderMessageTv.isVisible = false
+            searchPlaceholderImageIv.isVisible = false
+            searchProgressBar.isVisible = false
         }
     }
 
@@ -204,7 +218,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchFilterBt.setOnClickListener {
                 findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
             }
-            clearSearchIconIv.setOnClickListener {
+            searchClearIv.setOnClickListener {
                 viewModel.onUiEvent(SearchUiEvent.ClearText)
             }
         }
@@ -214,11 +228,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun showSearchResult(result: SearchUiState.SearchResult) {
         with(binding) {
             vacanciesAdapter.vacancies = result.vacancies
-            progressBar.isVisible = false
-            searchPictureTextTv.isVisible = false
-            searchPictureIv.isVisible = false
-            binding.searchProgressPg.isVisible = false
-            searchResultTv.apply {
+            searchPlaceholderMessageTv.isVisible = false
+            searchPlaceholderImageIv.isVisible = false
+            binding.searchProgressBarPg.isVisible = false
+            searchCountTv.apply {
                 text = convertToPlurals(result.count.toInt())
                 isVisible = true
             }
@@ -239,6 +252,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                     }
                 })
             }
+            searchProgressBar.isVisible = false
         }
     }
 
@@ -260,7 +274,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 Context.INPUT_METHOD_SERVICE
             ) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(
-            binding.searchFieldEt.windowToken,
+            binding.searchInputEt.windowToken,
             0
         )
     }
