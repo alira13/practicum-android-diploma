@@ -6,6 +6,8 @@ import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
+import ru.practicum.android.diploma.util.currencyUTF
+import ru.practicum.android.diploma.util.formatter
 
 class VacancyConverter(
     private val context: Context
@@ -33,48 +35,30 @@ class VacancyConverter(
 
     private fun parseSalary(salary: SalaryDto?): String {
         if (salary != null) {
-            return if (salary.to?.toInt() == 0) {
+            return if (salary.to?.toInt() == 0 || salary.to == null) {
                 String.format(
                     context.getString(R.string.salary_from),
-                    salary.from,
-                    currencyEnd(salary.currency)
+                    salary.from?.let { formatter(salary.from) },
+                    currencyUTF(salary.currency)
                 )
-            } else if (salary.from?.toInt() == 0) {
+
+            } else if (salary.from?.toInt() == 0 || salary.from == null) {
                 String.format(
                     context.getString(R.string.salary_to),
-                    salary.to,
-                    currencyEnd(salary.currency)
+                    formatter(salary.to),
+                    currencyUTF(salary.currency)
                 )
+
             } else {
                 String.format(
                     context.getString(R.string.salary_from_to),
-                    salary.from,
-                    salary.to,
-                    currencyEnd(salary.currency)
+                    formatter(salary.from),
+                    formatter(salary.to),
+                    currencyUTF(salary.currency)
                 )
             }
         } else {
             return context.getString(R.string.salary_is_null)
         }
-    }
-
-    private fun currencyEnd(currency: String?): String? {
-        return when (currency) {
-            RUR -> "₽"
-            USD -> "$"
-            EUR -> "€"
-            KZT -> "₸"
-            KGS -> "с"
-            null -> null
-            else -> currency
-        }
-    }
-
-    companion object {
-        private const val RUR = "RUR"
-        private const val USD = "USD"
-        private const val EUR = "EUR"
-        private const val KZT = "KZT"
-        private const val KGS = "KGS"
     }
 }

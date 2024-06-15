@@ -31,9 +31,9 @@
     <string name="radio_btn_description">Радиокнопка</string>
     <string name="close_btn_description">Закрыть</string>
     <string name="salary_is_null">Зарплата не указана</string>
-    <string name="salary_from">от %d %s</string>
-    <string name="salary_from_to">от %d до %d %s</string>
-    <string name="salary_to">до %d %s</string>
+    <string name="salary_from">от %s %s</string>
+    <string name="salary_from_to">от %s до %s %s</string>
+    <string name="salary_to">до %s %s</string>
     <string name="server_error_text">Ошибка сервера</string>
     <string name="incorrect_request_text">Некорректный запрос</string>
     <string name="experience_title_text">Требуемый опыт</string>
