@@ -1,4 +1,5 @@
 package ru.practicum.android.diploma.favorites.domain.impl
+
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteRepository
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteInteractor
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
