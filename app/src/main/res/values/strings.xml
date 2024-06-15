@@ -50,4 +50,5 @@
     <string name="vacansy_salary_text_to">до %1$s %2$s</string>
     <string name="vacancy_address_text">г. %1$s, ул. %2$s д. %3$s</string>
     <string name="vacancy_salary_not_specified_text">зарплата не указана</string>
+    <string name="vacancy_icon_description">Иконка вакансии</string>
 </resources>
