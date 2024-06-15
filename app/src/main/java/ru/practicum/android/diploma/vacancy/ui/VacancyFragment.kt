@@ -116,7 +116,6 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 keySkillsTextTv.text = details.keySkills
             } else {
                 keySkillsTitleTv.isVisible = false
-                keySkillsTitleTv.isVisible = false
             }
         }
     }
