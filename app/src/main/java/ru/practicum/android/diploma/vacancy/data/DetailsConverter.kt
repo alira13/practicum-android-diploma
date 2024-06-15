@@ -1,7 +1,14 @@
 package ru.practicum.android.diploma.vacancy.data
 
 import android.content.Context
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.di.viewModelModule
+import ru.practicum.android.diploma.favorites.data.db.AppDatabase
 import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 import ru.practicum.android.diploma.util.currencyUTF
 import ru.practicum.android.diploma.util.formatter
@@ -9,26 +16,31 @@ import ru.practicum.android.diploma.vacancy.data.dto.response.VacancyDetailsResp
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 
 class DetailsConverter(
-    private val context: Context
-) {
-    fun map(response: VacancyDetailsResponse): VacancyDetails {
+    private val context: Context,
+    private val appDatabase: AppDatabase,
+
+    ) {
+
+    suspend fun map(response: VacancyDetailsResponse): VacancyDetails {
         return VacancyDetails(
-            id = response.id,
-            name = response.name,
-            employer = response.employer?.name,
-            logoUrls = response.employer?.logoUrls?.px240,
-            alternateUrl = response.alternateUrl,
-            area = getArea(response),
-            experience = response.experience?.name,
-            salary = getSalary(response),
-            employment = response.employment?.name,
-            description = response.description,
-            keySkills = getKeySkills(response),
-            contactName = response.contacts?.name,
-            phone = getPhone(response),
-            email = response.contacts?.email,
-            comment = getComment(response)
-        )
+                id = response.id,
+                name = response.name,
+                employer = response.employer?.name,
+                logoUrls = response.employer?.logoUrls?.px240,
+                alternateUrl = response.alternateUrl,
+                area = getArea(response),
+                experience = response.experience?.name,
+                salary = getSalary(response),
+                employment = response.employment?.name,
+                description = response.description,
+                keySkills = getKeySkills(response),
+                contactName = response.contacts?.name,
+                phone = getPhone(response),
+                email = response.contacts?.email,
+                comment = getComment(response),
+                isFavorite = checkIsFavorite(response.id)
+            )
+
     }
 
     private fun getArea(response: VacancyDetailsResponse): String {
@@ -97,5 +109,10 @@ class DetailsConverter(
 
     private fun getComment(response: VacancyDetailsResponse): String? {
         return response.contacts?.phones?.firstOrNull()?.comment
+    }
+
+    private suspend fun checkIsFavorite(idVacancy: String): Boolean {
+        val listIdFavorites: List<String> = appDatabase.vacancyDao().getListIdFavoriteVacancies()
+        return listIdFavorites.contains(idVacancy)
     }
 }

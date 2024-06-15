@@ -38,7 +38,7 @@
             <ImageView
                 android:id="@+id/favorite_ic"
                 style="@style/VacancyToolBarIconsStyle"
-                android:src="@drawable/ic_favorites_off"
+                android:src="@drawable/selector_favorite"
                 android:layout_marginHorizontal="@dimen/spacing_4"/>
 
         </LinearLayout>

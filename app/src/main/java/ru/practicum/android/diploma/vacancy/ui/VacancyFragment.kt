@@ -48,10 +48,9 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         viewModel.getUIState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
-        setClickListeners()
     }
 
-    private fun setClickListeners() {
+    private fun setClickListeners(details: VacancyDetails) {
         binding.apply {
             emailTextTv.setOnClickListener {
                 val email = emailTextTv.text.toString()
@@ -72,7 +71,10 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 val phone = phoneTextTv.text.toString()
                 viewModel.callTo(phone)
             }
-            favoriteIc.setOnClickListener { }
+            favoriteIc.setOnClickListener {
+                it.isPressed != it.isPressed
+                viewModel.changeFavoriteState(details)
+            }
         }
     }
 
@@ -88,6 +90,7 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
             is VacancyDetailsUIState.Content -> {
                 showContent(state.details)
+                setClickListeners(state.details)
             }
         }
     }
@@ -103,11 +106,13 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             provideLogo(employerLogoIv, details.logoUrls)
             experienceTv.text = details.experience
             employmentTv.text = details.employment
+            favoriteIc.isPressed = details.isFavorite
             vacancyDescriptionTv.text = Html.fromHtml(details.description, Html.FROM_HTML_MODE_COMPACT)
             showKeySkills(details)
             showContacts(details)
         }
         vacancyUrl = details.alternateUrl
+
     }
 
     private fun showKeySkills(details: VacancyDetails) {

@@ -4,6 +4,6 @@ data class VacancyPreview(
     val id: String,
     val iconUrl: String?,
     val description: String,
-    val employer: String,
-    val salary: String
+    val employer: String?,
+    val salary: String?
 )

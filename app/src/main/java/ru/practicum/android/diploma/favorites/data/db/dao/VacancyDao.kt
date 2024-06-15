@@ -17,13 +17,16 @@ interface VacancyDao {
     suspend fun insertVacancy(vacancy: VacancyEntity)
 
     @Query("DELETE FROM vacancy_table WHERE vacancyId = :vacancyId")
-    suspend fun deleteVacancy(vacancyId: String)
+    suspend fun deleteVacancyById(vacancyId: String)
 
     @Query("SELECT * FROM vacancy_table")
-    suspend fun getVacancies(): List<VacancyEntity>
+    suspend fun getListFavoritesVacancies(): List<VacancyEntity>
 
     @Query("SELECT * FROM vacancy_table WHERE id = :vacancyId")
-    suspend fun getVacancyById(vacancyId: String): VacancyEntity
+    suspend fun getFavoriteVacancyById(vacancyId: String): VacancyEntity
+
+    @Query("SELECT vacancyId FROM vacancy_table")
+    suspend fun getListIdFavoriteVacancies(): List<String>
 
     @Update(
         entity = VacancyEntity::class,
