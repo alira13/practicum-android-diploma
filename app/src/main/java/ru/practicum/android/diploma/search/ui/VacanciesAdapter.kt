@@ -21,7 +21,7 @@ class VacanciesAdapter(
         return when (viewType) {
             VACANCY_ITEM -> VacanciesViewHolder(VacancyItemBinding.inflate(layoutInspector, parent, false))
             PROGRESSBAR_ITEM -> ProgressBarViewHolder(ProgressbarItemBinding.inflate(layoutInspector, parent, false))
-            else -> throw IllegalStateException("wrong view holder")
+            else -> error("wrong view holder")
         }
     }
 
@@ -31,7 +31,7 @@ class VacanciesAdapter(
         return when (vacancies[position]) {
             is VacancyPreview -> VACANCY_ITEM
             is ProgressBarItem -> PROGRESSBAR_ITEM
-            else -> throw IllegalStateException("wrong element")
+            else -> error("wrong element")
         }
     }
 
