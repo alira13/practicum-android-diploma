@@ -1,20 +1,19 @@
 package ru.practicum.android.diploma.vacancy.domain.models
 
-import ru.practicum.android.diploma.search.domain.models.Area
-
 data class VacancyDetails(
     val id: String,
     val name: String,
-    val employer: Employer?,
+    val employer: String?,
+    val logoUrls: String?,
     val alternateUrl: String,
-    val area: Area,
-    val address: Address?,
-    val experience: Experience?,
-    val salary: Salary?,
-    val schedule: Schedule,
-    val employment: Employment?,
+    val area: String,
+    val experience: String?,
+    val salary: String?,
+    val employment: String?,
     val description: String,
-    val keySkills: List<Skill>,
-    val professionalRoles: List<Role>,
-    val contacts: Contacts?
+    val keySkills: String?,
+    val contactName: String?,
+    val phone: String?,
+    val email: String?,
+    val comment: String?
 )

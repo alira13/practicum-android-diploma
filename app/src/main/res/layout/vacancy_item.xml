@@ -9,29 +9,18 @@
     android:elevation="0dp"
     app:barrierMargin="@dimen/item_size_1">
 
-    <com.google.android.material.card.MaterialCardView
+    <ImageView
         android:id="@+id/ve_card"
         android:layout_width="@dimen/item_size_48"
         android:layout_height="@dimen/item_size_48"
-        android:layout_marginTop="@dimen/spacing_8"
-        android:outlineProvider="bounds"
-        app:contentPadding="@dimen/item_size_1"
-        app:cardCornerRadius="@dimen/radius_12dp"
-        app:cardElevation="0dp"
+        android:adjustViewBounds="true"
+        android:foreground="@drawable/background_icon_border"
+        android:padding="1dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/grey">
-
-        <ImageView
-            android:id="@+id/ve_iv_icon"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:clipToOutline="true"
-            android:src="@drawable/ic_logo"
-            android:background="@drawable/background_icon_border"/>
-
-
-    </com.google.android.material.card.MaterialCardView>
+        android:contentDescription="@string/vacancy_icon_description"/>
 
     <TextView
         android:id="@+id/ve_tv_description"
