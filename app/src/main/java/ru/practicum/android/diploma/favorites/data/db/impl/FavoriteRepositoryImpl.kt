@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.favorites.data.db.impl
 
 import android.database.SQLException
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.favorites.data.converters.FavoriteConverter
@@ -35,6 +36,8 @@ class FavoriteRepositoryImpl(
         return try {
             Resource.Success(favoriteConverter.mapEntityToModel(vacancyEntity))
         } catch (e: SQLException) {
+            Log.e("SQLException", "Exception message: ${e.message}")
+            Log.e("SQLException", "Exception cause: ${e.cause}")
             Resource.Error(Errors.ServerError, null)
         }
     }
