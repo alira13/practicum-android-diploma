@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
@@ -25,7 +26,7 @@ import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
 class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
-    private val viewModel by inject<VacancyDetailsViewModel> {
+    private val viewModel: VacancyDetailsViewModel by viewModel {
         parametersOf(vacancyID)
     }
     private var vacancyID: String? = null
@@ -48,10 +49,9 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         viewModel.getUIState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
-        setClickListeners()
     }
 
-    private fun setClickListeners() {
+    private fun setClickListeners(details: VacancyDetails) {
         binding.apply {
             emailTextTv.setOnClickListener {
                 val email = emailTextTv.text.toString()
@@ -72,7 +72,10 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 val phone = phoneTextTv.text.toString()
                 viewModel.callTo(phone)
             }
-            favoriteIc.setOnClickListener { }
+            favoriteIc.setOnClickListener {
+                it.isPressed != it.isPressed
+                viewModel.changeFavoriteState(details)
+            }
         }
     }
 
@@ -88,6 +91,7 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
             is VacancyDetailsUIState.Content -> {
                 showContent(state.details)
+                setClickListeners(state.details)
             }
         }
     }
@@ -103,11 +107,13 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             provideLogo(employerLogoIv, details.logoUrls)
             experienceTv.text = details.experience
             employmentTv.text = details.employment
+            favoriteIc.isPressed = details.isFavorite
             vacancyDescriptionTv.text = Html.fromHtml(details.description, Html.FROM_HTML_MODE_COMPACT)
             showKeySkills(details)
             showContacts(details)
         }
         vacancyUrl = details.alternateUrl
+
     }
 
     private fun showKeySkills(details: VacancyDetails) {
