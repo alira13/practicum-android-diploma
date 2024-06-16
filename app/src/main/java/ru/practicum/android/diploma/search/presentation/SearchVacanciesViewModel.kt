@@ -45,12 +45,12 @@ class SearchVacanciesViewModel(
     }
 
     private fun onQueryInput(expression: String) {
-        if(
+        if (
             expression.isEmpty()
-            || expression == "null") {
+            || expression == "null"
+        ) {
             onRequestCleared()
-        }
-        else if (expression != lastSearchRequest){
+        } else if (expression != lastSearchRequest) {
             _uiState.value = SearchUiState.EditingRequest
             resetSearchParams(expression)
             searchJob?.cancel()
@@ -74,31 +74,35 @@ class SearchVacanciesViewModel(
             if (withDelay) {
                 delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
-            _uiState.value = if(pageToRequest == 0) {
+            _uiState.value = if (pageToRequest == 0) {
                 SearchUiState.Loading()
             } else {
                 SearchUiState.PagingLoading()
             }
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
-            _uiState.value = when (result) {
-                is SearchResult.Error -> if(pageToRequest == 0) {
-                    SearchUiState.FirstRequestError(error = result.error)
-                } else {
-                    SearchUiState.PagingError(error = result.error)
-                }
+            _uiState.value = convertResult(result)
+        }
+    }
 
-                is SearchResult.SearchContent -> if (result.vacancies.isEmpty()) {
-                    SearchUiState.EmptyResult()
-                } else {
-                    currentPage = result.page
-                    maxPages = result.pages
-                    SearchUiState.SearchResult(
-                        vacancies = addVacanciesToList(result.vacancies),
-                        count = result.count,
-                        isItFirstPage = pageToRequest == 0
-                    )
-                }
+    private fun convertResult(result: SearchResult): SearchUiState {
+        return when (result) {
+            is SearchResult.Error -> if (pageToRequest == 0) {
+                SearchUiState.FirstRequestError(error = result.error)
+            } else {
+                SearchUiState.PagingError(error = result.error)
+            }
+
+            is SearchResult.SearchContent -> if (result.vacancies.isEmpty()) {
+                SearchUiState.EmptyResult()
+            } else {
+                currentPage = result.page
+                maxPages = result.pages
+                SearchUiState.SearchResult(
+                    vacancies = addVacanciesToList(result.vacancies),
+                    count = result.count,
+                    isItFirstPage = pageToRequest == 0
+                )
             }
         }
     }

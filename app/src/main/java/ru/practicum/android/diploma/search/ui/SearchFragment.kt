@@ -161,21 +161,26 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 if (result.isItFirstPage) {
                     smoothScrollToPosition(0)
                 }
-                addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        super.onScrolled(recyclerView, dx, dy)
-
-                        if (dy > 0) {
-                            val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                            val itemsCount = vacanciesAdapter.itemCount
-                            if (pos >= itemsCount - 1) {
-                                viewModel.onUiEvent(SearchUiEvent.LastItemReached)
-                            }
-                        }
-                    }
-                })
+                setScrollListener(this)
             }
         }
+    }
+
+    private fun setScrollListener(listRV: RecyclerView) {
+        listRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val pos = (
+                        listRV.layoutManager as LinearLayoutManager
+                        ).findLastVisibleItemPosition()
+                    val itemsCount = vacanciesAdapter.itemCount
+                    if (pos >= itemsCount - 1) {
+                        viewModel.onUiEvent(SearchUiEvent.LastItemReached)
+                    }
+                }
+            }
+        })
     }
 
     private fun showToast(message: String) {
