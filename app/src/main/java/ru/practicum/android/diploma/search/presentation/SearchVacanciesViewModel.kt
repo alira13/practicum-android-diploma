@@ -26,7 +26,7 @@ class SearchVacanciesViewModel(
     private var isNextPageLoading: Boolean = false
     private var searchJob: Job? = null
 
-    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default)
+    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
 
     private var lastSearchRequest: String? = null
@@ -41,7 +41,7 @@ class SearchVacanciesViewModel(
 
     private fun onRequestCleared() {
         searchJob?.cancel()
-        _uiState.value = SearchUiState.Default
+        _uiState.value = SearchUiState.Default()
     }
 
     private fun onQueryInput(expression: String) {
@@ -74,23 +74,29 @@ class SearchVacanciesViewModel(
             if (withDelay) {
                 delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
-            _uiState.value = SearchUiState.Loading(isItFirstPage = pageToRequest == 0)
+            _uiState.value = if(pageToRequest == 0) {
+                SearchUiState.Loading()
+            } else {
+                SearchUiState.PagingLoading()
+            }
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
             _uiState.value = when (result) {
-                is SearchResult.Error -> SearchUiState.Error(
-                    error = result.error,
-                    isItFirstPage = pageToRequest == 0
-                )
+                is SearchResult.Error -> if(pageToRequest == 0) {
+                    SearchUiState.FirstRequestError(error = result.error)
+                } else {
+                    SearchUiState.PagingError(error = result.error)
+                }
 
                 is SearchResult.SearchContent -> if (result.vacancies.isEmpty()) {
-                    SearchUiState.EmptyResult
+                    SearchUiState.EmptyResult()
                 } else {
                     currentPage = result.page
                     maxPages = result.pages
                     SearchUiState.SearchResult(
-                        addVacanciesToList(result.vacancies),
-                        result.count
+                        vacancies = addVacanciesToList(result.vacancies),
+                        count = result.count,
+                        isItFirstPage = pageToRequest == 0
                     )
                 }
             }
@@ -109,7 +115,7 @@ class SearchVacanciesViewModel(
                 search(lastSearchRequest!!, false)
                 isNextPageLoading = false
             } else {
-                _uiState.value = SearchUiState.FullLoaded
+                _uiState.value = SearchUiState.FullLoaded()
             }
         }
     }
