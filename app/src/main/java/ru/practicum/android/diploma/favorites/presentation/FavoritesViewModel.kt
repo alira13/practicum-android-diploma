@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.favorites.domain.api.VacansyInteractor
-import ru.practicum.android.diploma.favorites.domain.models.VacancyDetailsDB
+import ru.practicum.android.diploma.favorites.domain.api.FavoriteInteractor
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
+import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 
-class FavoritesViewModel(private val interactor: VacansyInteractor) : ViewModel() {
+class FavoritesViewModel(private val interactor: FavoriteInteractor) : ViewModel() {
 
     private val _uiState = MutableLiveData<FavoritesUiState>()
     val uiStateFlow = _uiState
@@ -19,7 +19,7 @@ class FavoritesViewModel(private val interactor: VacansyInteractor) : ViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                interactor.getVacancies().collect { vacancies ->
+                interactor.getListFavoriteVacancies().collect { vacancies ->
                     when {
                         vacancies == null -> _uiState.postValue(FavoritesUiState.Failure)
                         vacancies.isEmpty() -> _uiState.postValue(FavoritesUiState.Empty)
@@ -33,13 +33,13 @@ class FavoritesViewModel(private val interactor: VacansyInteractor) : ViewModel(
         }
     }
 
-    private fun convert(vacancyDetails: VacancyDetailsDB): VacancyPreview {
+    private fun convert(vacancyDetails: VacancyDetails): VacancyPreview {
         return VacancyPreview(
             id = vacancyDetails.id,
-            iconUrl = vacancyDetails.employerLogo.toString(),
+            iconUrl = vacancyDetails.logoUrls,
             description = vacancyDetails.name,
-            employer = vacancyDetails.employerName,
-            salary = vacancyDetails.salaryTo
+            employer = vacancyDetails.employer,
+            salary = vacancyDetails.salary
         )
     }
 }

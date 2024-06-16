@@ -1,50 +1,47 @@
 package ru.practicum.android.diploma.favorites.data.converters
 
 import ru.practicum.android.diploma.favorites.data.db.entity.VacancyEntity
-import ru.practicum.android.diploma.favorites.domain.models.VacancyDetailsDB
+import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 
-class VacancyConverterDB {
-    fun mapEntityToModel(entity: VacancyEntity): VacancyDetailsDB =
-        VacancyDetailsDB(
+class FavoriteConverter {
+    fun mapEntityToModel(entity: VacancyEntity): VacancyDetails =
+        VacancyDetails(
             entity.vacancyId,
             entity.name,
-            entity.currency,
-            entity.salaryFrom,
-            entity.salaryTo,
             entity.employerName,
             entity.employerLogo,
+            entity.alternateUrl,
             entity.areaName,
             entity.experience,
+            entity.salary,
             entity.employment,
-            entity.schedule,
             entity.description,
             entity.keySkills,
             entity.contactName,
-            entity.contactEmail,
             entity.contactPhone,
-            entity.comment
+            entity.contactEmail,
+            entity.comment,
+            entity.isFavorite,
         )
 
-    fun mapModelToEntity(model: VacancyDetailsDB): VacancyEntity =
+    fun mapModelToEntity(model: VacancyDetails): VacancyEntity =
         VacancyEntity(
             id = 0,
             model.id,
             model.name,
-            model.currency,
-            model.salaryFrom,
-            model.salaryTo,
-            model.employerName,
-            model.employerLogo,
-            model.areaName,
+            model.employer,
+            model.logoUrls,
+            model.alternateUrl,
+            model.area,
             model.experience,
+            model.salary,
             model.employment,
-            model.schedule,
             model.description,
             model.keySkills,
             model.contactName,
-            model.contactEmail,
-            model.contactPhone,
-            model.comment
+            model.phone,
+            model.email,
+            model.comment,
+            true
         )
 }
-
