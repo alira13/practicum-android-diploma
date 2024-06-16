@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
@@ -24,6 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.models.Errors
+import ru.practicum.android.diploma.search.domain.models.ProgressBarItem
 import ru.practicum.android.diploma.search.presentation.SearchVacanciesViewModel
 import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
@@ -169,12 +170,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 progressBar.isVisible = true
             }
         } else {
-            binding.searchProgressPg.isVisible = true
+            vacanciesAdapter.vacancies.add(ProgressBarItem)
+            vacanciesAdapter.notifyItemInserted(vacanciesAdapter.vacancies.size)
         }
     }
 
     private fun initializeVacanciesList() {
-        vacanciesAdapter.vacancies = emptyList()
+        vacanciesAdapter.vacancies = mutableListOf()
         binding.searchListRv.adapter = vacanciesAdapter
     }
 
@@ -213,11 +215,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchResult(result: SearchUiState.SearchResult) {
         with(binding) {
-            vacanciesAdapter.vacancies = result.vacancies
+            val lastIndex = vacanciesAdapter.vacancies.lastIndex
+            if (lastIndex > 0) {
+                vacanciesAdapter.vacancies.removeAt(lastIndex)
+                vacanciesAdapter.notifyItemRemoved(lastIndex)
+            }
+            vacanciesAdapter.vacancies = result.vacancies.toMutableList()
             progressBar.isVisible = false
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
-            binding.searchProgressPg.isVisible = false
             searchResultTv.apply {
                 text = convertToPlurals(result.count.toInt())
                 isVisible = true
