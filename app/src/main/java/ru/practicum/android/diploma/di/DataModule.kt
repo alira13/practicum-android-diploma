@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.favorites.data.converters.FavoriteConverter
 import ru.practicum.android.diploma.favorites.data.db.AppDatabase
+import ru.practicum.android.diploma.filter.data.converter.FilterConverter
 import ru.practicum.android.diploma.search.data.VacancyConverter
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
@@ -33,6 +34,10 @@ val dataModule = module {
             context = androidContext(),
             appDatabase = get()
         )
+    }
+
+    factory {
+        FilterConverter()
     }
 
     single {

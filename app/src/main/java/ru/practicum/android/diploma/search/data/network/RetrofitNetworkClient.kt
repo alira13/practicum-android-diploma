@@ -4,6 +4,10 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.filter.data.dto.IndustriesResponse
+import ru.practicum.android.diploma.filter.data.dto.IndustryRequestDto
+import ru.practicum.android.diploma.filter.data.dto.RegionsRequestDto
+import ru.practicum.android.diploma.filter.data.dto.RegionsResponse
 import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
 import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
 import ru.practicum.android.diploma.search.data.SERVER_ERROR
@@ -33,6 +37,18 @@ class RetrofitNetworkClient(
 
                     is VacancyDetailsRequestDto -> {
                         val response = apiService.getVacancyDetails(dto.id, options = dto.options)
+                        response.apply { resultCode = SUCCESS }
+                    }
+
+                    is RegionsRequestDto -> {
+                        val regions = apiService.getRegions(options = dto.options)
+                        val response = RegionsResponse(regions)
+                        response.apply { resultCode = SUCCESS }
+                    }
+
+                    is IndustryRequestDto -> {
+                        val industries = apiService.getIndustries(options = dto.options)
+                        val response = IndustriesResponse(industries)
                         response.apply { resultCode = SUCCESS }
                     }
 

@@ -5,6 +5,8 @@ import ru.practicum.android.diploma.favorites.data.db.impl.FavoriteRepositoryImp
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteInteractor
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteRepository
 import ru.practicum.android.diploma.favorites.domain.impl.FavoriteInteractorImpl
+import ru.practicum.android.diploma.filter.data.impl.FilterRepositoryImpl
+import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.search.data.impl.SearchRepositoryImpl
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.api.SearchRepository
@@ -58,5 +60,9 @@ val domainModule = module {
 
     single<FavoriteInteractor> {
         FavoriteInteractorImpl(favoriteRepository = get())
+    }
+
+    single<FilterRepository> {
+        FilterRepositoryImpl(get(), get())
     }
 }
