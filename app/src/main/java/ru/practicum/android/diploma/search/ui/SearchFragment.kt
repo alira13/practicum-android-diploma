@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.search.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,14 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.filter.data.dto.CountriesRequestDto
-import ru.practicum.android.diploma.filter.data.dto.RegionsRequestDto
-import ru.practicum.android.diploma.search.data.api.NetworkClient
-import ru.practicum.android.diploma.search.data.network.RetrofitNetworkClient
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.search.domain.models.ProgressBarItem
 import ru.practicum.android.diploma.search.presentation.SearchVacanciesViewModel
@@ -40,7 +34,6 @@ import java.util.Locale
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
-    private val networkClient by inject<NetworkClient>()
     private var lastRequest: String? = null
     private val viewModel: SearchVacanciesViewModel by viewModel()
     private val vacanciesAdapter: VacanciesAdapter by lazy {
@@ -62,17 +55,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         initializeVacanciesList()
         setRequestInputBehaviour()
         subscribeOnViewModel()
-        lifecycleScope.launch {
-            val response = networkClient.doRequest(
-                RegionsRequestDto(
-                    hashMapOf(
-                        Pair("locale", "RU"),
-                        Pair("host", "hh.ru"),
-                    )
-                )
-            )
-            //Log.d("SearchFragment", "countries response ${response.countriesList}")
-        }
     }
 
     private fun subscribeOnViewModel() {
