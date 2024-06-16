@@ -23,7 +23,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
     private val vacanciesAdapter: VacanciesAdapter by lazy {
         VacanciesAdapter { vacancy -> toVacancyDetails(vacancy.id) }
             .apply {
-                vacancies = emptyList()
+                vacancies = mutableListOf()
             }
     }
 
@@ -60,7 +60,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
     }
 
     private fun showContent(list: List<VacancyPreview>) {
-        vacanciesAdapter.vacancies = list
+        vacanciesAdapter.vacancies = list.toMutableList()
         with(binding) {
             favRvVacancies.apply {
                 adapter?.notifyDataSetChanged()
@@ -89,7 +89,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
     }
 
     private fun initializeFavoritesList() {
-        vacanciesAdapter.vacancies = emptyList()
+        vacanciesAdapter.vacancies = mutableListOf()
         binding.favRvVacancies.adapter = vacanciesAdapter
     }
 

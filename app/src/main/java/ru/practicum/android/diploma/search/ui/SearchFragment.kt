@@ -170,7 +170,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 progressBar.isVisible = true
             }
         } else {
-            binding.searchProgressPg.isVisible = false
             vacanciesAdapter.vacancies.add(ProgressBarItem)
             vacanciesAdapter.notifyItemInserted(vacanciesAdapter.vacancies.size)
         }
@@ -225,7 +224,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             progressBar.isVisible = false
             searchPictureTextTv.isVisible = false
             searchPictureIv.isVisible = false
-            binding.searchProgressPg.isVisible = false
             searchResultTv.apply {
                 text = convertToPlurals(result.count.toInt())
                 isVisible = true
