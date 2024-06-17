@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -93,7 +91,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchPlaceholderMessageTv.isVisible = state.placeholderMessageIsVisible
             searchListRv.isVisible = state.vacanciesListRvIsVisible
             searchProgressBar.isVisible = state.progressBarIsVisible
-            searchProgressBarPg.isVisible = state.progressBarPgIsVisible
         }
     }
 
@@ -134,10 +131,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun onPagingLoading() {
-        vacanciesAdapter.apply {
-            vacancies.add(ProgressBarItem)
-            notifyItemInserted(vacanciesAdapter.vacancies.size)
-        }
+        vacanciesAdapter.vacancies.add(ProgressBarItem)
+        binding.searchListRv.adapter?.notifyItemInserted(vacanciesAdapter.vacancies.size)
     }
 
     private fun initializeVacanciesList() {
@@ -176,14 +171,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             }
         }
     }
-
-    /*
-    val lastIndex = vacanciesAdapter.vacancies.lastIndex
-            if (lastIndex > 0) {
-                vacanciesAdapter.vacancies.removeAt(lastIndex)
-                vacanciesAdapter.notifyItemRemoved(lastIndex)
-            }
-    * */
 
     private fun setScrollListener(listRV: RecyclerView) {
         listRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {

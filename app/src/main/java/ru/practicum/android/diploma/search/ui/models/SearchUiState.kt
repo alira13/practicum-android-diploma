@@ -12,8 +12,7 @@ sealed class SearchUiState(
     open val placeholderImageIcon: Int? = null,
     open val placeholderMessageIsVisible: Boolean = false,
     open val vacanciesListRvIsVisible: Boolean = false,
-    open val progressBarIsVisible: Boolean = false,
-    open val progressBarPgIsVisible: Boolean = false,
+    open val progressBarIsVisible: Boolean = false
 ) {
     data class Default(
         override val clearEnabled: Boolean = false,
@@ -30,8 +29,7 @@ sealed class SearchUiState(
 
     data class PagingLoading(
         override val countIsVisible: Boolean = true,
-        override val vacanciesListRvIsVisible: Boolean = true,
-        override val progressBarPgIsVisible: Boolean = true
+        override val vacanciesListRvIsVisible: Boolean = true
     ) : SearchUiState()
 
     data class SearchResult(
@@ -64,7 +62,6 @@ sealed class SearchUiState(
 
     data class FullLoaded(
         override val countIsVisible: Boolean = true,
-        override val vacanciesListRvIsVisible: Boolean = true,
-        override val progressBarPgIsVisible: Boolean = true
+        override val vacanciesListRvIsVisible: Boolean = true
     ) : SearchUiState()
 }
