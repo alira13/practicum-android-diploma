@@ -118,7 +118,7 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             provideLogo(employerLogoIv, details.logoUrls)
             experienceTv.text = details.experience
             employmentTv.text = details.employment
-            favoriteIc.isPressed = details.isFavorite
+            favoriteOnIc.isPressed = details.isFavorite
             vacancyDescriptionTv.text = Html.fromHtml(
                 details.description, Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM
             )
