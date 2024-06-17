@@ -102,13 +102,8 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
     private fun renderFavoriteState(stateFavorite: Boolean) {
         with(binding) {
-            if (stateFavorite) {
-                favoriteOnIc.isVisible = true
-                favoriteOffIc.isVisible = false
-            } else {
-                favoriteOnIc.isVisible = false
-                favoriteOffIc.isVisible = true
-            }
+            favoriteOnIc.isVisible = stateFavorite
+            favoriteOffIc.isVisible = !stateFavorite
         }
     }
 
