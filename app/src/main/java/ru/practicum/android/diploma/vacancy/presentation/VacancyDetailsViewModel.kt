@@ -21,13 +21,15 @@ open class VacancyDetailsViewModel(
     private val favoriteInteractor: FavoriteInteractor,
 ) : ViewModel() {
 
-    private val idVacancy = id
-
     val vacancyDetailsState: MutableLiveData<VacancyDetailsUIState> = MutableLiveData()
     fun getUIState(): LiveData<VacancyDetailsUIState> = vacancyDetailsState
 
+    private val favoriteState: MutableLiveData<Boolean> = MutableLiveData()
+    fun getFavoriteState(): LiveData<Boolean> = favoriteState
+
     init {
         getVacancyDetails(id)
+        isVacancyFavorite(id)
     }
 
     private fun getVacancyDetails(id: String) {
@@ -60,15 +62,23 @@ open class VacancyDetailsViewModel(
         }
     }
 
-    fun changeFavoriteState(vacancyDetails: VacancyDetails) {
+    fun addVacancyToFavorite(vacancyDetails: VacancyDetails) {
         viewModelScope.launch {
-            vacancyDetails.isFavorite != vacancyDetails.isFavorite
-            if (vacancyDetails.isFavorite) {
-                favoriteInteractor.deleteFavoriteVacancyById(vacancyDetails.id)
-            } else {
-                favoriteInteractor.insertFavoriteVacancy(vacancyDetails)
-            }
-            getVacancyDetails(idVacancy)
+            favoriteInteractor.insertFavoriteVacancy(vacancyDetails)
+            favoriteState.postValue(true)
+        }
+    }
+
+    fun deleteVacancyFromFavorite(vacancyId: String) {
+        viewModelScope.launch {
+            favoriteInteractor.deleteFavoriteVacancyById(vacancyId)
+            favoriteState.postValue(false)
+        }
+    }
+
+    private fun isVacancyFavorite(vacancyId: String) {
+        viewModelScope.launch {
+            favoriteState.postValue(favoriteInteractor.isVacancyFavorite(vacancyId))
         }
     }
 }

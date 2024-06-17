@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.vacancy.data
 import android.content.Context
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.favorites.data.db.AppDatabase
+import ru.practicum.android.diploma.favorites.domain.api.FavoriteRepository
 import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 import ru.practicum.android.diploma.util.currencyUTF
 import ru.practicum.android.diploma.util.formatter
@@ -11,7 +12,7 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 
 class DetailsConverter(
     private val context: Context,
-    private val appDatabase: AppDatabase,
+    private val favoriteRepository: FavoriteRepository,
 ) {
 
     suspend fun map(response: VacancyDetailsResponse): VacancyDetails {
@@ -31,7 +32,7 @@ class DetailsConverter(
             phone = getPhone(response),
             email = response.contacts?.email,
             comment = getComment(response),
-            isFavorite = checkIsFavorite(response.id)
+            isFavorite = favoriteRepository.isVacancyFavorite(response.id)
         )
     }
 
@@ -103,8 +104,8 @@ class DetailsConverter(
         return response.contacts?.phones?.firstOrNull()?.comment
     }
 
-    private suspend fun checkIsFavorite(idVacancy: String): Boolean {
-        val listIdFavorites: List<String> = appDatabase.vacancyDao().getListIdFavoriteVacancies()
-        return listIdFavorites.contains(idVacancy)
-    }
+//    private suspend fun checkIsFavorite(idVacancy: String): Boolean {
+//        val listIdFavorites: List<String> = appDatabase.vacancyDao().getListIdFavoriteVacancies()
+//        return listIdFavorites.contains(idVacancy)
+//    }
 }

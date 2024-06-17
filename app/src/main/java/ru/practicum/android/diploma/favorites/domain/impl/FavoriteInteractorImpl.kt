@@ -26,4 +26,8 @@ class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository)
             is Resource.Error -> Pair(null, result.error)
         }
     }
+
+    override suspend fun isVacancyFavorite(vacancyId: String): Boolean {
+        return favoriteRepository.isVacancyFavorite(vacancyId)
+    }
 }
