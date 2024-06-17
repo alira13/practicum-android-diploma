@@ -107,7 +107,7 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             experienceTv.text = details.experience
             employmentTv.text = details.employment
             favoriteIc.isPressed = details.isFavorite
-            vacancyDescriptionTv.text = Html.fromHtml(details.description, Html.FROM_HTML_MODE_COMPACT)
+            vacancyDescriptionTv.text = Html.fromHtml(details.description, Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM)
             showKeySkills(details)
             showContacts(details)
         }
