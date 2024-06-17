@@ -45,7 +45,7 @@ class RetrofitNetworkClient(
                 Log.e("RetrofitNetworkClient", "exception handled $e")
                 Log.e("RetrofitNetworkClient", "Code - ${e.code()}")
                 when (e.code()) {
-                    404 -> Response().apply { resultCode = ERROR_404 }
+                    ERROR_404 -> Response().apply { resultCode = ERROR_404 }
                     else -> Response().apply { resultCode = SERVER_ERROR }
                 }
             }
