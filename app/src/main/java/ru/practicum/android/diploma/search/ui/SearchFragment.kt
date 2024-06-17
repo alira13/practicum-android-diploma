@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.search.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -52,15 +54,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         subscribeOnViewModel()
     }
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     onUiState(it)
-                }
             }
         }
     }
@@ -93,7 +98,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchPlaceholderMessageTv.isVisible = state.placeholderMessageIsVisible
             searchListRv.isVisible = state.vacanciesListRvIsVisible
             searchProgressBar.isVisible = state.progressBarIsVisible
-            searchProgressBarPg.isVisible = state.progressBarPgIsVisible
         }
     }
 
@@ -134,10 +138,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun onPagingLoading() {
-        vacanciesAdapter.apply {
-            vacancies.add(ProgressBarItem)
-            notifyItemInserted(vacanciesAdapter.vacancies.size)
-        }
+        vacanciesAdapter.vacancies.add(ProgressBarItem)
+        binding.searchListRv.adapter?.notifyItemInserted(vacanciesAdapter.vacancies.size)
     }
 
     private fun initializeVacanciesList() {
