@@ -17,7 +17,7 @@ interface VacancyDao {
     suspend fun insertVacancy(vacancy: VacancyEntity)
 
     @Query("DELETE FROM vacancy_table WHERE vacancyId = :vacancyId")
-    suspend fun deleteVacancyById(vacancyId: kotlin.String?)
+    suspend fun deleteVacancyById(vacancyId: String)
 
     @Query("SELECT * FROM vacancy_table")
     suspend fun getListFavoritesVacancies(): List<VacancyEntity>
