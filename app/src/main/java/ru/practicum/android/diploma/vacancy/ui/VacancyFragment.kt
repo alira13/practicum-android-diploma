@@ -48,6 +48,9 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         viewModel.getUIState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
+        viewModel.getFavoriteState().observe(viewLifecycleOwner) { stateFavorite ->
+            renderFavoriteState(stateFavorite)
+        }
     }
 
     private fun setClickListeners(details: VacancyDetails) {
@@ -71,9 +74,11 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 val phone = phoneTextTv.text.toString()
                 viewModel.callTo(phone)
             }
-            favoriteIc.setOnClickListener {
-                it.isPressed != it.isPressed
-                viewModel.changeFavoriteState(details)
+            favoriteOffIc.setOnClickListener {
+                viewModel.addVacancyToFavorite(details)
+            }
+            favoriteOnIc.setOnClickListener {
+                viewModel.deleteVacancyFromFavorite(details.id)
             }
         }
     }
@@ -95,6 +100,13 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
     }
 
+    private fun renderFavoriteState(stateFavorite: Boolean) {
+        with(binding) {
+            favoriteOnIc.isVisible = stateFavorite
+            favoriteOffIc.isVisible = !stateFavorite
+        }
+    }
+
     private fun showContent(details: VacancyDetails) {
         binding.apply {
             progressBar.isVisible = false
@@ -106,7 +118,6 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             provideLogo(employerLogoIv, details.logoUrls)
             experienceTv.text = details.experience
             employmentTv.text = details.employment
-            favoriteIc.isPressed = details.isFavorite
             vacancyDescriptionTv.text = Html.fromHtml(details.description, Html.FROM_HTML_MODE_COMPACT)
             showKeySkills(details)
             showContacts(details)

@@ -9,4 +9,5 @@ interface FavoriteRepository {
     suspend fun deleteFavoriteVacancyById(vacancyId: String)
     suspend fun getListFavoriteVacancies(): Flow<List<VacancyDetails>?>
     suspend fun getFavoriteVacancyById(vacancyId: String): Resource<VacancyDetails>
+    suspend fun isVacancyFavorite(vacancyId: String): Boolean
 }

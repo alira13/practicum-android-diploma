@@ -42,6 +42,11 @@ class FavoriteRepositoryImpl(
         }
     }
 
+    override suspend fun isVacancyFavorite(vacancyId: String): Boolean {
+        val listIdFavorites: List<String> = appDatabase.vacancyDao().getListIdFavoriteVacancies()
+        return listIdFavorites.contains(vacancyId)
+    }
+
     private fun mapListEntityToListModel(vacanciesEntity: List<VacancyEntity>): List<VacancyDetails> {
         return vacanciesEntity.map { vacancyEntity ->
             favoriteConverter.mapEntityToModel(vacancyEntity)
