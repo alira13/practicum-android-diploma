@@ -26,9 +26,7 @@
     <dimen name="spacing_32">32dp</dimen>
     <dimen name="spacing_164dp">164dp</dimen>
 
-    <dimen name="radius_10dp">10dp</dimen>
     <dimen name="radius_12dp">12dp</dimen>
-    <dimen name="spacing_10dp">10dp</dimen>
     <dimen name="spacing_224dp">224dp</dimen>
 
 </resources>
