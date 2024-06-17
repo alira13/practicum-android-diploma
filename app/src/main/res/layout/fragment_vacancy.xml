@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:contentInsetLeft="0dp"
-        app:contentInsetStart="10dp"
+        app:contentInsetStart="@dimen/spacing_10"
         app:contentInsetStartWithNavigation="0dp">
 
         <LinearLayout
@@ -70,7 +70,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="223dp"
+                android:layout_height="@dimen/spacing_224dp"
                 android:layout_marginHorizontal="@dimen/spacing_16"
                 android:src="@drawable/placeholder_vacancy_error"/>
 

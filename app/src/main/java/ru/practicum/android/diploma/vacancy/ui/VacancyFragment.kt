@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
@@ -118,10 +120,7 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             provideLogo(employerLogoIv, details.logoUrls)
             experienceTv.text = details.experience
             employmentTv.text = details.employment
-            favoriteOnIc.isPressed = details.isFavorite
-            vacancyDescriptionTv.text = Html.fromHtml(
-                details.description, Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM
-            )
+            vacancyDescriptionTv.text = Html.fromHtml(details.description, Html.FROM_HTML_MODE_COMPACT)
             showKeySkills(details)
             showContacts(details)
         }
@@ -217,6 +216,14 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                     vacancyErrorPlaceHolderErrorText.text = getString(R.string.incorrect_request_text)
                 }
 
+                is Errors.Error404 -> {
+                    vacancyErrorPlaceHolderErrorText.text = getString(R.string.server_error_text)
+                    showToast(getString(R.string.vacancy_was_deleted))
+                    if (vacancyID != null) {
+                        viewModel.deleteVacancyFromFavorite(vacancyID!!)
+                    }
+                }
+
                 else -> {}
             }
         }
@@ -236,6 +243,18 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             .placeholder(R.drawable.ic_placeholder)
             .transform(RoundedCorners(CORNER_RADIUS))
             .into(imageView)
+    }
+
+    private fun showToast(message: String) {
+        val snackBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
+        snackBar.setTextColor(requireContext().getColor(R.color.white))
+        snackBar.show()
+        val viewSnackbar = snackBar.view.apply {
+            setBackgroundResource(R.drawable.background_red_snackbar)
+        }
+        val textSnackbar: TextView =
+            viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
+        textSnackbar.textAlignment = View.TEXT_ALIGNMENT_CENTER
     }
 
     companion object {
