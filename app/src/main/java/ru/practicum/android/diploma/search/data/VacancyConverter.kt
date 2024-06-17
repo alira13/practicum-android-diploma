@@ -66,10 +66,6 @@ class VacancyConverter(
     }
 
     private fun convertToPlurals(count: Int): String {
-        val languageTag = "ru"
-        AppCompatDelegate.setApplicationLocales(
-            LocaleListCompat.create(Locale.forLanguageTag(languageTag))
-        )
         return context.resources.getQuantityString(R.plurals.vacancies_amount, count, count)
     }
 }
