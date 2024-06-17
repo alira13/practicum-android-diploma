@@ -9,19 +9,19 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
+import ru.practicum.android.diploma.favoritedetails.ui.FavoriteDetailsFragment
 import ru.practicum.android.diploma.favorites.presentation.FavoritesUiState
 import ru.practicum.android.diploma.favorites.presentation.FavoritesViewModel
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
 import ru.practicum.android.diploma.search.ui.VacanciesAdapter
 import ru.practicum.android.diploma.util.BindingFragment
-import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
 
 class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
 
     private val viewModel: FavoritesViewModel by viewModel()
 
     private val vacanciesAdapter: VacanciesAdapter by lazy {
-        VacanciesAdapter { vacancy -> toVacancyDetails(vacancy.id) }
+        VacanciesAdapter { vacancy -> toFavoriteVacancyDetails(vacancy.id) }
             .apply {
                 vacancies = mutableListOf()
             }
@@ -93,10 +93,10 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
         binding.favRvVacancies.adapter = vacanciesAdapter
     }
 
-    private fun toVacancyDetails(vacancyID: String) {
+    private fun toFavoriteVacancyDetails(vacancyID: String) {
         findNavController().navigate(
-            R.id.action_favoritesFragment_to_vacancyFragment,
-            VacancyFragment.createArgs(vacancyID)
+            R.id.action_favoritesFragment_to_favoriteDetailFragment,
+            FavoriteDetailsFragment.createArgs(vacancyID)
         )
     }
 }

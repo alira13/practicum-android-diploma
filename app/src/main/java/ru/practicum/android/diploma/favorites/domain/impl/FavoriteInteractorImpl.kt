@@ -3,6 +3,8 @@ package ru.practicum.android.diploma.favorites.domain.impl
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteInteractor
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteRepository
+import ru.practicum.android.diploma.search.domain.models.Errors
+import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 
 class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository) : FavoriteInteractor {
@@ -18,7 +20,10 @@ class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository)
         return favoriteRepository.getListFavoriteVacancies()
     }
 
-    override suspend fun getFavoriteVacancyById(vacancyId: String): Flow<VacancyDetails> {
-        return favoriteRepository.getFavoriteVacancyById(vacancyId)
+    override suspend fun getFavoriteVacancyById(vacancyId: String): Pair<VacancyDetails?, Errors?> {
+        return when (val result: Resource<VacancyDetails> = favoriteRepository.getFavoriteVacancyById(vacancyId)) {
+            is Resource.Success -> Pair(result.data, null)
+            is Resource.Error -> Pair(null, result.error)
+        }
     }
 }

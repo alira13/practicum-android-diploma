@@ -14,7 +14,7 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsRequest
 import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
-class VacancyDetailsViewModel(
+open class VacancyDetailsViewModel(
     id: String,
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
     private val sharingInteractor: SharingInteractor,
@@ -23,7 +23,7 @@ class VacancyDetailsViewModel(
 
     private val idVacancy = id
 
-    private val vacancyDetailsState: MutableLiveData<VacancyDetailsUIState> = MutableLiveData()
+    val vacancyDetailsState: MutableLiveData<VacancyDetailsUIState> = MutableLiveData()
     fun getUIState(): LiveData<VacancyDetailsUIState> = vacancyDetailsState
 
     init {
@@ -52,7 +52,7 @@ class VacancyDetailsViewModel(
         sharingInteractor.callTo(number)
     }
 
-    private fun processResult(details: VacancyDetails?, errors: Errors?) {
+    fun processResult(details: VacancyDetails?, errors: Errors?) {
         if (details != null) {
             vacancyDetailsState.value = VacancyDetailsUIState.Content(details)
         } else {
