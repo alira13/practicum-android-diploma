@@ -48,6 +48,9 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         viewModel.getUIState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
+        viewModel.getFavoriteState().observe(viewLifecycleOwner) { stateFavorite ->
+            renderFavoriteState(stateFavorite)
+        }
     }
 
     private fun setClickListeners(details: VacancyDetails) {
@@ -71,9 +74,11 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 val phone = phoneTextTv.text.toString()
                 viewModel.callTo(phone)
             }
-            favoriteIc.setOnClickListener {
-                it.isPressed != it.isPressed
-                viewModel.changeFavoriteState(details)
+            favoriteOffIc.setOnClickListener {
+                viewModel.addVacancyToFavorite(details)
+            }
+            favoriteOnIc.setOnClickListener {
+                viewModel.deleteVacancyFromFavorite(details.id)
             }
         }
     }
@@ -92,6 +97,13 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 showContent(state.details)
                 setClickListeners(state.details)
             }
+        }
+    }
+
+    private fun renderFavoriteState(stateFavorite: Boolean) {
+        with(binding) {
+            favoriteOnIc.isVisible = stateFavorite
+            favoriteOffIc.isVisible = !stateFavorite
         }
     }
 

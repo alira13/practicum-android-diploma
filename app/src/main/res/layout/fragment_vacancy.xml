@@ -37,10 +37,19 @@
                 android:src="@drawable/ic_sharing"/>
 
             <ImageView
-                android:id="@+id/favorite_ic"
+                android:id="@+id/favorite_off_ic"
                 style="@style/VacancyToolBarIconsStyle"
-                android:src="@drawable/selector_favorite"
+                android:src="@drawable/ic_favorites_off"
                 android:layout_marginHorizontal="@dimen/spacing_4"
+                android:visibility="invisible"
+                />
+
+            <ImageView
+                android:id="@+id/favorite_on_ic"
+                style="@style/VacancyToolBarIconsStyle"
+                android:src="@drawable/ic_favorites_on"
+                android:layout_marginHorizontal="@dimen/spacing_4"
+                android:visibility="gone"
                 />
 
         </LinearLayout>
