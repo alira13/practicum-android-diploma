@@ -24,6 +24,7 @@
             <TextView
                 android:id="@+id/fv_tv_header"
                 style="@style/MediumTextStyle"
+                android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="10"
                 android:layout_gravity="center_vertical"
@@ -67,6 +68,8 @@
             <TextView
                 android:id="@+id/vacancy_error_place_holder_error_text"
                 style="@style/MediumTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/spacing_16"
                 android:layout_gravity="center_horizontal"
                 tools:text="Server error"/>
@@ -95,6 +98,8 @@
                 <TextView
                     android:id="@+id/vacancy_name_tv"
                     style="@style/BoldTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     tools:text="Андроид разработчик"
                     android:maxLines="1"
                     android:ellipsize="end"
@@ -104,6 +109,8 @@
                 <TextView
                     android:id="@+id/salary_tv"
                     style="@style/MediumTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_4"
                     tools:text="от 100000 \u20bd"
                     app:layout_constraintTop_toBottomOf="@id/vacancy_name_tv"
@@ -167,6 +174,8 @@
                 <TextView
                     android:id="@+id/experience_title_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_24"
                     android:fontWeight="500"
                     android:textStyle="bold"
@@ -177,6 +186,8 @@
                 <TextView
                     android:id="@+id/experience_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_4"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/experience_title_tv"
@@ -185,6 +196,7 @@
                 <TextView
                     android:id="@+id/employment_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:maxLines="1"
                     android:ellipsize="end"
@@ -197,6 +209,8 @@
                 <TextView
                     android:id="@+id/vacancy_description_title_tv"
                     style="@style/MediumTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/vacancy_description_title_text"
                     android:layout_marginTop="@dimen/spacing_32"
                     app:layout_constraintStart_toStartOf="parent"
@@ -205,6 +219,7 @@
                 <TextView
                     android:id="@+id/vacancy_description_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/spacing_16"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -215,6 +230,8 @@
                 <TextView
                     android:id="@+id/key_skills_title_tv"
                     style="@style/MediumTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_24"
                     android:text="@string/key_skills_title_text"
                     app:layout_constraintStart_toStartOf="parent"
@@ -223,6 +240,7 @@
                 <TextView
                     android:id="@+id/key_skills_text_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_16"
                     android:layout_width="match_parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -233,6 +251,8 @@
                 <TextView
                     android:id="@+id/contacts_title_tv"
                     style="@style/MediumTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/contacts_title_text"
                     android:layout_marginTop="@dimen/spacing_24"
                     app:layout_constraintStart_toStartOf="parent"
@@ -241,6 +261,8 @@
                 <TextView
                     android:id="@+id/contact_person_title_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:fontWeight="500"
                     android:textStyle="bold"
                     android:text="@string/contact_person_title_text"
@@ -251,6 +273,8 @@
                 <TextView
                     android:id="@+id/contact_person_text_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_4"
                     tools:text="Ирина"
                     app:layout_constraintStart_toStartOf="parent"
@@ -259,6 +283,8 @@
                 <TextView
                     android:id="@+id/email_title_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_16"
                     android:fontWeight="500"
                     android:text="@string/email_title_text"
@@ -269,6 +295,8 @@
                 <TextView
                     android:id="@+id/email_text_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_4"
                     android:textColor="@color/blue"
                     tools:text="example@example.com"
@@ -278,6 +306,8 @@
                 <TextView
                     android:id="@+id/phone_title_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_16"
                     android:fontWeight="500"
                     android:text="@string/phone_title_text"
@@ -288,6 +318,8 @@
                 <TextView
                     android:id="@+id/phone_text_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textColor="@color/blue"
                     android:layout_marginTop="@dimen/spacing_4"
                     app:layout_constraintStart_toStartOf="parent"
@@ -297,6 +329,8 @@
                 <TextView
                     android:id="@+id/comment_title_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:fontWeight="500"
                     android:text="@string/comment_title_text"
                     android:textStyle="bold"
@@ -307,6 +341,7 @@
                 <TextView
                     android:id="@+id/comment_text_tv"
                     style="@style/RegularTextStyle"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_4"
                     android:layout_width="match_parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -317,9 +352,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
-
     </FrameLayout>
-
-
-
 </LinearLayout>
