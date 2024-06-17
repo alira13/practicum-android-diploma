@@ -37,7 +37,7 @@ class FavoritesFragment : BindingFragment<FragmentFavoritesBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeFavoritesList()
-
+        viewModel.getListFavoriteVacancies()
         viewModel.uiStateFlow.observe(viewLifecycleOwner) { state ->
             render(state)
         }
