@@ -112,7 +112,6 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
     }
 
-
     private fun showContent(details: VacancyDetails) {
         binding.apply {
             progressBar.isVisible = false
