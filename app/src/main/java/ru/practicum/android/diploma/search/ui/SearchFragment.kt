@@ -6,11 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.models.Errors
+import ru.practicum.android.diploma.search.domain.models.ProgressBarItem
 import ru.practicum.android.diploma.search.presentation.SearchVacanciesViewModel
 import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
@@ -47,17 +52,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
-    }
-
-    override fun onStart() {
-        super.onStart()
         subscribeOnViewModel()
     }
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect {
-                onUiState(it)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    onUiState(it)
+                }
             }
         }
     }
@@ -69,6 +72,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             is SearchUiState.FirstRequestError -> onFirstRequestError(state.error)
             is SearchUiState.PagingError -> onPagingError(state.error)
             is SearchUiState.Loading -> onLoading()
+            is SearchUiState.PagingLoading -> onPagingLoading()
             is SearchUiState.SearchResult -> showSearchResult(state)
             else -> {}
         }
@@ -129,8 +133,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         hideKeyboard()
     }
 
+    private fun onPagingLoading() {
+        vacanciesAdapter.apply {
+            vacancies.add(ProgressBarItem)
+            notifyItemInserted(vacanciesAdapter.vacancies.size)
+        }
+    }
+
     private fun initializeVacanciesList() {
-        vacanciesAdapter.vacancies = emptyList()
+        vacanciesAdapter.vacancies = mutableListOf()
         binding.searchListRv.adapter = vacanciesAdapter
     }
 
@@ -153,7 +164,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchResult(result: SearchUiState.SearchResult) {
-        vacanciesAdapter.vacancies = result.vacancies
+        vacanciesAdapter.vacancies = result.vacancies.toMutableList()
         with(binding) {
             searchCountTv.text = result.count
             searchListRv.apply {
@@ -165,6 +176,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             }
         }
     }
+
+    /*
+    val lastIndex = vacanciesAdapter.vacancies.lastIndex
+            if (lastIndex > 0) {
+                vacanciesAdapter.vacancies.removeAt(lastIndex)
+                vacanciesAdapter.notifyItemRemoved(lastIndex)
+            }
+    * */
 
     private fun setScrollListener(listRV: RecyclerView) {
         listRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {

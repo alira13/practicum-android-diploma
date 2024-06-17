@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.favorites.domain.api.FavoriteInteractor
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.share.domain.api.SharingInteractor
 import ru.practicum.android.diploma.share.domain.models.EmailData
@@ -13,17 +14,22 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsRequest
 import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
-class VacancyDetailsViewModel(
+open class VacancyDetailsViewModel(
     id: String,
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
-    private val sharingInteractor: SharingInteractor
+    private val sharingInteractor: SharingInteractor,
+    private val favoriteInteractor: FavoriteInteractor,
 ) : ViewModel() {
 
-    private val vacancyDetailsState: MutableLiveData<VacancyDetailsUIState> = MutableLiveData()
+    val vacancyDetailsState: MutableLiveData<VacancyDetailsUIState> = MutableLiveData()
     fun getUIState(): LiveData<VacancyDetailsUIState> = vacancyDetailsState
+
+    private val favoriteState: MutableLiveData<Boolean> = MutableLiveData()
+    fun getFavoriteState(): LiveData<Boolean> = favoriteState
 
     init {
         getVacancyDetails(id)
+        isVacancyFavorite(id)
     }
 
     private fun getVacancyDetails(id: String) {
@@ -48,11 +54,31 @@ class VacancyDetailsViewModel(
         sharingInteractor.callTo(number)
     }
 
-    private fun processResult(details: VacancyDetails?, errors: Errors?) {
+    fun processResult(details: VacancyDetails?, errors: Errors?) {
         if (details != null) {
             vacancyDetailsState.value = VacancyDetailsUIState.Content(details)
         } else {
             vacancyDetailsState.value = VacancyDetailsUIState.Error(errors)
+        }
+    }
+
+    fun addVacancyToFavorite(vacancyDetails: VacancyDetails) {
+        viewModelScope.launch {
+            favoriteInteractor.insertFavoriteVacancy(vacancyDetails)
+            favoriteState.postValue(true)
+        }
+    }
+
+    fun deleteVacancyFromFavorite(vacancyId: String) {
+        viewModelScope.launch {
+            favoriteInteractor.deleteFavoriteVacancyById(vacancyId)
+            favoriteState.postValue(false)
+        }
+    }
+
+    private fun isVacancyFavorite(vacancyId: String) {
+        viewModelScope.launch {
+            favoriteState.postValue(favoriteInteractor.isVacancyFavorite(vacancyId))
         }
     }
 }

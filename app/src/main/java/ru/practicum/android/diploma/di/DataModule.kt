@@ -7,7 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.favorites.data.converters.VacancyConverterDB
+import ru.practicum.android.diploma.favorites.data.converters.FavoriteConverter
 import ru.practicum.android.diploma.favorites.data.db.AppDatabase
 import ru.practicum.android.diploma.search.data.VacancyConverter
 import ru.practicum.android.diploma.search.data.api.HHApiService
@@ -20,19 +20,24 @@ const val BASE_URL = "https://api.hh.ru/"
 
 val dataModule = module {
 
-    single { VacancyConverterDB() }
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
 
     factory { VacancyConverter(androidContext()) }
 
     factory {
         DetailsConverter(
-            context = get()
+            context = androidContext(),
+            favoriteRepository = get()
         )
     }
 
     single {
         ExternalNavigator(
-            context = get()
+            context = androidContext()
         )
     }
 
@@ -58,9 +63,5 @@ val dataModule = module {
         retrofit.create(HHApiService::class.java)
     }
 
-    single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
-            .fallbackToDestructiveMigration()
-            .build()
-    }
+    single { FavoriteConverter() }
 }

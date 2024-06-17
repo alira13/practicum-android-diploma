@@ -12,7 +12,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
@@ -23,9 +23,9 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 import ru.practicum.android.diploma.vacancy.presentation.VacancyDetailsViewModel
 import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
-class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
+open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
-    private val viewModel by inject<VacancyDetailsViewModel> {
+    open val viewModel: VacancyDetailsViewModel by viewModel {
         parametersOf(vacancyID)
     }
     private var vacancyID: String? = null
@@ -48,10 +48,12 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         viewModel.getUIState().observe(viewLifecycleOwner) { state ->
             render(state)
         }
-        setClickListeners()
+        viewModel.getFavoriteState().observe(viewLifecycleOwner) { stateFavorite ->
+            renderFavoriteState(stateFavorite)
+        }
     }
 
-    private fun setClickListeners() {
+    private fun setClickListeners(details: VacancyDetails) {
         binding.apply {
             emailTextTv.setOnClickListener {
                 val email = emailTextTv.text.toString()
@@ -72,7 +74,12 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 val phone = phoneTextTv.text.toString()
                 viewModel.callTo(phone)
             }
-            favoriteIc.setOnClickListener { }
+            favoriteOffIc.setOnClickListener {
+                viewModel.addVacancyToFavorite(details)
+            }
+            favoriteOnIc.setOnClickListener {
+                viewModel.deleteVacancyFromFavorite(details.id)
+            }
         }
     }
 
@@ -88,7 +95,15 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
             is VacancyDetailsUIState.Content -> {
                 showContent(state.details)
+                setClickListeners(state.details)
             }
+        }
+    }
+
+    private fun renderFavoriteState(stateFavorite: Boolean) {
+        with(binding) {
+            favoriteOnIc.isVisible = stateFavorite
+            favoriteOffIc.isVisible = !stateFavorite
         }
     }
 
@@ -108,6 +123,7 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             showContacts(details)
         }
         vacancyUrl = details.alternateUrl
+
     }
 
     private fun showKeySkills(details: VacancyDetails) {
