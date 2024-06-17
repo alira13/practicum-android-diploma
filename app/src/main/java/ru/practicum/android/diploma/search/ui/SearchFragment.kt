@@ -52,7 +52,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
-
     }
 
     override fun onStart() {
@@ -62,8 +61,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.uiState.collect {
-                    onUiState(it)
+            viewModel.uiState.collect {
+                onUiState(it)
             }
         }
     }
