@@ -138,6 +138,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             is Errors.ConnectionError -> getString(R.string.no_internet)
             is Errors.ServerError -> getString(R.string.server_error_text)
             is Errors.IncorrectRequest -> getString(R.string.incorrect_request_text)
+            is Errors.Error404 -> getString(R.string.server_error_text)
         }
         hideKeyboard()
         if (state.isItFirstPage) {
