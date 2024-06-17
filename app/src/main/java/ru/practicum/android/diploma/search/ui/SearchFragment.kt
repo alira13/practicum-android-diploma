@@ -8,13 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,11 +26,9 @@ import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
 import ru.practicum.android.diploma.util.BindingFragment
 import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
-import java.util.Locale
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
-    private var lastRequest: String? = null
     private val viewModel: SearchVacanciesViewModel by viewModel()
     private val vacanciesAdapter: VacanciesAdapter by lazy {
         VacanciesAdapter { vacancy ->
@@ -54,125 +48,91 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
+    }
+
+    override fun onStart() {
+        super.onStart()
         subscribeOnViewModel()
     }
 
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    render(it)
-                }
+            viewModel.uiState.collect {
+                onUiState(it)
             }
         }
     }
 
-    private fun render(state: SearchUiState) {
+    private fun onUiState(state: SearchUiState) {
         when (state) {
-            SearchUiState.Default -> renderDefaultState()
-            SearchUiState.EditingRequest -> onEditingRequest()
-            SearchUiState.EmptyResult -> showEmptyResult()
-            is SearchUiState.Error -> onError(state)
-            is SearchUiState.Loading -> showLoading(state.isItFirstPage)
-            SearchUiState.FullLoaded -> showFullLoaded()
+            is SearchUiState.Default -> onDefaultState()
+            is SearchUiState.EmptyResult -> onEmptyResult()
+            is SearchUiState.FirstRequestError -> onFirstRequestError(state.error)
+            is SearchUiState.PagingError -> onPagingError(state.error)
+            is SearchUiState.Loading -> onLoading()
+            is SearchUiState.PagingLoading -> onPagingLoading()
             is SearchUiState.SearchResult -> showSearchResult(state)
+            else -> {}
+        }
+        renderViews(state)
+    }
+
+    private fun renderViews(state: SearchUiState) {
+        with(binding) {
+            searchClearIv.apply {
+                isEnabled = state.clearEnabled
+                setImageResource(state.clearIcon)
+            }
+            searchCountTv.isVisible = state.countIsVisible
+            searchPlaceholderImageIv.apply {
+                isVisible = state.placeholderImageIsVisible
+                state.placeholderImageIcon?.let { setImageResource(it) }
+            }
+            searchPlaceholderMessageTv.isVisible = state.placeholderMessageIsVisible
+            searchListRv.isVisible = state.vacanciesListRvIsVisible
+            searchProgressBar.isVisible = state.progressBarIsVisible
         }
     }
 
-    private fun renderDefaultState() {
+    private fun onDefaultState() {
         with(binding) {
-            searchFieldEt.apply {
+            searchInputEt.apply {
                 text = null
                 clearFocus()
             }
-            searchResultTv.isVisible = false
-            progressBar.isVisible = false
-            searchListRv.isVisible = false
-            searchPictureTextTv.isVisible = false
-            clearSearchIconIv.apply {
-                isEnabled = false
-                setImageResource(R.drawable.ic_search)
-            }
-            searchPictureIv.apply {
-                isVisible = true
-                setImageResource(R.drawable.placeholder_main)
-            }
         }
     }
 
-    private fun onEditingRequest() {
+    private fun onEmptyResult() {
         with(binding) {
-            searchResultTv.isVisible = false
-            progressBar.isVisible = false
-            searchListRv.isVisible = false
-            searchPictureTextTv.isVisible = false
-            clearSearchIconIv.apply {
-                isEnabled = true
-                setImageResource(R.drawable.ic_close)
-            }
-            searchPictureIv.isVisible = false
+            searchCountTv.setText(R.string.no_vacancies)
+            searchPlaceholderMessageTv.setText(R.string.no_vacancies)
         }
     }
 
-    private fun showEmptyResult() {
-        with(binding) {
-            progressBar.isVisible = false
-            searchListRv.isVisible = false
-            searchResultTv.apply {
-                setText(R.string.no_vacancies)
-                isVisible = true
-            }
-            searchPictureTextTv.apply {
-                isVisible = true
-                setText(R.string.no_vacancies)
-            }
-            searchPictureIv.apply {
-                isVisible = true
-                setImageResource(R.drawable.placeholder_error)
-            }
-        }
-    }
-
-    private fun onError(state: SearchUiState.Error) {
-        val errorMessage = when (state.error) {
+    private fun onErrorMessage(error: Errors): String {
+        return when (error) {
             is Errors.ConnectionError -> getString(R.string.no_internet)
             is Errors.ServerError -> getString(R.string.server_error_text)
             is Errors.IncorrectRequest -> getString(R.string.incorrect_request_text)
         }
-        hideKeyboard()
-        if (state.isItFirstPage) {
-            with(binding) {
-                searchResultTv.isVisible = false
-                progressBar.isVisible = false
-                searchListRv.isVisible = false
-                searchPictureIv.apply {
-                    isVisible = true
-                    setImageResource(R.drawable.placeholder_internet_error)
-                }
-                searchPictureTextTv.apply {
-                    isVisible = true
-                    text = errorMessage
-                }
-            }
-        } else {
-            showToast(errorMessage)
-        }
     }
 
-    private fun showLoading(isItFirstPage: Boolean) {
-        if (isItFirstPage) {
-            hideKeyboard()
-            with(binding) {
-                searchResultTv.isVisible = false
-                searchListRv.isVisible = false
-                searchPictureTextTv.isVisible = false
-                searchPictureIv.isVisible = false
-                progressBar.isVisible = true
-            }
-        } else {
-            vacanciesAdapter.vacancies.add(ProgressBarItem)
-            vacanciesAdapter.notifyItemInserted(vacanciesAdapter.vacancies.size)
-        }
+    private fun onPagingError(error: Errors) {
+        showToast(onErrorMessage(error))
+    }
+
+    private fun onFirstRequestError(error: Errors) {
+        binding.searchPlaceholderMessageTv.text = onErrorMessage(error)
+    }
+
+    private fun onLoading() {
+        hideKeyboard()
+    }
+
+    private fun onPagingLoading() {
+        vacanciesAdapter.vacancies.add(ProgressBarItem)
+        binding.searchListRv.adapter?.notifyItemInserted(vacanciesAdapter.vacancies.size)
     }
 
     private fun initializeVacanciesList() {
@@ -181,23 +141,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun setRequestInputBehaviour() {
-        binding.searchFieldEt.doOnTextChanged { text, start, before, count ->
-            if (
-                text != null
-                && text.toString() != lastRequest
-            ) {
-                lastRequest = text.toString()
-                viewModel.onUiEvent(SearchUiEvent.QueryInput(text))
-            }
-        }
-    }
-
-    private fun showFullLoaded() {
-        with(binding) {
-            searchListRv.isVisible = true
-            searchPictureTextTv.isVisible = false
-            searchPictureIv.isVisible = false
-            progressBar.isVisible = false
+        binding.searchInputEt.doOnTextChanged { s, _, _, _ ->
+            viewModel.onUiEvent(SearchUiEvent.QueryInput(s.toString()))
         }
     }
 
@@ -206,7 +151,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             searchFilterBt.setOnClickListener {
                 findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
             }
-            clearSearchIconIv.setOnClickListener {
+            searchClearIv.setOnClickListener {
                 viewModel.onUiEvent(SearchUiEvent.ClearText)
             }
         }
@@ -214,38 +159,34 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchResult(result: SearchUiState.SearchResult) {
+        vacanciesAdapter.vacancies = result.vacancies.toMutableList()
         with(binding) {
-            val lastIndex = vacanciesAdapter.vacancies.lastIndex
-            if (lastIndex > 0) {
-                vacanciesAdapter.vacancies.removeAt(lastIndex)
-                vacanciesAdapter.notifyItemRemoved(lastIndex)
-            }
-            vacanciesAdapter.vacancies = result.vacancies.toMutableList()
-            progressBar.isVisible = false
-            searchPictureTextTv.isVisible = false
-            searchPictureIv.isVisible = false
-            searchResultTv.apply {
-                text = convertToPlurals(result.count.toInt())
-                isVisible = true
-            }
+            searchCountTv.text = result.count
             searchListRv.apply {
                 adapter?.notifyDataSetChanged()
-                isVisible = true
-                addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        super.onScrolled(recyclerView, dx, dy)
-
-                        if (dy > 0) {
-                            val pos = (searchListRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                            val itemsCount = vacanciesAdapter.itemCount
-                            if (pos >= itemsCount - 1) {
-                                viewModel.onUiEvent(SearchUiEvent.LastItemReached)
-                            }
-                        }
-                    }
-                })
+                if (result.isItFirstPage) {
+                    smoothScrollToPosition(0)
+                }
+                setScrollListener(this)
             }
         }
+    }
+
+    private fun setScrollListener(listRV: RecyclerView) {
+        listRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val pos = (
+                        listRV.layoutManager as LinearLayoutManager
+                        ).findLastVisibleItemPosition()
+                    val itemsCount = vacanciesAdapter.itemCount
+                    if (pos >= itemsCount - 1) {
+                        viewModel.onUiEvent(SearchUiEvent.LastItemReached)
+                    }
+                }
+            }
+        })
     }
 
     private fun showToast(message: String) {
@@ -266,7 +207,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 Context.INPUT_METHOD_SERVICE
             ) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(
-            binding.searchFieldEt.windowToken,
+            binding.searchInputEt.windowToken,
             0
         )
     }
@@ -276,13 +217,5 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             R.id.action_searchFragment_to_vacancyFragment,
             VacancyFragment.createArgs(vacancyID)
         )
-    }
-
-    private fun convertToPlurals(count: Int): String {
-        val languageTag = "ru"
-        AppCompatDelegate.setApplicationLocales(
-            LocaleListCompat.create(Locale.forLanguageTag(languageTag))
-        )
-        return resources.getQuantityString(R.plurals.vacancies_amount, count, count)
     }
 }

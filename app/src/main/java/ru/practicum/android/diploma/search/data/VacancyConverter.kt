@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.search.data
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.search.data.dto.reponse.SalaryDto
 import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
@@ -8,6 +10,7 @@ import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
 import ru.practicum.android.diploma.util.currencyUTF
 import ru.practicum.android.diploma.util.formatter
+import java.util.Locale
 
 class VacancyConverter(
     private val context: Context
@@ -27,7 +30,7 @@ class VacancyConverter(
                     salary = parseSalary(item.salary)
                 )
             },
-            count = response.found,
+            count = convertToPlurals(response.found),
             page = response.page,
             pages = response.pages
         )
@@ -60,5 +63,13 @@ class VacancyConverter(
         } else {
             return context.getString(R.string.salary_is_null)
         }
+    }
+
+    private fun convertToPlurals(count: Int): String {
+        val languageTag = "ru"
+        AppCompatDelegate.setApplicationLocales(
+            LocaleListCompat.create(Locale.forLanguageTag(languageTag))
+        )
+        return context.resources.getQuantityString(R.plurals.vacancies_amount, count, count)
     }
 }
