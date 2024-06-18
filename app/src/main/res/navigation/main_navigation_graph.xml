@@ -24,8 +24,8 @@
         android:name="ru.practicum.android.diploma.favorites.ui.FavoritesFragment"
         android:label="FavoritesFragment" >
         <action
-            android:id="@+id/action_favoritesFragment_to_vacancyFragment"
-            app:destination="@id/vacancyFragment" />
+            android:id="@+id/action_favoritesFragment_to_favoriteDetailFragment"
+            app:destination="@id/favoriteDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/teamFragment"
@@ -69,4 +69,8 @@
         android:id="@+id/filterRegionFragment"
         android:name="ru.practicum.android.diploma.filter.ui.FilterRegionFragment"
         android:label="FilterRegionFragment" />
+    <fragment
+        android:id="@+id/favoriteDetailFragment"
+        android:name="ru.practicum.android.diploma.favoritedetails.ui.FavoriteDetailsFragment"
+        android:label="FavoriteDetailFragment" />
 </navigation>

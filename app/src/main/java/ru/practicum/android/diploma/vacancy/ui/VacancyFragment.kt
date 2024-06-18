@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import org.koin.android.ext.android.inject
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
@@ -24,9 +25,9 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 import ru.practicum.android.diploma.vacancy.presentation.VacancyDetailsViewModel
 import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
-class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
+open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
-    private val viewModel: VacancyDetailsViewModel by viewModel {
+    open val viewModel: VacancyDetailsViewModel by viewModel {
         parametersOf(vacancyID)
     }
     private var vacancyID: String? = null
@@ -48,6 +49,9 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
         viewModel.getUIState().observe(viewLifecycleOwner) { state ->
             render(state)
+        }
+        viewModel.getFavoriteState().observe(viewLifecycleOwner) { stateFavorite ->
+            renderFavoriteState(stateFavorite)
         }
     }
 
@@ -72,9 +76,11 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 val phone = phoneTextTv.text.toString()
                 viewModel.callTo(phone)
             }
-            favoriteIc.setOnClickListener {
-                it.isPressed != it.isPressed
-                viewModel.changeFavoriteState(details)
+            favoriteOffIc.setOnClickListener {
+                viewModel.addVacancyToFavorite(details)
+            }
+            favoriteOnIc.setOnClickListener {
+                viewModel.deleteVacancyFromFavorite(details.id)
             }
         }
     }
@@ -96,6 +102,13 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
     }
 
+    private fun renderFavoriteState(stateFavorite: Boolean) {
+        with(binding) {
+            favoriteOnIc.isVisible = stateFavorite
+            favoriteOffIc.isVisible = !stateFavorite
+        }
+    }
+
     private fun showContent(details: VacancyDetails) {
         binding.apply {
             progressBar.isVisible = false
@@ -107,7 +120,6 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             provideLogo(employerLogoIv, details.logoUrls)
             experienceTv.text = details.experience
             employmentTv.text = details.employment
-            favoriteIc.isPressed = details.isFavorite
             vacancyDescriptionTv.text = Html.fromHtml(details.description, Html.FROM_HTML_MODE_COMPACT)
             showKeySkills(details)
             showContacts(details)
@@ -204,6 +216,14 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                     vacancyErrorPlaceHolderErrorText.text = getString(R.string.incorrect_request_text)
                 }
 
+                is Errors.Error404 -> {
+                    vacancyErrorPlaceHolderErrorText.text = getString(R.string.server_error_text)
+                    showToast(getString(R.string.vacancy_was_deleted))
+                    if (vacancyID != null) {
+                        viewModel.deleteVacancyFromFavorite(vacancyID!!)
+                    }
+                }
+
                 else -> {}
             }
         }
@@ -223,6 +243,18 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             .placeholder(R.drawable.ic_placeholder)
             .transform(RoundedCorners(CORNER_RADIUS))
             .into(imageView)
+    }
+
+    private fun showToast(message: String) {
+        val snackBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
+        snackBar.setTextColor(requireContext().getColor(R.color.white))
+        snackBar.show()
+        val viewSnackbar = snackBar.view.apply {
+            setBackgroundResource(R.drawable.background_red_snackbar)
+        }
+        val textSnackbar: TextView =
+            viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
+        textSnackbar.textAlignment = View.TEXT_ALIGNMENT_CENTER
     }
 
     companion object {

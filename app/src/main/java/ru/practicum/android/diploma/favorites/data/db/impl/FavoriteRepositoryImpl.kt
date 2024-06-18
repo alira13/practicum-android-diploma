@@ -1,11 +1,15 @@
 package ru.practicum.android.diploma.favorites.data.db.impl
 
+import android.database.SQLException
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.favorites.data.converters.FavoriteConverter
 import ru.practicum.android.diploma.favorites.data.db.AppDatabase
 import ru.practicum.android.diploma.favorites.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.favorites.domain.api.FavoriteRepository
+import ru.practicum.android.diploma.search.domain.models.Errors
+import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 
 class FavoriteRepositoryImpl(
@@ -27,9 +31,20 @@ class FavoriteRepositoryImpl(
         emit(mapListEntityToListModel(vacanciesEntity))
     }
 
-    override suspend fun getFavoriteVacancyById(vacancyId: String): Flow<VacancyDetails> = flow {
+    override suspend fun getFavoriteVacancyById(vacancyId: String): Resource<VacancyDetails> {
         val vacancyEntity = appDatabase.vacancyDao().getFavoriteVacancyById(vacancyId)
-        emit(favoriteConverter.mapEntityToModel(vacancyEntity))
+        return try {
+            Resource.Success(favoriteConverter.mapEntityToModel(vacancyEntity))
+        } catch (e: SQLException) {
+            Log.e("SQLException", "Exception message: ${e.message}")
+            Log.e("SQLException", "Exception cause: ${e.cause}")
+            Resource.Error(Errors.ServerError, null)
+        }
+    }
+
+    override suspend fun isVacancyFavorite(vacancyId: String): Boolean {
+        val listIdFavorites: List<String> = appDatabase.vacancyDao().getListIdFavoriteVacancies()
+        return listIdFavorites.contains(vacancyId)
     }
 
     private fun mapListEntityToListModel(vacanciesEntity: List<VacancyEntity>): List<VacancyDetails> {

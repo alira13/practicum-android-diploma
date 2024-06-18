@@ -51,4 +51,5 @@
     <string name="vacancy_address_text">г. %1$s, ул. %2$s д. %3$s</string>
     <string name="vacancy_salary_not_specified_text">зарплата не указана</string>
     <string name="vacancy_icon_description">Иконка вакансии</string>
+    <string name="vacancy_was_deleted">Вакансия удалена или у вас нет прав для её просмотра</string>
 </resources>

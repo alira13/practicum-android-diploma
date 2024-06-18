@@ -14,20 +14,22 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetails
 import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsRequest
 import ru.practicum.android.diploma.vacancy.ui.models.VacancyDetailsUIState
 
-class VacancyDetailsViewModel(
+open class VacancyDetailsViewModel(
     id: String,
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
     private val sharingInteractor: SharingInteractor,
     private val favoriteInteractor: FavoriteInteractor,
 ) : ViewModel() {
 
-    private val idVacancy = id
-
-    private val vacancyDetailsState: MutableLiveData<VacancyDetailsUIState> = MutableLiveData()
+    val vacancyDetailsState: MutableLiveData<VacancyDetailsUIState> = MutableLiveData()
     fun getUIState(): LiveData<VacancyDetailsUIState> = vacancyDetailsState
+
+    private val favoriteState: MutableLiveData<Boolean> = MutableLiveData()
+    fun getFavoriteState(): LiveData<Boolean> = favoriteState
 
     init {
         getVacancyDetails(id)
+        isVacancyFavorite(id)
     }
 
     private fun getVacancyDetails(id: String) {
@@ -52,7 +54,7 @@ class VacancyDetailsViewModel(
         sharingInteractor.callTo(number)
     }
 
-    private fun processResult(details: VacancyDetails?, errors: Errors?) {
+    fun processResult(details: VacancyDetails?, errors: Errors?) {
         if (details != null) {
             vacancyDetailsState.value = VacancyDetailsUIState.Content(details)
         } else {
@@ -60,15 +62,23 @@ class VacancyDetailsViewModel(
         }
     }
 
-    fun changeFavoriteState(vacancyDetails: VacancyDetails) {
+    fun addVacancyToFavorite(vacancyDetails: VacancyDetails) {
         viewModelScope.launch {
-            vacancyDetails.isFavorite != vacancyDetails.isFavorite
-            if (vacancyDetails.isFavorite) {
-                favoriteInteractor.deleteFavoriteVacancyById(vacancyDetails.id)
-            } else {
-                favoriteInteractor.insertFavoriteVacancy(vacancyDetails)
-            }
-            getVacancyDetails(idVacancy)
+            favoriteInteractor.insertFavoriteVacancy(vacancyDetails)
+            favoriteState.postValue(true)
+        }
+    }
+
+    fun deleteVacancyFromFavorite(vacancyId: String) {
+        viewModelScope.launch {
+            favoriteInteractor.deleteFavoriteVacancyById(vacancyId)
+            favoriteState.postValue(false)
+        }
+    }
+
+    private fun isVacancyFavorite(vacancyId: String) {
+        viewModelScope.launch {
+            favoriteState.postValue(favoriteInteractor.isVacancyFavorite(vacancyId))
         }
     }
 }

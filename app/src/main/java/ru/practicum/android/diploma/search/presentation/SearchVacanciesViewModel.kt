@@ -2,6 +2,9 @@ package ru.practicum.android.diploma.search.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -11,7 +14,6 @@ import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
 import ru.practicum.android.diploma.search.domain.models.VacancyPreview
 import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
-import ru.practicum.android.diploma.util.debounce
 
 class SearchVacanciesViewModel(
     private val searchInteractor: SearchInteractor
@@ -22,32 +24,37 @@ class SearchVacanciesViewModel(
     private var maxPages = 1
     private var totalVacansiesList: MutableList<VacancyPreview> = mutableListOf()
     private var isNextPageLoading: Boolean = false
+    private var searchJob: Job? = null
 
-    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default)
+    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
 
     private var lastSearchRequest: String? = null
-    private val searchDebounce = debounce<String>(
-        delayMillis = SEARCH_DEBOUNCE_DELAY_MILLIS,
-        coroutineScope = viewModelScope,
-        useLastParam = true
-    ) { searchRequest ->
-        search(searchRequest)
-    }
 
     fun onUiEvent(event: SearchUiEvent) {
         when (event) {
-            SearchUiEvent.ClearText -> _uiState.value = SearchUiState.Default
-            is SearchUiEvent.QueryInput -> onQueryInput(event.s)
+            SearchUiEvent.ClearText -> onRequestCleared()
+            is SearchUiEvent.QueryInput -> onQueryInput(event.expression)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
         }
     }
 
-    private fun onQueryInput(s: CharSequence?) {
-        if (!s.isNullOrEmpty()) {
+    private fun onRequestCleared() {
+        searchJob?.cancel()
+        _uiState.value = SearchUiState.Default()
+    }
+
+    private fun onQueryInput(expression: String) {
+        if (
+            expression.isEmpty()
+            || expression == "null"
+        ) {
+            onRequestCleared()
+        } else if (expression != lastSearchRequest) {
             _uiState.value = SearchUiState.EditingRequest
-            resetSearchParams(s.toString())
-            searchDebounce(lastSearchRequest!!)
+            resetSearchParams(expression)
+            searchJob?.cancel()
+            search(lastSearchRequest!!, true)
         }
     }
 
@@ -59,31 +66,52 @@ class SearchVacanciesViewModel(
         totalVacansiesList = mutableListOf()
     }
 
-    private fun search(searchRequest: String) {
-        viewModelScope.launch {
-            _uiState.value = SearchUiState.Loading(isItFirstPage = pageToRequest == 0)
+    private fun search(
+        searchRequest: String,
+        withDelay: Boolean
+    ) {
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
+            if (withDelay) {
+                delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
+            }
+            _uiState.value = if (pageToRequest == 0) {
+                SearchUiState.Loading()
+            } else {
+                SearchUiState.PagingLoading()
+            }
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
-            _uiState.value = when (result) {
-                is SearchResult.Error -> SearchUiState.Error(
-                    error = result.error,
+            _uiState.value = convertResult(result)
+        }
+    }
+
+    private fun convertResult(result: SearchResult): SearchUiState {
+        return when (result) {
+            is SearchResult.Error -> if (pageToRequest == 0) {
+                SearchUiState.FirstRequestError(error = result.error)
+            } else {
+                SearchUiState.PagingError(error = result.error)
+            }
+
+            is SearchResult.SearchContent -> if (isEmpty(result.vacancies)) {
+                SearchUiState.EmptyResult()
+            } else {
+                currentPage = result.page
+                maxPages = result.pages
+                SearchUiState.SearchResult(
+                    vacancies = addVacanciesToList(result.vacancies),
+                    count = result.count,
                     isItFirstPage = pageToRequest == 0
                 )
-
-                is SearchResult.SearchContent -> if (result.count == 0) {
-                    SearchUiState.EmptyResult
-                } else {
-                    currentPage = result.page
-                    maxPages = result.pages
-                    SearchUiState.SearchResult(
-                        addVacanciesToList(result.vacancies),
-                        result.count.toString()
-                    )
-                }
             }
         }
     }
 
+    private fun isEmpty(vacancies: List<VacancyPreview>): Boolean {
+        val condition1 = pageToRequest == 0 && vacancies.isEmpty()
+        val condition2 = pageToRequest != 0 && totalVacansiesList.isEmpty()
+        return condition1 || condition2
+    }
 
     private fun addVacanciesToList(newPartVacancies: List<VacancyPreview>): MutableList<VacancyPreview> {
         totalVacansiesList += newPartVacancies
@@ -91,13 +119,13 @@ class SearchVacanciesViewModel(
     }
 
     private fun onLastItemReached() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (pageToRequest < maxPages && isNextPageLoading) {
                 pageToRequest += 1
-                search(lastSearchRequest!!)
+                search(lastSearchRequest!!, false)
                 isNextPageLoading = false
             } else {
-                _uiState.value = SearchUiState.FullLoaded
+                _uiState.value = SearchUiState.FullLoaded()
             }
         }
     }

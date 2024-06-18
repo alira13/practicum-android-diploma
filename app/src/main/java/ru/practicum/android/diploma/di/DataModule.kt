@@ -32,7 +32,7 @@ val dataModule = module {
     factory {
         DetailsConverter(
             context = androidContext(),
-            appDatabase = get()
+            favoriteRepository = get()
         )
     }
 

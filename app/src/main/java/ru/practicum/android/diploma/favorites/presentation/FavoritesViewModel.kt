@@ -16,7 +16,7 @@ class FavoritesViewModel(private val interactor: FavoriteInteractor) : ViewModel
     private val _uiState = MutableLiveData<FavoritesUiState>()
     val uiStateFlow = _uiState
 
-    init {
+    fun getListFavoriteVacancies() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 interactor.getListFavoriteVacancies().collect { vacancies ->
