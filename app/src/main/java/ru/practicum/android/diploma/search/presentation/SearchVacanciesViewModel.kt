@@ -93,7 +93,10 @@ class SearchVacanciesViewModel(
                 SearchUiState.PagingError(error = result.error)
             }
 
-            is SearchResult.SearchContent -> if (result.vacancies.isEmpty()) {
+            is SearchResult.SearchContent -> if (
+                (pageToRequest == 0 && result.vacancies.isEmpty())
+                || (pageToRequest != 0 && totalVacansiesList.isEmpty())
+            ) {
                 SearchUiState.EmptyResult()
             } else {
                 currentPage = result.page
