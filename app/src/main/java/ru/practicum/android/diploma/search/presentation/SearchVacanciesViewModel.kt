@@ -22,7 +22,7 @@ class SearchVacanciesViewModel(
     private var pageToRequest = 0
     private var totalVacansiesList: MutableList<VacancyPreview> = mutableListOf()
     private var searchJob: Job? = null
-    private var pagingJob: Job? = null
+    private var isNextPageLoading: Boolean = false
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
@@ -53,6 +53,7 @@ class SearchVacanciesViewModel(
             resetSearchParams(expression)
             searchJob?.cancel()
             search(lastSearchRequest!!, true)
+            isNextPageLoading = true
         }
     }
 
@@ -74,6 +75,7 @@ class SearchVacanciesViewModel(
                 _uiState.value = SearchUiState.Loading()
             }
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
+            isNextPageLoading = true
             _uiState.value = convertResult(result)
         }
     }
@@ -112,16 +114,16 @@ class SearchVacanciesViewModel(
 
     private fun onLastItemReached() {
         _uiState.value = SearchUiState.PagingLoading()
-        pagingJob?.cancel()
-        pagingJob = viewModelScope.launch(Dispatchers.IO) {
-            delay(PAGING_DEBOUNCE_DELAY_MILLIS)
-            pageToRequest += 1
-            search(lastSearchRequest!!, false)
+        viewModelScope.launch(Dispatchers.IO) {
+            if (isNextPageLoading) {
+                pageToRequest += 1
+                search(lastSearchRequest!!, false)
+                isNextPageLoading = false
+            }
         }
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
-        private const val PAGING_DEBOUNCE_DELAY_MILLIS = 2000L
     }
 }
