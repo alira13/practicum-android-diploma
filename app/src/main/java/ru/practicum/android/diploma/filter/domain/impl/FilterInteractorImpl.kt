@@ -5,8 +5,8 @@ import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.filter.domain.models.FilterResult
 
 class FilterInteractorImpl(
-    private val filterRepository: FilterRepository
-) : FilterInteractor{
+    private val filterRepository: FilterRepository,
+) : FilterInteractor {
     override suspend fun getRegions(): FilterResult {
         return filterRepository.getRegions()
     }
