@@ -93,10 +93,7 @@ class SearchVacanciesViewModel(
                 SearchUiState.PagingError(error = result.error)
             }
 
-            is SearchResult.SearchContent -> if (
-                pageToRequest == 0 && result.vacancies.isEmpty()
-                || pageToRequest != 0 && totalVacansiesList.isEmpty()
-            ) {
+            is SearchResult.SearchContent -> if (isEmpty(result.vacancies)) {
                 SearchUiState.EmptyResult()
             } else {
                 currentPage = result.page
@@ -108,6 +105,12 @@ class SearchVacanciesViewModel(
                 )
             }
         }
+    }
+
+    private fun isEmpty(vacancies: List<VacancyPreview>): Boolean {
+        val condition1 = pageToRequest == 0 && vacancies.isEmpty()
+        val condition2 = pageToRequest != 0 && totalVacansiesList.isEmpty()
+        return condition1 || condition2
     }
 
     private fun addVacanciesToList(newPartVacancies: List<VacancyPreview>): MutableList<VacancyPreview> {
