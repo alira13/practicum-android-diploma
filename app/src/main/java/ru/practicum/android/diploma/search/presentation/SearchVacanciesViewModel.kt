@@ -20,7 +20,7 @@ class SearchVacanciesViewModel(
 ) : ViewModel() {
 
     private var pageToRequest = 0
-    private var totalVacansiesList: MutableList<VacancyPreview> = mutableListOf()
+    private var totalVacanciesList: MutableList<VacancyPreview> = mutableListOf()
     private var searchJob: Job? = null
     private var isNextPageLoading: Boolean = false
 
@@ -60,7 +60,7 @@ class SearchVacanciesViewModel(
     private fun resetSearchParams(request: String) {
         lastSearchRequest = request
         pageToRequest = 0
-        totalVacansiesList = mutableListOf()
+        totalVacanciesList = mutableListOf()
     }
 
     private fun search(
@@ -75,7 +75,6 @@ class SearchVacanciesViewModel(
                 _uiState.value = SearchUiState.Loading()
             }
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
-            isNextPageLoading = true
             _uiState.value = convertResult(result)
         }
     }
@@ -103,13 +102,13 @@ class SearchVacanciesViewModel(
 
     private fun isEmpty(vacancies: List<VacancyPreview>): Boolean {
         val condition1 = pageToRequest == 0 && vacancies.isEmpty()
-        val condition2 = pageToRequest != 0 && totalVacansiesList.isEmpty()
+        val condition2 = pageToRequest != 0 && totalVacanciesList.isEmpty()
         return condition1 || condition2
     }
 
     private fun addVacanciesToList(newPartVacancies: List<VacancyPreview>): MutableList<VacancyPreview> {
-        totalVacansiesList += newPartVacancies
-        return totalVacansiesList
+        totalVacanciesList += newPartVacancies
+        return totalVacanciesList
     }
 
     private fun onLastItemReached() {
