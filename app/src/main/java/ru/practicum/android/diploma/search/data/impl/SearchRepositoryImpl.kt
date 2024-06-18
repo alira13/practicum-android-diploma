@@ -42,4 +42,10 @@ class SearchRepositoryImpl(
             }
         }
     }
+
+    companion object {
+        const val INCORRECT_REQUEST = 400
+        const val SUCCESS = 200
+        const val CONNECTION_ERROR = -1
+    }
 }
