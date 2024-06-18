@@ -122,6 +122,6 @@ class SearchVacanciesViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
-        private const val PAGING_DEBOUNCE_DELAY_MILLIS = 2000L
+        private const val PAGING_DEBOUNCE_DELAY_MILLIS = 300L
     }
 }
