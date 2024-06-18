@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.di
 
 import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
