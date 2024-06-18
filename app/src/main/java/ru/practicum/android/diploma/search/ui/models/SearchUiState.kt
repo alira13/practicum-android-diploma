@@ -12,7 +12,8 @@ sealed class SearchUiState(
     open val placeholderImageIcon: Int? = null,
     open val placeholderMessageIsVisible: Boolean = false,
     open val vacanciesListRvIsVisible: Boolean = false,
-    open val progressBarIsVisible: Boolean = false
+    open val progressBarIsVisible: Boolean = false,
+    open val dataToBeResumed: Boolean = false
 ) {
     data class Default(
         override val clearEnabled: Boolean = false,
@@ -58,6 +59,7 @@ sealed class SearchUiState(
     data class PagingError(
         override val countIsVisible: Boolean = true,
         override val vacanciesListRvIsVisible: Boolean = true,
+        override val dataToBeResumed: Boolean = true,
         val error: Errors
     ) : SearchUiState()
 }

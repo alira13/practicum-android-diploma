@@ -23,6 +23,8 @@ class SearchVacanciesViewModel(
     private var totalVacanciesList: MutableList<VacancyPreview> = mutableListOf()
     private var searchJob: Job? = null
     private var isNextPageLoading: Boolean = false
+    private var isFullLoaded: Boolean = false
+    private var count: String? = null
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
@@ -34,7 +36,17 @@ class SearchVacanciesViewModel(
             SearchUiEvent.ClearText -> onRequestCleared()
             is SearchUiEvent.QueryInput -> onQueryInput(event.expression)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
+            SearchUiEvent.ResumeData -> resumeData()
         }
+    }
+
+    private fun resumeData() {
+        _uiState.value = SearchUiState.SearchResult(
+            vacancies = totalVacanciesList,
+            count = count!!,
+            isItFirstPage = pageToRequest == 0,
+            isFullLoaded = isFullLoaded
+        )
     }
 
     private fun onRequestCleared() {
@@ -60,6 +72,8 @@ class SearchVacanciesViewModel(
         lastSearchRequest = request
         pageToRequest = 0
         totalVacanciesList = mutableListOf()
+        isFullLoaded = false
+        count = null
     }
 
     private fun search(
@@ -90,11 +104,13 @@ class SearchVacanciesViewModel(
             is SearchResult.SearchContent -> if (isEmpty(result.vacancies)) {
                 SearchUiState.EmptyResult()
             } else {
+                isFullLoaded = result.page == result.pages
+                count = result.count
                 SearchUiState.SearchResult(
                     vacancies = addVacanciesToList(result.vacancies),
-                    count = result.count,
+                    count = count!!,
                     isItFirstPage = pageToRequest == 0,
-                    isFullLoaded = result.page == result.pages
+                    isFullLoaded = isFullLoaded
                 )
             }
         }

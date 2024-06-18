@@ -30,6 +30,7 @@ import ru.practicum.android.diploma.vacancy.ui.VacancyFragment
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private val viewModel: SearchVacanciesViewModel by viewModel()
+    private var dataToBeResumed: Boolean = false
     private val vacanciesAdapter: VacanciesAdapter by lazy {
         VacanciesAdapter { vacancy ->
             toVacancyFullInfo(vacancy.id)
@@ -55,6 +56,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         subscribeOnViewModel()
     }
 
+    override fun onStop() {
+        if (dataToBeResumed) {
+            viewModel.onUiEvent(SearchUiEvent.ResumeData)
+        }
+        super.onStop()
+    }
+
     private fun subscribeOnViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect {
@@ -64,6 +72,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun onUiState(state: SearchUiState) {
+        dataToBeResumed = state.dataToBeResumed
         when (state) {
             is SearchUiState.Default -> onDefaultState()
             is SearchUiState.EmptyResult -> onEmptyResult()
