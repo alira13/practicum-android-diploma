@@ -119,10 +119,17 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
+    private fun onPagingErrorMessage(error: Errors): String {
+        return when (error) {
+            is Errors.ConnectionError -> getString(R.string.check_internet)
+            else -> getString(R.string.mistake_happened)
+        }
+    }
+
     private fun onPagingError(error: Errors) {
         vacanciesAdapter.vacancies.remove(ProgressBarItem)
         binding.searchListRv.adapter?.notifyItemRemoved(vacanciesAdapter.vacancies.size)
-        showToast(onErrorMessage(error))
+        showToast(onPagingErrorMessage(error))
     }
 
     private fun onFirstRequestError(error: Errors) {

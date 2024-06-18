@@ -52,4 +52,6 @@
     <string name="vacancy_salary_not_specified_text">зарплата не указана</string>
     <string name="vacancy_icon_description">Иконка вакансии</string>
     <string name="vacancy_was_deleted">Вакансия удалена или у вас нет прав для её просмотра</string>
+    <string name="check_internet">Проверьте подключение к интернету</string>
+    <string name="mistake_happened">Произошла ошибка</string>
 </resources>
