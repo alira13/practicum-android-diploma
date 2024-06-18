@@ -53,7 +53,6 @@ class SearchVacanciesViewModel(
             resetSearchParams(expression)
             searchJob?.cancel()
             search(lastSearchRequest!!, true)
-            isNextPageLoading = true
         }
     }
 
@@ -75,6 +74,7 @@ class SearchVacanciesViewModel(
                 _uiState.value = SearchUiState.Loading()
             }
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
+            isNextPageLoading = true
             _uiState.value = convertResult(result)
         }
     }
