@@ -22,6 +22,7 @@ class SearchVacanciesViewModel(
     private var pageToRequest = 0
     private var totalVacansiesList: MutableList<VacancyPreview> = mutableListOf()
     private var searchJob: Job? = null
+    private var pagingJob: Job? = null
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
@@ -69,10 +70,8 @@ class SearchVacanciesViewModel(
             if (withDelay) {
                 delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
-            _uiState.value = if (pageToRequest == 0) {
-                SearchUiState.Loading()
-            } else {
-                SearchUiState.PagingLoading()
+            if (pageToRequest == 0) {
+                _uiState.value = SearchUiState.Loading()
             }
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             _uiState.value = convertResult(result)
@@ -112,7 +111,10 @@ class SearchVacanciesViewModel(
     }
 
     private fun onLastItemReached() {
-        viewModelScope.launch(Dispatchers.IO) {
+        _uiState.value = SearchUiState.PagingLoading()
+        pagingJob?.cancel()
+        pagingJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(PAGING_DEBOUNCE_DELAY_MILLIS)
             pageToRequest += 1
             search(lastSearchRequest!!, false)
         }
@@ -120,5 +122,6 @@ class SearchVacanciesViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
+        private const val PAGING_DEBOUNCE_DELAY_MILLIS = 2000L
     }
 }
