@@ -17,13 +17,17 @@ import ru.practicum.android.diploma.util.isConnected
 import ru.practicum.android.diploma.vacancy.data.dto.VacancyDetailsRequestDto
 
 class RetrofitNetworkClient(
-    private val apiService: HHApiService
+    private val apiService: HHApiService,
 ) : NetworkClient {
     override suspend fun doRequest(dto: Any): Response {
         if (!isConnected()) {
-            return Response().apply { resultCode = CONNECTION_ERROR }
+            Response().apply { resultCode = CONNECTION_ERROR }
         }
 
+        return getResponse(dto)
+    }
+
+    private suspend fun getResponse(dto: Any): Response {
         return withContext(Dispatchers.IO) {
             try {
                 when (dto) {
@@ -41,6 +45,7 @@ class RetrofitNetworkClient(
                         Response().apply { resultCode = INCORRECT_REQUEST }
                     }
                 }
+
             } catch (e: HttpException) {
                 Log.e("RetrofitNetworkClient", "exception handled $e")
                 Log.e("RetrofitNetworkClient", "Code - ${e.code()}")
@@ -50,5 +55,12 @@ class RetrofitNetworkClient(
                 }
             }
         }
+    }
+
+    companion object {
+        const val INCORRECT_REQUEST = 400
+        const val SUCCESS = 200
+        const val SERVER_ERROR = 500
+        const val CONNECTION_ERROR = -1
     }
 }

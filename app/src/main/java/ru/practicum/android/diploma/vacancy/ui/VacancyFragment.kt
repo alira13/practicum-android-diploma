@@ -1,18 +1,14 @@
 package ru.practicum.android.diploma.vacancy.ui
 
 import android.os.Bundle
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -96,8 +92,9 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             }
 
             is VacancyDetailsUIState.Content -> {
-                showContent(state.details)
+                DetailsShower(binding, requireContext()).showContent(state.details)
                 setClickListeners(state.details)
+                vacancyUrl = state.details.alternateUrl
             }
         }
     }
@@ -106,95 +103,6 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         with(binding) {
             favoriteOnIc.isVisible = stateFavorite
             favoriteOffIc.isVisible = !stateFavorite
-        }
-    }
-
-    private fun showContent(details: VacancyDetails) {
-        binding.apply {
-            progressBar.isVisible = false
-            scrollViewContent.isVisible = true
-            vacancyNameTv.text = details.name
-            salaryTv.text = details.salary
-            employerNameTv.text = details.employer ?: ""
-            areaNameTv.text = details.area
-            provideLogo(employerLogoIv, details.logoUrls)
-            experienceTv.text = details.experience
-            employmentTv.text = details.employment
-            vacancyDescriptionTv.text = Html.fromHtml(details.description, Html.FROM_HTML_MODE_COMPACT)
-            showKeySkills(details)
-            showContacts(details)
-        }
-        vacancyUrl = details.alternateUrl
-
-    }
-
-    private fun showKeySkills(details: VacancyDetails) {
-        binding.apply {
-            if (details.keySkills?.isNotEmpty() == true) {
-                keySkillsTextTv.text = details.keySkills
-            } else {
-                keySkillsTitleTv.isVisible = false
-            }
-        }
-    }
-
-    private fun showContacts(details: VacancyDetails) {
-        binding.apply {
-            val name = details.contactName
-            val email = details.email
-            val phones = details.phone
-            showNamesAndEmails(details)
-            showPhones(details)
-            if (name == null && email == null && phones.isNullOrEmpty()) {
-                contactsTitleTv.isVisible = false
-                commentTitleTv.isVisible = false
-                contactsTitleTv.isVisible = false
-                contactPersonTitleTv.isVisible = false
-                contactPersonTextTv.isVisible = false
-                emailTextTv.isVisible = false
-                emailTitleTv.isVisible = false
-                phoneTextTv.isVisible = false
-                phoneTitleTv.isVisible = false
-                commentTitleTv.isVisible = false
-                commentTextTv.isVisible = false
-            }
-        }
-    }
-
-    private fun showNamesAndEmails(details: VacancyDetails) {
-        binding.apply {
-            val name = details.contactName
-            val email = details.email
-            if (name != null) {
-                contactPersonTextTv.text = name
-            } else {
-                contactPersonTitleTv.isVisible = false
-                contactPersonTextTv.isVisible = false
-            }
-            if (email != null) {
-                emailTextTv.text = email
-            } else {
-                emailTextTv.isVisible = false
-                emailTitleTv.isVisible = false
-            }
-        }
-    }
-
-    private fun showPhones(details: VacancyDetails) {
-        binding.apply {
-            val phone = details.phone
-            if (!phone.isNullOrEmpty()) {
-                phoneTextTv.text = phone
-                val comment = details.comment
-                if (!comment.isNullOrEmpty()) {
-                    commentTextTv.text = comment
-                } else {
-                    commentTextTv.isVisible = false
-                }
-            } else {
-                phoneTextTv.isVisible = false
-                phoneTitleTv.isVisible = false
-            }
         }
     }
 
@@ -237,24 +145,16 @@ open class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
     }
 
-    private fun provideLogo(imageView: ImageView, url: String?) {
-        Glide.with(requireContext())
-            .load(url)
-            .placeholder(R.drawable.ic_placeholder)
-            .transform(RoundedCorners(CORNER_RADIUS))
-            .into(imageView)
-    }
-
     private fun showToast(message: String) {
         val snackBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
         snackBar.setTextColor(requireContext().getColor(R.color.white))
         snackBar.show()
-        val viewSnackbar = snackBar.view.apply {
+        val viewSnackBar = snackBar.view.apply {
             setBackgroundResource(R.drawable.background_red_snackbar)
         }
-        val textSnackbar: TextView =
-            viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
-        textSnackbar.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        val textSnackBar: TextView =
+            viewSnackBar.findViewById(com.google.android.material.R.id.snackbar_text)
+        textSnackBar.textAlignment = View.TEXT_ALIGNMENT_CENTER
     }
 
     companion object {
