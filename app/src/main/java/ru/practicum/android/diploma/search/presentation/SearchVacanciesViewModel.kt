@@ -94,8 +94,8 @@ class SearchVacanciesViewModel(
             }
 
             is SearchResult.SearchContent -> if (
-                (pageToRequest == 0 && result.vacancies.isEmpty())
-                || (pageToRequest != 0 && totalVacansiesList.isEmpty())
+                pageToRequest == 0 && result.vacancies.isEmpty()
+                || pageToRequest != 0 && totalVacansiesList.isEmpty()
             ) {
                 SearchUiState.EmptyResult()
             } else {
