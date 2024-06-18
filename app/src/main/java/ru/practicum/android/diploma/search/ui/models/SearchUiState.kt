@@ -37,7 +37,8 @@ sealed class SearchUiState(
         override val vacanciesListRvIsVisible: Boolean = true,
         val vacancies: List<VacancyPreview>,
         val count: String,
-        val isItFirstPage: Boolean
+        val isItFirstPage: Boolean,
+        val isFullLoaded: Boolean
     ) : SearchUiState()
 
     data class EmptyResult(
@@ -58,10 +59,5 @@ sealed class SearchUiState(
         override val countIsVisible: Boolean = true,
         override val vacanciesListRvIsVisible: Boolean = true,
         val error: Errors
-    ) : SearchUiState()
-
-    data class FullLoaded(
-        override val countIsVisible: Boolean = true,
-        override val vacanciesListRvIsVisible: Boolean = true
     ) : SearchUiState()
 }

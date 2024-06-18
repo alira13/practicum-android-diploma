@@ -170,7 +170,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 if (result.isItFirstPage) {
                     smoothScrollToPosition(0)
                 }
-                setScrollListener(this)
+                if (result.isFullLoaded) {
+                    clearOnScrollListeners()
+                } else {
+                    setScrollListener(this)
+                }
             }
         }
     }
