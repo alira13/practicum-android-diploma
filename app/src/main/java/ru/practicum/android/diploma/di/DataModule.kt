@@ -22,7 +22,7 @@ import ru.practicum.android.diploma.share.data.ExternalNavigator
 import ru.practicum.android.diploma.vacancy.data.DetailsConverter
 
 const val BASE_URL = "https://api.hh.ru/"
-private const val VACANCY_CATCHER_SHARED_PREFS = "play_list_maker_shared_prefs"
+private const val VACANCY_CATCHER_SHARED_PREFS = "vacancy_catcher_shared_prefs"
 
 val dataModule = module {
 
