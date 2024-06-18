@@ -120,6 +120,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun onPagingError(error: Errors) {
+        vacanciesAdapter.vacancies.remove(ProgressBarItem)
+        binding.searchListRv.adapter?.notifyItemRemoved(vacanciesAdapter.vacancies.size)
         showToast(onErrorMessage(error))
     }
 
