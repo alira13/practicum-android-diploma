@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "vacancy_table")
 data class VacancyEntity(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    val id: Int,
     val vacancyId: String,
     val name: String,
     val employerName: String?,
