@@ -13,6 +13,10 @@ import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
+import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.filter.domain.models.Country
+import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.filter.domain.models.WriteRequest
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsInteractor
@@ -45,6 +49,33 @@ class RootActivity : AppCompatActivity() {
             binding.bottomNavigationView.isVisible = isVisible
             binding.line.isVisible = isVisible
         }
+        settingsInteractor.write(
+            WriteRequest.WriteArea(
+                Area(
+                    "example",
+                    "example"
+                )
+            )
+        )
+        settingsInteractor.write(
+            WriteRequest.WriteSalary(100000)
+        )
+        settingsInteractor.write(
+            WriteRequest.WriteCountry(
+                Country(
+                    "id",
+                    "name"
+                )
+            )
+        )
+        settingsInteractor.write(
+            WriteRequest.WriteIndustry(
+                Industry(
+                    "id",
+                    "industry"
+                )
+            )
+        )
         Log.d("RootActivity", "settings ${settingsInteractor.read()}")
     }
 }

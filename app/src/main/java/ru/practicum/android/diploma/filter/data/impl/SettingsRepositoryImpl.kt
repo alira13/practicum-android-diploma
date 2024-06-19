@@ -1,15 +1,15 @@
 package ru.practicum.android.diploma.filter.data.impl
 
+import ru.practicum.android.diploma.filter.data.api.SettingsHandler
 import ru.practicum.android.diploma.filter.data.converter.FilterConverter
 import ru.practicum.android.diploma.filter.data.dto.SettingsDto
-import ru.practicum.android.diploma.filter.data.local.SettingsHandlerImpl
 import ru.practicum.android.diploma.filter.domain.api.SettingsRepository
 import ru.practicum.android.diploma.filter.domain.models.Settings
 import ru.practicum.android.diploma.filter.domain.models.WriteRequest
 
 class SettingsRepositoryImpl(
     private val converter: FilterConverter,
-    private val settingsHandler: SettingsHandlerImpl,
+    private val settingsHandler: SettingsHandler,
 ) : SettingsRepository {
     override fun read(): Settings {
         return converter.map(settingsHandler.read())
