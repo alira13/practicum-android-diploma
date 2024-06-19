@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.filter.data.api
 
 import ru.practicum.android.diploma.filter.data.dto.SettingsDto
 
-interface Settings {
+interface SettingsHandler {
     fun read(): SettingsDto?
     fun write(settingsDto: SettingsDto): Boolean
     fun clear()

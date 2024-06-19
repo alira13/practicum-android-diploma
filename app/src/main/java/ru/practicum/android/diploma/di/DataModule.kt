@@ -11,9 +11,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.favorites.data.converters.FavoriteConverter
 import ru.practicum.android.diploma.favorites.data.db.AppDatabase
-import ru.practicum.android.diploma.filter.data.api.Settings
+import ru.practicum.android.diploma.filter.data.api.SettingsHandler
 import ru.practicum.android.diploma.filter.data.converter.FilterConverter
-import ru.practicum.android.diploma.filter.data.local.SettingsHandler
+import ru.practicum.android.diploma.filter.data.local.SettingsHandlerImpl
 import ru.practicum.android.diploma.search.data.VacancyConverter
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
@@ -23,7 +23,6 @@ import ru.practicum.android.diploma.vacancy.data.DetailsConverter
 
 const val BASE_URL = "https://api.hh.ru/"
 private const val VACANCY_CATCHER_SHARED_PREFS = "vacancy_catcher_shared_prefs"
-
 val dataModule = module {
 
     single {
@@ -39,10 +38,6 @@ val dataModule = module {
             context = androidContext(),
             favoriteRepository = get()
         )
-    }
-
-    factory {
-        FilterConverter()
     }
 
     single {
@@ -81,6 +76,8 @@ val dataModule = module {
 
     factory { Gson() }
 
-    single<Settings> { SettingsHandler(get(), get()) }
+    factory { FilterConverter() }
+
+    single<SettingsHandler> { SettingsHandlerImpl(get(), get()) }
 
 }

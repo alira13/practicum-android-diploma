@@ -2,13 +2,13 @@ package ru.practicum.android.diploma.filter.data.local
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import ru.practicum.android.diploma.filter.data.api.Settings
+import ru.practicum.android.diploma.filter.data.api.SettingsHandler
 import ru.practicum.android.diploma.filter.data.dto.SettingsDto
 
-class SettingsHandler(
+class SettingsHandlerImpl(
     private val preferences: SharedPreferences,
     private val gson: Gson
-) : Settings {
+) : SettingsHandler {
     override fun read(): SettingsDto {
         val json = preferences.getString(SETTINGS_KEY, null)
         return gson.fromJson(json, SettingsDto::class.java)

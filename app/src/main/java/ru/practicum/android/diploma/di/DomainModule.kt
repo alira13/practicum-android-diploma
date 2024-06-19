@@ -24,6 +24,7 @@ import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsInteractor
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
 import ru.practicum.android.diploma.vacancy.domain.impl.VacancyDetailsInteractorImpl
 
+
 val domainModule = module {
 
     single<SearchRepository> {
@@ -76,11 +77,11 @@ val domainModule = module {
         FilterInteractorImpl(get())
     }
 
-    single<SettingsRepository> {
-        SettingsRepositoryImpl(get(), get())
-    }
-
     single<SettingsInteractor> {
         SettingsInteractorImpl(get())
+    }
+
+    single<SettingsRepository> {
+        SettingsRepositoryImpl(get(), get())
     }
 }

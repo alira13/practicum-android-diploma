@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
+import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsInteractor
@@ -19,8 +20,7 @@ import ru.practicum.android.diploma.vacancy.domain.models.VacancyDetailsRequest
 
 class RootActivity : AppCompatActivity() {
 
-    private val vacancyDetailsInteractor by inject<VacancyDetailsInteractor>()
-    private val searchInteractor by inject<SearchInteractor>()
+    private val settingsInteractor by inject<SettingsInteractor>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,23 +45,7 @@ class RootActivity : AppCompatActivity() {
             binding.bottomNavigationView.isVisible = isVisible
             binding.line.isVisible = isVisible
         }
-        lifecycleScope.launch {
-            val details = vacancyDetailsInteractor.getVacancyDetails(
-                VacancyDetailsRequest(id = "81430574")
-            )
-            Log.d("RootActivity", "details response $details")
-            val search = searchInteractor.searchVacancies(
-                VacanciesSearchRequest(page = 0, searchString = "разработчик")
-            )
-            Log.d("RootActivity", "search response $search")
-        }
+        Log.d("RootActivity", "settings ${settingsInteractor.read()}")
     }
 }
 
-/*
-* Пример использования access token для HeadHunter API
-* networkRequestExample(accessToken = BuildConfig.HH_ACCESS_TOKEN)
-* private fun networkRequestExample(accessToken: String) {
-        // ...
-    }
-* */
