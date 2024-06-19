@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="Regular16GrayTextStyle" parent="BaseTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+
+    <style name="Regular12HintTextStyle" parent="BaseTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="RegularTextStyle" parent="BaseTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
     <style name="TransparentButtonStyle">
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/text_size_16</item>

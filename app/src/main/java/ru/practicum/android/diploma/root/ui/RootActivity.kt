@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.root.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
@@ -43,6 +42,7 @@ class RootActivity : AppCompatActivity() {
             binding.bottomNavigationView.isVisible = isVisible
             binding.line.isVisible = isVisible
         }
+
         settingsInteractor.write(
             WriteRequest.WriteArea(
                 Area(
@@ -73,4 +73,5 @@ class RootActivity : AppCompatActivity() {
         Log.d("RootActivity", "settings ${settingsInteractor.read()}")
     }
 }
+
 

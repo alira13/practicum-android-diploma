@@ -30,6 +30,11 @@
     <string name="multi_string_hint_value">Какое-то очень-очень-очень-очень длинное многострочное значение</string>
     <string name="radio_btn_description">Радиокнопка</string>
     <string name="close_btn_description">Закрыть</string>
+    <string name="place_work">Место работы</string>
+    <string name="industry">Отрасль</string>
+    <string name="input_amount">Введите сумму</string>
+    <string name="expecting_salary">Ожидаемая зарплата</string>
+    <string name="dont_show_with_out_salary">Не показывать без зарплаты</string>
     <string name="salary_is_null">Зарплата не указана</string>
     <string name="salary_from">от %s %s</string>
     <string name="salary_from_to">от %s до %s %s</string>
@@ -52,4 +57,6 @@
     <string name="vacancy_salary_not_specified_text">зарплата не указана</string>
     <string name="vacancy_icon_description">Иконка вакансии</string>
     <string name="vacancy_was_deleted">Вакансия удалена или у вас нет прав для её просмотра</string>
+    <string name="check_internet">Проверьте подключение к интернету</string>
+    <string name="mistake_happened">Произошла ошибка</string>
 </resources>

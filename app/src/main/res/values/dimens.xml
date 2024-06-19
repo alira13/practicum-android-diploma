@@ -26,6 +26,16 @@
     <dimen name="spacing_32">32dp</dimen>
     <dimen name="spacing_164dp">164dp</dimen>
 
+    <dimen name="item_size_12dp">12dp</dimen>
+    <dimen name="item_size_4dp">4dp</dimen>
+    <dimen name="item_size_16dp">16dp</dimen>
+    <dimen name="item_size_20dp">20dp</dimen>
+    <dimen name="item_size_2dp">2dp</dimen>
+    <dimen name="item_size_52dp">52dp</dimen>
+    <dimen name="item_size_22dp">22dp</dimen>
+    <dimen name="item_size_32dp">32dp</dimen>
+    <dimen name="item_size_44dp">44dp</dimen>
+    <dimen name="item_size_36dp">36dp</dimen>
     <dimen name="radius_12dp">12dp</dimen>
     <dimen name="spacing_224dp">224dp</dimen>
 

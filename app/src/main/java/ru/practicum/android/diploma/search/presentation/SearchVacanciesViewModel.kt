@@ -20,11 +20,11 @@ class SearchVacanciesViewModel(
 ) : ViewModel() {
 
     private var pageToRequest = 0
-    private var currentPage = 0
-    private var maxPages = 1
-    private var totalVacansiesList: MutableList<VacancyPreview> = mutableListOf()
-    private var isNextPageLoading: Boolean = false
+    private var totalVacanciesList: MutableList<VacancyPreview> = mutableListOf()
     private var searchJob: Job? = null
+    private var isNextPageLoading: Boolean = false
+    private var isFullLoaded: Boolean = false
+    private var count: String? = null
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
@@ -36,7 +36,17 @@ class SearchVacanciesViewModel(
             SearchUiEvent.ClearText -> onRequestCleared()
             is SearchUiEvent.QueryInput -> onQueryInput(event.expression)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
+            SearchUiEvent.ResumeData -> resumeData()
         }
+    }
+
+    private fun resumeData() {
+        _uiState.value = SearchUiState.SearchResult(
+            vacancies = totalVacanciesList,
+            count = count!!,
+            isItFirstPage = pageToRequest == 0,
+            isFullLoaded = isFullLoaded
+        )
     }
 
     private fun onRequestCleared() {
@@ -61,9 +71,9 @@ class SearchVacanciesViewModel(
     private fun resetSearchParams(request: String) {
         lastSearchRequest = request
         pageToRequest = 0
-        currentPage = 0
-        maxPages = 0
-        totalVacansiesList = mutableListOf()
+        totalVacanciesList = mutableListOf()
+        isFullLoaded = false
+        count = null
     }
 
     private fun search(
@@ -74,10 +84,8 @@ class SearchVacanciesViewModel(
             if (withDelay) {
                 delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
-            _uiState.value = if (pageToRequest == 0) {
-                SearchUiState.Loading()
-            } else {
-                SearchUiState.PagingLoading()
+            if (pageToRequest == 0) {
+                _uiState.value = SearchUiState.Loading()
             }
             val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
@@ -96,12 +104,13 @@ class SearchVacanciesViewModel(
             is SearchResult.SearchContent -> if (isEmpty(result.vacancies)) {
                 SearchUiState.EmptyResult()
             } else {
-                currentPage = result.page
-                maxPages = result.pages
+                isFullLoaded = result.page == result.pages
+                count = result.count
                 SearchUiState.SearchResult(
                     vacancies = addVacanciesToList(result.vacancies),
-                    count = result.count,
-                    isItFirstPage = pageToRequest == 0
+                    count = count!!,
+                    isItFirstPage = pageToRequest == 0,
+                    isFullLoaded = isFullLoaded
                 )
             }
         }
@@ -109,23 +118,22 @@ class SearchVacanciesViewModel(
 
     private fun isEmpty(vacancies: List<VacancyPreview>): Boolean {
         val condition1 = pageToRequest == 0 && vacancies.isEmpty()
-        val condition2 = pageToRequest != 0 && totalVacansiesList.isEmpty()
+        val condition2 = pageToRequest != 0 && totalVacanciesList.isEmpty()
         return condition1 || condition2
     }
 
     private fun addVacanciesToList(newPartVacancies: List<VacancyPreview>): MutableList<VacancyPreview> {
-        totalVacansiesList += newPartVacancies
-        return totalVacansiesList
+        totalVacanciesList += newPartVacancies
+        return totalVacanciesList
     }
 
     private fun onLastItemReached() {
+        _uiState.value = SearchUiState.PagingLoading()
         viewModelScope.launch(Dispatchers.IO) {
-            if (pageToRequest < maxPages && isNextPageLoading) {
+            if (isNextPageLoading) {
                 pageToRequest += 1
                 search(lastSearchRequest!!, false)
                 isNextPageLoading = false
-            } else {
-                _uiState.value = SearchUiState.FullLoaded()
             }
         }
     }
