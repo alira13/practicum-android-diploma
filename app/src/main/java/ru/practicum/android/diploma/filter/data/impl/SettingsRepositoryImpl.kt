@@ -18,49 +18,65 @@ class SettingsRepositoryImpl(
     override fun write(writeRequest: WriteRequest): Boolean {
         return when (writeRequest) {
             is WriteRequest.WriteIndustry -> {
-                val settingsDto = settingsHandler.read()
-                val settingsToWrite = SettingsDto(
-                    industry = converter.mapIndustry(writeRequest.industry),
-                    country = settingsDto.country,
-                    area = settingsDto.area,
-                    salary = settingsDto.salary
-                )
+                val settingsToWrite = writeIndustry(writeRequest)
                 settingsHandler.write(settingsToWrite)
             }
 
             is WriteRequest.WriteCountry -> {
-                val settingsDto = settingsHandler.read()
-                val settingsToWrite = SettingsDto(
-                    industry = settingsDto.industry,
-                    country = converter.mapCountry(writeRequest.country),
-                    salary = settingsDto.salary,
-                    area = settingsDto.area
-                )
+                val settingsToWrite = writeCountry(writeRequest)
                 settingsHandler.write(settingsToWrite)
             }
 
             is WriteRequest.WriteSalary -> {
-                val settingsDto = settingsHandler.read()
-                val settingsToWrite = SettingsDto(
-                    industry = settingsDto.industry,
-                    country = settingsDto.country,
-                    salary = writeRequest.salary,
-                    area = settingsDto.area
-                )
+                val settingsToWrite = writeSalary(writeRequest)
                 settingsHandler.write(settingsToWrite)
             }
 
             is WriteRequest.WriteArea -> {
-                val settingsDto = settingsHandler.read()
-                val settingsToWrite = SettingsDto(
-                    industry = settingsDto.industry,
-                    country = settingsDto.country,
-                    salary = settingsDto.salary,
-                    area = converter.mapArea(writeRequest.area)
-                )
+                val settingsToWrite = writeArea(writeRequest)
                 settingsHandler.write(settingsToWrite)
             }
         }
+    }
+
+    private fun writeIndustry(writeRequest: WriteRequest.WriteIndustry): SettingsDto {
+        val settingsDto = settingsHandler.read()
+        return SettingsDto(
+            industry = converter.mapIndustry(writeRequest.industry),
+            country = settingsDto.country,
+            area = settingsDto.area,
+            salary = settingsDto.salary
+        )
+    }
+
+    private fun writeCountry(writeRequest: WriteRequest.WriteCountry): SettingsDto {
+        val settingsDto = settingsHandler.read()
+        return SettingsDto(
+            industry = settingsDto.industry,
+            country = converter.mapCountry(writeRequest.country),
+            salary = settingsDto.salary,
+            area = settingsDto.area
+        )
+    }
+
+    private fun writeSalary(writeRequest: WriteRequest.WriteSalary): SettingsDto {
+        val settingsDto = settingsHandler.read()
+        return SettingsDto(
+            industry = settingsDto.industry,
+            country = settingsDto.country,
+            salary = writeRequest.salary,
+            area = settingsDto.area
+        )
+    }
+
+    private fun writeArea(writeRequest: WriteRequest.WriteArea): SettingsDto {
+        val settingsDto = settingsHandler.read()
+        return SettingsDto(
+            industry = settingsDto.industry,
+            country = settingsDto.country,
+            salary = settingsDto.salary,
+            area = converter.mapArea(writeRequest.area)
+        )
     }
 
     override fun clear() {
