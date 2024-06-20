@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
 
 class RootActivity : AppCompatActivity() {
-    //private val settingsInteractor by inject<SettingsInteractor>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityRootBinding.inflate(layoutInflater)
@@ -34,35 +33,34 @@ class RootActivity : AppCompatActivity() {
             binding.bottomNavigationView.isVisible = isVisible
             binding.line.isVisible = isVisible
         }
-
-        /*settingsInteractor.write(
-            WriteRequest.WriteArea(
-                Area(
-                    "example",
-                    "example"
-                )
-            )
-        )
-        val salary = 100000
-        settingsInteractor.write(
-            WriteRequest.WriteSalary(salary)
-        )
-        settingsInteractor.write(
-            WriteRequest.WriteCountry(
-                Country(
-                    "id",
-                    "name"
-                )
-            )
-        )
-        settingsInteractor.write(
-            WriteRequest.WriteIndustry(
-                Industry(
-                    "id",
-                    "industry"
-                )
-            )
-        )
-        Log.d("RootActivity", "settings ${settingsInteractor.read()}")*/
     }
 }
+/*settingsInteractor.write(
+    WriteRequest.WriteArea(
+        Area(
+            "example",
+            "example"
+        )
+    )
+)
+val salary = 100000
+settingsInteractor.write(
+    WriteRequest.WriteSalary(salary)
+)
+settingsInteractor.write(
+    WriteRequest.WriteCountry(
+        Country(
+            "id",
+            "name"
+        )
+    )
+)
+settingsInteractor.write(
+    WriteRequest.WriteIndustry(
+        Industry(
+            "id",
+            "industry"
+        )
+    )
+)
+Log.d("RootActivity", "settings ${settingsInteractor.read()}")*/
