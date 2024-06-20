@@ -24,7 +24,6 @@ import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsInteractor
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
 import ru.practicum.android.diploma.vacancy.domain.impl.VacancyDetailsInteractorImpl
 
-
 val domainModule = module {
 
     single<SearchRepository> {

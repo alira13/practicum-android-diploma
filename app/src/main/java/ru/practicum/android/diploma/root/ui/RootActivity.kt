@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.root.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
@@ -51,8 +52,9 @@ class RootActivity : AppCompatActivity() {
                 )
             )
         )
+        val salary = 100000
         settingsInteractor.write(
-            WriteRequest.WriteSalary(100000)
+            WriteRequest.WriteSalary(salary)
         )
         settingsInteractor.write(
             WriteRequest.WriteCountry(

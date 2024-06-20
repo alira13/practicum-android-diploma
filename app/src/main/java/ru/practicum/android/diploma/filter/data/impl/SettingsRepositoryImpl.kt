@@ -12,7 +12,7 @@ class SettingsRepositoryImpl(
     private val settingsHandler: SettingsHandler,
 ) : SettingsRepository {
     override fun read(): Settings {
-        return converter.map(settingsHandler.read())
+        return converter.mapSettings(settingsHandler.read())
     }
 
     override fun write(writeRequest: WriteRequest): Boolean {
@@ -20,7 +20,7 @@ class SettingsRepositoryImpl(
             is WriteRequest.WriteIndustry -> {
                 val settingsDto = settingsHandler.read()
                 val settingsToWrite = SettingsDto(
-                    industry = converter.map(writeRequest.industry),
+                    industry = converter.mapIndustry(writeRequest.industry),
                     country = settingsDto.country,
                     area = settingsDto.area,
                     salary = settingsDto.salary
@@ -32,7 +32,7 @@ class SettingsRepositoryImpl(
                 val settingsDto = settingsHandler.read()
                 val settingsToWrite = SettingsDto(
                     industry = settingsDto.industry,
-                    country = converter.map(writeRequest.country),
+                    country = converter.mapCountry(writeRequest.country),
                     salary = settingsDto.salary,
                     area = settingsDto.area
                 )
@@ -56,7 +56,7 @@ class SettingsRepositoryImpl(
                     industry = settingsDto.industry,
                     country = settingsDto.country,
                     salary = settingsDto.salary,
-                    area = converter.map(writeRequest.area)
+                    area = converter.mapArea(writeRequest.area)
                 )
                 settingsHandler.write(settingsToWrite)
             }

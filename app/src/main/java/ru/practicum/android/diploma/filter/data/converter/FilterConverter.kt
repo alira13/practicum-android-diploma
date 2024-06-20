@@ -12,14 +12,14 @@ import ru.practicum.android.diploma.filter.domain.models.Settings
 import ru.practicum.android.diploma.search.data.dto.reponse.AreaDto
 
 class FilterConverter {
-    fun map(dto: IndustryDto): Industry {
+    fun mapIndustryDto(dto: IndustryDto): Industry {
         return Industry(
             id = dto.id,
             name = dto.name
         )
     }
 
-    fun map(dto: RegionDto): Region {
+    fun mapRegion(dto: RegionDto): Region {
         return Region(
             areas = dto.areas.map { areaDto ->
                 Area(
@@ -32,27 +32,14 @@ class FilterConverter {
         )
     }
 
-    fun map(industry: Industry): IndustryDto {
+    fun mapIndustry(industry: Industry): IndustryDto {
         return IndustryDto(
             id = industry.id,
             name = industry.name
         )
     }
 
-    fun map(region: Region): RegionDto {
-        return RegionDto(
-            areas = region.areas.map { area ->
-                AreaDto(
-                    id = area.id,
-                    name = area.name
-                )
-            },
-            id = region.id,
-            name = region.name
-        )
-    }
-
-    fun map(dto: SettingsDto): Settings {
+    fun mapSettings(dto: SettingsDto): Settings {
         return Settings(
             industry = Industry(
                 id = dto.industry.id,
@@ -70,28 +57,14 @@ class FilterConverter {
         )
     }
 
-    fun map(dto: CountryDto): Country {
-        return Country(
-            id = dto.id,
-            name = dto.name
-        )
-    }
-
-    fun map(dto: AreaDto): Area {
-        return Area(
-            id = dto.id,
-            name = dto.name
-        )
-    }
-
-    fun map(country: Country): CountryDto {
+    fun mapCountry(country: Country): CountryDto {
         return CountryDto(
             id = country.id,
             name = country.name
         )
     }
 
-    fun map(area: Area): AreaDto {
+    fun mapArea(area: Area): AreaDto {
         return AreaDto(
             id = area.id,
             name = area.name

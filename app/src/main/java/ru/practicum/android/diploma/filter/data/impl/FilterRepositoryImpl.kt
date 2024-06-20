@@ -25,7 +25,7 @@ class FilterRepositoryImpl(
         val response = networkClient.doRequest(RegionsRequestDto(options))
         return when (response.resultCode) {
             SUCCESS -> {
-                val resultList = (response as RegionsResponse).regions.map { converter.map(it) }
+                val resultList = (response as RegionsResponse).regions.map { converter.mapRegion(it) }
                 FilterResult.Regions(resultList)
             }
             CONNECTION_ERROR -> {
@@ -48,7 +48,7 @@ class FilterRepositoryImpl(
         val response = networkClient.doRequest(IndustryRequestDto(options))
         return when (response.resultCode) {
             SUCCESS -> {
-                val resultList = (response as IndustriesResponse).industries.map { converter.map(it) }
+                val resultList = (response as IndustriesResponse).industries.map { converter.mapIndustryDto(it) }
                 FilterResult.Industries(resultList)
             }
             CONNECTION_ERROR -> {
