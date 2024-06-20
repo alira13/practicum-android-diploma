@@ -2,23 +2,16 @@ package ru.practicum.android.diploma.root.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
-import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
-import ru.practicum.android.diploma.filter.domain.models.Area
-import ru.practicum.android.diploma.filter.domain.models.Country
-import ru.practicum.android.diploma.filter.domain.models.Industry
-import ru.practicum.android.diploma.filter.domain.models.WriteRequest
 
 class RootActivity : AppCompatActivity() {
 
-    private val settingsInteractor by inject<SettingsInteractor>()
+    //private val settingsInteractor by inject<SettingsInteractor>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +37,7 @@ class RootActivity : AppCompatActivity() {
             binding.line.isVisible = isVisible
         }
 
-        settingsInteractor.write(
+        /*settingsInteractor.write(
             WriteRequest.WriteArea(
                 Area(
                     "example",
@@ -72,8 +65,6 @@ class RootActivity : AppCompatActivity() {
                 )
             )
         )
-        Log.d("RootActivity", "settings ${settingsInteractor.read()}")
+        Log.d("RootActivity", "settings ${settingsInteractor.read()}")*/
     }
 }
-
-
