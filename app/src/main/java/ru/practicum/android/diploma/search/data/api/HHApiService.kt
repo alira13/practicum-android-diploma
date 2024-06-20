@@ -6,6 +6,8 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
+import ru.practicum.android.diploma.filter.data.dto.IndustryDto
+import ru.practicum.android.diploma.filter.data.dto.RegionDto
 import ru.practicum.android.diploma.search.data.dto.reponse.VacanciesResponse
 import ru.practicum.android.diploma.vacancy.data.dto.response.VacancyDetailsResponse
 
@@ -31,4 +33,22 @@ interface HHApiService {
         @Path("id") id: String,
         @QueryMap options: Map<String, String>
     ): VacancyDetailsResponse
+
+    @Headers(
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
+        "HH-User-Agent: $APP_NAME"
+    )
+    @GET("/areas")
+    suspend fun getRegions(
+        @QueryMap options: Map<String, String>
+    ): List<RegionDto>
+
+    @Headers(
+        "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
+        "HH-User-Agent: $APP_NAME"
+    )
+    @GET("/areas")
+    suspend fun getIndustries(
+        @QueryMap options: Map<String, String>
+    ): List<IndustryDto>
 }
