@@ -28,38 +28,33 @@ class FilterLocationViewModel(
 
     fun onUiEvent(event: FilterLocationUiEvent) {
         when (event) {
-            FilterLocationUiEvent.ClearCountry -> clearCountry()
-            FilterLocationUiEvent.ClearRegion -> clearRegion()
+            FilterLocationUiEvent.ClearCountry -> clearFilterItem(
+                WriteRequest.WriteCountry(
+                    Country(
+                        id = DEFAULT_STRING_VALUE,
+                        name = DEFAULT_STRING_VALUE
+                    )
+                )
+            )
+
+            FilterLocationUiEvent.ClearRegion -> clearFilterItem(
+                WriteRequest.WriteArea(
+                    Area(
+                        id = DEFAULT_STRING_VALUE,
+                        name = DEFAULT_STRING_VALUE
+                    )
+                )
+            )
+
             FilterLocationUiEvent.UpdateData -> updateFilters()
         }
     }
 
-    private fun clearCountry() {
+    private fun clearFilterItem(item: WriteRequest) {
         viewModelScope.launch(Dispatchers.IO) {
-            settingsInteractor.write(
-                WriteRequest.WriteCountry(
-                    Country(
-                        id = "",
-                        name = ""
-                    )
-                )
-            )
+            settingsInteractor.write(item)
         }
         updateFilters()
-    }
-
-    private fun clearRegion() {
-        viewModelScope.launch(Dispatchers.IO) {
-            settingsInteractor.write(
-                WriteRequest.WriteArea(
-                    Area(
-                        id = "",
-                        name = ""
-                    )
-                )
-            )
-            updateFilters()
-        }
     }
 
     private fun updateFilters() {
@@ -80,5 +75,9 @@ class FilterLocationViewModel(
             val buttonVisibility = !(countryName.isEmpty() && regionName.isEmpty())
             _uiState.value = FilterLocationUiState(item1, item2, buttonVisibility)
         }
+    }
+
+    companion object {
+        private const val DEFAULT_STRING_VALUE = ""
     }
 }
