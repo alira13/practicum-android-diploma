@@ -9,13 +9,24 @@
     <TextView
         android:id="@+id/fc_tv_header"
         style="@style/MediumTextStyle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/item_size_64"
-        android:paddingStart="@dimen/spacing_16"
         android:text="@string/filter_country"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@id/fc_tv_header"
+        app:layout_constraintEnd_toStartOf="@id/fc_tv_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorOnPrimary" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_country"
@@ -49,7 +60,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/fc_tv_header">
+        app:layout_constraintTop_toBottomOf="@id/fc_tv_header">
 
         <ImageView
             android:layout_width="wrap_content"
