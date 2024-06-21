@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterRegionBinding
+import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.FilterRegionViewModel
 import ru.practicum.android.diploma.filter.ui.region.adapter.RegionAdapter
 import ru.practicum.android.diploma.filter.ui.region.models.RegionUiEvent
@@ -29,7 +30,7 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
     private var dataToBeResumed: Boolean = false
     private val adapter: RegionAdapter by lazy {
         RegionAdapter { item ->
-            backToPrevious(item.id)
+            backToPrevious(item)
         }
     }
 
@@ -175,8 +176,8 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
         )
     }
 
-    private fun backToPrevious(regionId: String) {
-        viewModel.saveRegion(regionId)
+    private fun backToPrevious(area: Area) {
+        viewModel.saveSettings(area)
         findNavController().navigateUp()
     }
 }

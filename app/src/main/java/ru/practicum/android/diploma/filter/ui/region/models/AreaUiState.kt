@@ -17,7 +17,9 @@ sealed class AreaUiState(
     data class Default(
         override val clearEnabled: Boolean = false,
         override val clearIcon: Int = R.drawable.ic_search,
-        override val placeholderImageIsVisible: Boolean = false
+        override val placeholderImageIsVisible: Boolean = false,
+        override val listRvIsVisible: Boolean = true,
+        val content: List<Area>
     ) : AreaUiState()
 
     data object EditingRequest : AreaUiState()
