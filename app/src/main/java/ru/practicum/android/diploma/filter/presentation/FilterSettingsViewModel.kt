@@ -34,7 +34,7 @@ class FilterSettingsViewModel(
 
     fun clearPlaceWork() {
         with(settingsInteractor) {
-            write(WriteRequest.WriteArea(Area("", "")))
+            write(WriteRequest.WriteArea(Area("", "", "")))
             read()
         }
     }

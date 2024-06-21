@@ -67,7 +67,7 @@
         android:label="FilterCountryFragment" />
     <fragment
         android:id="@+id/filterRegionFragment"
-        android:name="ru.practicum.android.diploma.filter.ui.FilterRegionFragment"
+        android:name="ru.practicum.android.diploma.filter.ui.region.FilterRegionFragment"
         android:label="FilterRegionFragment" />
     <fragment
         android:id="@+id/favoriteDetailFragment"

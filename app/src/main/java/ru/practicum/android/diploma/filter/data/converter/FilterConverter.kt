@@ -24,7 +24,8 @@ class FilterConverter {
             areas = dto.areas.map { areaDto ->
                 Area(
                     id = areaDto.id,
-                    name = dto.name
+                    name = areaDto.name,
+                    parentId = dto.id
                 )
             },
             id = dto.id,
@@ -51,7 +52,8 @@ class FilterConverter {
             ),
             area = Area(
                 id = dto.area.id,
-                name = dto.area.name
+                name = dto.area.name,
+                parentId = dto.country.id
             ),
             salary = dto.salary,
             onlyWithSalary = dto.onlyWithSalary,
