@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterResult
 import ru.practicum.android.diploma.filter.domain.models.Region
+import ru.practicum.android.diploma.filter.domain.models.Settings
 import ru.practicum.android.diploma.filter.ui.region.models.AreaUiState
 import ru.practicum.android.diploma.filter.ui.region.models.RegionUiEvent
 
@@ -32,6 +33,7 @@ class FilterRegionViewModel(
 
     private var currentRegions: List<Region>? = null
     private var currentAreas: List<Area>? = null
+    private var settings: Settings? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -41,9 +43,10 @@ class FilterRegionViewModel(
     }
 
     private fun applySettings(regions: List<Region>) {
-        val settings = settingsInteractor.read()
+        settings = settingsInteractor.read()
+        getAllAreas(regions)
         when {
-            settings.area != null -> getAreasByRegionId(regions, settings.area.id)
+            settings!!.area!=null -> getAreasByRegionId(regions, settings!!.area.id)
             else -> getAllAreas(regions)
         }
     }
@@ -52,13 +55,13 @@ class FilterRegionViewModel(
         Log.d("MY", ">>>>>>>>>>>>getAllRegions")
         currentRegions = regions
         Log.d("MY", ">>>>>>>>>>>>getAllRegions ${regions}")
-        currentAreas = currentRegions!!.map { it -> it.areas }.flatten()
+        currentAreas = currentRegions!!.map { it -> it.areas }.flatten().sortedBy { it.name }
         Log.d("MY", ">>>>>>>>>>>>getAllRegions ${currentAreas}")
     }
 
     private fun getAreasByRegionId(regions: List<Region>, regionId: String) {
         currentRegions = regions.filter { regionId -> regionId == regionId }
-        currentAreas = currentRegions!!.first().areas
+        currentAreas = currentRegions!!.first().areas.sortedBy { it.name }
     }
 
     private fun getAreasByName(regions: List<Region>, areaName: String): List<Area> {
@@ -111,14 +114,24 @@ class FilterRegionViewModel(
             if (withDelay) {
                 delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
-
             _uiState.value = AreaUiState.Loading()
-            val result = getAreasByName(currentRegions!!, searchRequest)
 
-            //_uiState.value = convertResult(result)
+            getAreasByName(currentRegions!!, searchRequest)
+            when {
+                currentAreas == null -> {
+                    _uiState.value = AreaUiState.EmptyResult()
+                }
+
+                currentAreas?.isEmpty() == true -> {
+                    _uiState.value = AreaUiState.EmptyResult()
+                }
+
+                currentAreas?.isNotEmpty() == true -> {
+                    _uiState.value = AreaUiState.SearchResult(true, currentAreas!!)
+                }
+            }
         }
     }
-
 
     private fun convertResult(result: FilterResult): AreaUiState {
         return when (result) {
