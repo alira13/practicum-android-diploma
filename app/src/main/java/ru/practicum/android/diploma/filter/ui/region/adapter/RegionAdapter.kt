@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ViewItemForwardBtnBinding
-import ru.practicum.android.diploma.filter.domain.models.Region
+import ru.practicum.android.diploma.filter.domain.models.Area
 
 class RegionAdapter(
-    private var onItemClickListener: ((Region) -> Unit)
+    private var onItemClickListener: ((Area) -> Unit)
 ) : RecyclerView.Adapter<RegionViewHolder>() {
 
-    var content = mutableListOf<Region>()
+    var content = mutableListOf<Area>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegionViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)

@@ -58,7 +58,8 @@ val viewModelModule = module {
 
     viewModel {
         FilterRegionViewModel(
-            interactor = get()
+            interactor = get(),
+            settingsInteractor = get()
         )
     }
 }

@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -9,51 +10,78 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
+import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
+import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterResult
 import ru.practicum.android.diploma.filter.domain.models.Region
+import ru.practicum.android.diploma.filter.ui.region.models.AreaUiState
 import ru.practicum.android.diploma.filter.ui.region.models.RegionUiEvent
-import ru.practicum.android.diploma.filter.ui.region.models.RegionUiState
 
 class FilterRegionViewModel(
-    private val interactor: FilterInteractor
+    private val interactor: FilterInteractor,
+    private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
-    private var pageToRequest = 0
-    private var totalVacanciesList: MutableList<Region> = mutableListOf()
+    private var totalRegionList: MutableList<Region> = mutableListOf()
     private var searchJob: Job? = null
-    private var isNextPageLoading: Boolean = false
-    private var isFullLoaded: Boolean = false
-    private var count: String? = null
 
-    private val _uiState = MutableStateFlow<RegionUiState>(RegionUiState.Default())
+    private val _uiState = MutableStateFlow<AreaUiState>(AreaUiState.Default())
     val uiState = _uiState.asStateFlow()
 
     private var lastSearchRequest: String? = null
 
-    fun saveRegion(regionId: String){
+    private var currentRegions: List<Region>? = null
+    private var currentAreas: List<Area>? = null
 
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = interactor.getRegions()
+            _uiState.value = convertResult(result)
+        }
     }
+
+    private fun applySettings(regions: List<Region>) {
+        val settings = settingsInteractor.read()
+        when {
+            settings.area != null -> getAreasByRegionId(regions, settings.area.id)
+            else -> getAllAreas(regions)
+        }
+    }
+
+    private fun getAllAreas(regions: List<Region>) {
+        Log.d("MY", ">>>>>>>>>>>>getAllRegions")
+        currentRegions = regions
+        Log.d("MY", ">>>>>>>>>>>>getAllRegions ${regions}")
+        currentAreas = currentRegions!!.map { it -> it.areas }.flatten()
+        Log.d("MY", ">>>>>>>>>>>>getAllRegions ${currentAreas}")
+    }
+
+    private fun getAreasByRegionId(regions: List<Region>, regionId: String) {
+        currentRegions = regions.filter { regionId -> regionId == regionId }
+        currentAreas = currentRegions!!.first().areas
+    }
+
+    private fun getAreasByName(regions: List<Region>, areaName: String): List<Area> {
+        return currentAreas!!.filter { area -> area.name == areaName }
+    }
+
     fun onUiEvent(event: RegionUiEvent) {
         when (event) {
             RegionUiEvent.ClearText -> onRequestCleared()
             is RegionUiEvent.QueryInput -> onQueryInput(event.expression)
-            is RegionUiEvent.LastItemReached -> onLastItemReached()
             RegionUiEvent.ResumeData -> resumeData()
         }
     }
 
     private fun resumeData() {
-        _uiState.value = RegionUiState.SearchResult(
-            content = totalVacanciesList,
-            count = count!!,
-            isItFirstPage = pageToRequest == 0,
-            isFullLoaded = isFullLoaded
+        _uiState.value = AreaUiState.SearchResult(
+            content = currentAreas!!
         )
     }
 
     private fun onRequestCleared() {
         searchJob?.cancel()
-        _uiState.value = RegionUiState.Default()
+        _uiState.value = AreaUiState.Default()
     }
 
     private fun onQueryInput(expression: String) {
@@ -63,7 +91,7 @@ class FilterRegionViewModel(
         ) {
             onRequestCleared()
         } else if (expression != lastSearchRequest) {
-            _uiState.value = RegionUiState.EditingRequest
+            _uiState.value = AreaUiState.EditingRequest
             resetSearchParams(expression)
             searchJob?.cancel()
             search(lastSearchRequest!!, true)
@@ -72,12 +100,8 @@ class FilterRegionViewModel(
 
     private fun resetSearchParams(request: String) {
         lastSearchRequest = request
-        pageToRequest = 0
-        totalVacanciesList = mutableListOf()
-        isFullLoaded = false
-        count = null
+        totalRegionList = mutableListOf()
     }
-
 
     private fun search(
         searchRequest: String,
@@ -87,66 +111,44 @@ class FilterRegionViewModel(
             if (withDelay) {
                 delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
-            if (pageToRequest == 0) {
-                _uiState.value = RegionUiState.Loading()
-            }
 
-            val result  = interactor.getRegions()
-            //val result = interactor.getRegions(VacanciesSearchRequest(pageToRequest, searchRequest))
-            isNextPageLoading = true
-            _uiState.value = convertResult(result)
+            _uiState.value = AreaUiState.Loading()
+            val result = getAreasByName(currentRegions!!, searchRequest)
+
+            //_uiState.value = convertResult(result)
         }
     }
 
-    private fun convertResult(result: FilterResult): RegionUiState {
+
+    private fun convertResult(result: FilterResult): AreaUiState {
         return when (result) {
-            is FilterResult.Error -> if (pageToRequest == 0) {
-                RegionUiState.FirstRequestError(error = result.error)
-            } else {
-                RegionUiState.PagingError(error = result.error)
+            is FilterResult.Error -> {
+                Log.d("MY", "error = ${result.error}")
+                AreaUiState.Error(error = result.error)
             }
 
-            is FilterResult.Regions -> if (isEmpty(result.regions)) {
-                RegionUiState.EmptyResult()
-            } else {
-                //TODO Тут удалить вообще isFullLoaded
-                isFullLoaded = true
-                count = result.regions.count().toString()
-                RegionUiState.SearchResult(
-                    content = addVacanciesToList(result.regions),
-                    count = count!!,
-                    isItFirstPage = pageToRequest == 0,
-                    isFullLoaded = isFullLoaded
-                )
+            is FilterResult.Regions -> {
+                applySettings(result.regions)
+                if (currentAreas.isNullOrEmpty()) {
+                    Log.d("MY", "regions isEmpty = ${result.regions}")
+                    AreaUiState.EmptyResult()
+                } else {
+                    Log.d("MY", "VM regions = ${result.regions}")
+                    applySettings(result.regions)
+                    Log.d("MY", "VM currentAreas = ${currentAreas}")
+                    AreaUiState.SearchResult(true, currentAreas!!)
+                }
             }
 
             //TODO Вот это очень странно
             is FilterResult.Industries -> {
-                RegionUiState.EmptyResult()
+                AreaUiState.EmptyResult()
             }
         }
     }
 
-    private fun isEmpty(vacancies: List<Region>): Boolean {
-        val condition1 = pageToRequest == 0 && vacancies.isEmpty()
-        val condition2 = pageToRequest != 0 && totalVacanciesList.isEmpty()
-        return condition1 || condition2
-    }
+    fun saveRegion(regionId: String) {
 
-    private fun addVacanciesToList(newPartVacancies: List<Region>): MutableList<Region> {
-        totalVacanciesList += newPartVacancies
-        return totalVacanciesList
-    }
-
-    private fun onLastItemReached() {
-        _uiState.value = RegionUiState.PagingLoading()
-        viewModelScope.launch(Dispatchers.IO) {
-            if (isNextPageLoading) {
-                pageToRequest += 1
-                search(lastSearchRequest!!, false)
-                isNextPageLoading = false
-            }
-        }
     }
 
     companion object {

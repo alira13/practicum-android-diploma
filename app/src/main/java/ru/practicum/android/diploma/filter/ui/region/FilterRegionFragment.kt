@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filter.ui.region
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -20,7 +19,7 @@ import ru.practicum.android.diploma.databinding.FragmentFilterRegionBinding
 import ru.practicum.android.diploma.filter.presentation.FilterRegionViewModel
 import ru.practicum.android.diploma.filter.ui.region.adapter.RegionAdapter
 import ru.practicum.android.diploma.filter.ui.region.models.RegionUiEvent
-import ru.practicum.android.diploma.filter.ui.region.models.RegionUiState
+import ru.practicum.android.diploma.filter.ui.region.models.AreaUiState
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.util.BindingFragment
 
@@ -68,20 +67,21 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
         }
     }
 
-    private fun onUiState(state: RegionUiState) {
+    private fun onUiState(state: AreaUiState) {
+        Log.d("MY", "*****onUiState ${state}")
         dataToBeResumed = state.dataToBeResumed
         when (state) {
-            is RegionUiState.Default -> onDefaultState()
-            is RegionUiState.EmptyResult -> onEmptyResult()
-            is RegionUiState.FirstRequestError -> onFirstRequestError(state.error)
-            is RegionUiState.Loading -> onLoading()
-            is RegionUiState.SearchResult -> showSearchResult(state)
+            is AreaUiState.Default -> onDefaultState()
+            is AreaUiState.EmptyResult -> onEmptyResult()
+            is AreaUiState.Error -> onFirstRequestError(state.error)
+            is AreaUiState.Loading -> onLoading()
+            is AreaUiState.SearchResult -> showSearchResult(state)
             else -> {}
         }
         renderViews(state)
     }
 
-    private fun renderViews(state: RegionUiState) {
+    private fun renderViews(state: AreaUiState) {
         with(binding) {
             clearRegionIconIv.apply {
                 isEnabled = state.clearEnabled
@@ -154,38 +154,14 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun showSearchResult(result: RegionUiState.SearchResult) {
+    private fun showSearchResult(result: AreaUiState.SearchResult) {
+        Log.d("MY", "F showSearchResult")
         adapter.content = result.content.toMutableList()
         with(binding) {
             regionListRv.apply {
                 adapter?.notifyDataSetChanged()
-                if (result.isItFirstPage) {
-                    smoothScrollToPosition(0)
-                }
-                if (result.isFullLoaded) {
-                    clearOnScrollListeners()
-                } else {
-                    setScrollListener(this)
-                }
             }
         }
-    }
-
-    private fun setScrollListener(listRV: RecyclerView) {
-        listRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
-                    val pos = (
-                        listRV.layoutManager as LinearLayoutManager
-                        ).findLastVisibleItemPosition()
-                    val itemsCount = adapter.itemCount
-                    if (pos >= itemsCount - 1) {
-                        viewModel.onUiEvent(RegionUiEvent.LastItemReached)
-                    }
-                }
-            }
-        })
     }
 
     private fun hideKeyboard() {

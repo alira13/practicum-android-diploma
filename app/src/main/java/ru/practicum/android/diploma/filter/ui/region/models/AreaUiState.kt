@@ -1,10 +1,10 @@
 package ru.practicum.android.diploma.filter.ui.region.models
 
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.filter.domain.models.Region
+import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.search.domain.models.Errors
 
-sealed class RegionUiState(
+sealed class AreaUiState(
     open val clearEnabled: Boolean = true,
     open val clearIcon: Int = R.drawable.ic_close,
     open val placeholderImageIsVisible: Boolean = false,
@@ -17,44 +17,31 @@ sealed class RegionUiState(
     data class Default(
         override val clearEnabled: Boolean = false,
         override val clearIcon: Int = R.drawable.ic_search,
-        override val placeholderImageIsVisible: Boolean = true,
-        override val placeholderImageIcon: Int? = R.drawable.placeholder_main
-    ) : RegionUiState()
+        override val placeholderImageIsVisible: Boolean = false
+    ) : AreaUiState()
 
-    data object EditingRequest : RegionUiState()
+    data object EditingRequest : AreaUiState()
 
     data class Loading(
         override val progressBarIsVisible: Boolean = true
-    ) : RegionUiState()
-
-    data class PagingLoading(
-        override val listRvIsVisible: Boolean = true
-    ) : RegionUiState()
+    ) : AreaUiState()
 
     data class SearchResult(
         override val listRvIsVisible: Boolean = true,
-        val content: List<Region>,
-        val count: String,
-        val isItFirstPage: Boolean,
-        val isFullLoaded: Boolean
-    ) : RegionUiState()
+        val content: List<Area>
+    ) : AreaUiState()
 
     data class EmptyResult(
         override val placeholderImageIsVisible: Boolean = true,
         override val placeholderImageIcon: Int? = R.drawable.placeholder_error,
         override val placeholderMessageIsVisible: Boolean = true,
-    ) : RegionUiState()
+    ) : AreaUiState()
 
-    data class FirstRequestError(
+    data class Error(
         override val placeholderImageIsVisible: Boolean = true,
         override val placeholderImageIcon: Int? = R.drawable.placeholder_empty_location_list,
         override val placeholderMessageIsVisible: Boolean = true,
         val error: Errors
-    ) : RegionUiState()
+    ) : AreaUiState()
 
-    data class PagingError(
-        override val listRvIsVisible: Boolean = true,
-        override val dataToBeResumed: Boolean = true,
-        val error: Errors
-    ) : RegionUiState()
 }

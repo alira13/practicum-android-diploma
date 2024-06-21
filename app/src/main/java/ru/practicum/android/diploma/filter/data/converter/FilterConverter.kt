@@ -24,7 +24,7 @@ class FilterConverter {
             areas = dto.areas.map { areaDto ->
                 Area(
                     id = areaDto.id,
-                    name = dto.name
+                    name = areaDto.name
                 )
             },
             id = dto.id,
