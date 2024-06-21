@@ -125,7 +125,6 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
         }
     }
 
-
     private fun onFirstRequestError(error: Errors) {
         binding.regionPictureTextTv.text = onErrorMessage(error)
     }
