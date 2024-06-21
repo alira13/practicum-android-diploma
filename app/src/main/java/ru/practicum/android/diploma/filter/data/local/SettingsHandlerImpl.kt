@@ -21,7 +21,9 @@ class SettingsHandlerImpl(
                 industry = IndustryDto("", ""),
                 country = CountryDto("", ""),
                 salary = 0,
-                area = AreaDto("", "")
+                area = AreaDto("", ""),
+                onlyWithSalary = false,
+                filterOn = false
             )
         }
     }

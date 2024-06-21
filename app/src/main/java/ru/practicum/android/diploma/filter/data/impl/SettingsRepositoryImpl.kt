@@ -36,6 +36,16 @@ class SettingsRepositoryImpl(
                 val settingsToWrite = writeArea(writeRequest)
                 settingsHandler.write(settingsToWrite)
             }
+
+            is WriteRequest.WriteOnlyWithSalary -> {
+                val settingsToWrite = writeOnlyWithSalary(writeRequest)
+                settingsHandler.write(settingsToWrite)
+            }
+
+            is WriteRequest.WriteFilterOn -> {
+                val settingsToWrite = writeFilterOn(writeRequest)
+                settingsHandler.write(settingsToWrite)
+            }
         }
     }
 
@@ -45,7 +55,9 @@ class SettingsRepositoryImpl(
             industry = converter.mapIndustry(writeRequest.industry),
             country = settingsDto.country,
             area = settingsDto.area,
-            salary = settingsDto.salary
+            salary = settingsDto.salary,
+            onlyWithSalary = settingsDto.onlyWithSalary,
+            filterOn = settingsDto.filterOn,
         )
     }
 
@@ -55,7 +67,9 @@ class SettingsRepositoryImpl(
             industry = settingsDto.industry,
             country = converter.mapCountry(writeRequest.country),
             salary = settingsDto.salary,
-            area = settingsDto.area
+            area = settingsDto.area,
+            onlyWithSalary = settingsDto.onlyWithSalary,
+            filterOn = settingsDto.filterOn,
         )
     }
 
@@ -65,7 +79,9 @@ class SettingsRepositoryImpl(
             industry = settingsDto.industry,
             country = settingsDto.country,
             salary = writeRequest.salary,
-            area = settingsDto.area
+            area = settingsDto.area,
+            onlyWithSalary = settingsDto.onlyWithSalary,
+            filterOn = settingsDto.filterOn,
         )
     }
 
@@ -75,7 +91,33 @@ class SettingsRepositoryImpl(
             industry = settingsDto.industry,
             country = settingsDto.country,
             salary = settingsDto.salary,
-            area = converter.mapArea(writeRequest.area)
+            area = converter.mapArea(writeRequest.area),
+            onlyWithSalary = settingsDto.onlyWithSalary,
+            filterOn = settingsDto.filterOn,
+        )
+    }
+
+    private fun writeOnlyWithSalary(writeRequest: WriteRequest.WriteOnlyWithSalary): SettingsDto {
+        val settingsDto = settingsHandler.read()
+        return SettingsDto(
+            industry = settingsDto.industry,
+            country = settingsDto.country,
+            salary = settingsDto.salary,
+            area = settingsDto.area,
+            onlyWithSalary = writeRequest.onlyWithSalary,
+            filterOn = settingsDto.filterOn,
+        )
+    }
+
+    private fun writeFilterOn(writeRequest: WriteRequest.WriteFilterOn): SettingsDto {
+        val settingsDto = settingsHandler.read()
+        return SettingsDto(
+            industry = settingsDto.industry,
+            country = settingsDto.country,
+            salary = settingsDto.salary,
+            area = settingsDto.area,
+            onlyWithSalary = settingsDto.onlyWithSalary,
+            filterOn = writeRequest.filterOn,
         )
     }
 

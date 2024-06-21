@@ -54,6 +54,8 @@ class FilterConverter {
                 name = dto.area.name
             ),
             salary = dto.salary,
+            onlyWithSalary = dto.onlyWithSalary,
+            filterOn = dto.filterOn
         )
     }
 

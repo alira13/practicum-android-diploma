@@ -16,4 +16,12 @@ sealed interface WriteRequest {
     data class WriteSalary(
         val salary: Int,
     ) : WriteRequest
+
+    data class WriteOnlyWithSalary(
+        val onlyWithSalary: Boolean,
+    ) : WriteRequest
+
+    data class WriteFilterOn(
+        val filterOn: Boolean,
+    ) : WriteRequest
 }
