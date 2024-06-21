@@ -52,7 +52,7 @@ class FilterRegionViewModel(
             is FilterResult.Regions -> {
                 applySettings(result.regions)
                 if (currentAreas.isEmpty()) {
-                     AreaUiState.EmptyResult()
+                    AreaUiState.EmptyResult()
                 } else {
                     applySettings(result.regions)
                     AreaUiState.SearchResult(true, currentAreas)
@@ -146,7 +146,6 @@ class FilterRegionViewModel(
             }
         }
     }
-
 
     fun saveSettings(area: Area) {
         val region = currentRegions.filter { region -> region.id == area.parentId }.first()
