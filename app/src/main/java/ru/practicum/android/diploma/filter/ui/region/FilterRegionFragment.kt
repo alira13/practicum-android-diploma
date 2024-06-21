@@ -96,6 +96,7 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun onDefaultState(result: AreaUiState.Default) {
         adapter.content = result.content.toMutableList()
         with(binding) {
