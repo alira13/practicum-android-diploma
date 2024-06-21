@@ -59,4 +59,5 @@
     <string name="vacancy_was_deleted">Вакансия удалена или у вас нет прав для её просмотра</string>
     <string name="check_internet">Проверьте подключение к интернету</string>
     <string name="mistake_happened">Произошла ошибка</string>
+    <string name="cant_get_list">Не удалось получить список</string>
 </resources>
