@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.data.api
 
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -32,7 +33,7 @@ interface HHApiService {
     suspend fun getVacancyDetails(
         @Path("id") id: String,
         @QueryMap options: Map<String, String>
-    ): VacancyDetailsResponse
+    ): Response<VacancyDetailsResponse>
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
