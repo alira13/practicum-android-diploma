@@ -46,12 +46,12 @@ val viewModelModule = module {
         FilterCountryViewModel(
             filterInteractor = get(),
             settingsInteractor = get()
-            )
+        )
     }
-    
+
     viewModel {
         FilterSettingsViewModel(
-            get()
+            settingsInteractor = get()
         )
     }
 }
