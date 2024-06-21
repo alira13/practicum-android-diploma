@@ -37,7 +37,7 @@ class FilterRegionViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = interactor.getRegions()
             _uiState.value = convertResult(result)
         }
