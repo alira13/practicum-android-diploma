@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -47,20 +46,15 @@ class FilterRegionViewModel(
     private fun convertResult(result: FilterResult): AreaUiState {
         return when (result) {
             is FilterResult.Error -> {
-                Log.d("MY", "FilterResult.Error = ${result.error}")
                 AreaUiState.Error(error = result.error)
             }
 
             is FilterResult.Regions -> {
                 applySettings(result.regions)
                 if (currentAreas.isEmpty()) {
-                    Log.d("MY", "FilterResult.Regions isEmpty = ${result.regions}")
-                    AreaUiState.EmptyResult()
+                     AreaUiState.EmptyResult()
                 } else {
-                    Log.d("MY", "FilterResult.Regions notEmpty = ${result.regions}")
                     applySettings(result.regions)
-                    Log.d("MY", "FilterResult.Regions afterSettings currentRegions = ${currentRegions}")
-                    Log.d("MY", "FilterResult.Regions afterSettings currentAreas = ${currentAreas}")
                     AreaUiState.SearchResult(true, currentAreas)
                 }
             }
@@ -73,7 +67,6 @@ class FilterRegionViewModel(
 
     private fun applySettings(regions: List<Region>) {
         settings = settingsInteractor.read()
-        Log.d("MY", "applySettings settings = ${settings}")
         getAllAreas(regions)
         when {
             settings == null -> getAllAreas(regions)
@@ -83,19 +76,16 @@ class FilterRegionViewModel(
     }
 
     private fun getAllAreas(regions: List<Region>) {
-        Log.d("MY", "getAllAreas")
         currentRegions = regions
         currentAreas = currentRegions.map { it.areas }.flatten().sortedBy { it.name }
     }
 
     private fun getAreasByRegionId(regions: List<Region>, regionId: String) {
-        Log.d("MY", "getAreasByRegionId")
         currentRegions = regions.filter { region -> region.id == regionId }
         currentAreas = currentRegions.first().areas.sortedBy { it.name }
     }
 
     private fun getAreasByName(areaName: String): List<Area> {
-        Log.d("MY", "getAreasByName ${areaName}")
         return currentAreas.filter { it.name.startsWith(areaName, true) }
     }
 
@@ -145,7 +135,6 @@ class FilterRegionViewModel(
             _uiState.value = AreaUiState.Loading()
 
             val foundAreas = getAreasByName(searchRequest)
-            Log.d("MY", ">>>>>>>>search ${foundAreas}")
             when {
                 foundAreas.isEmpty() -> {
                     _uiState.value = AreaUiState.EmptyResult()
@@ -160,11 +149,7 @@ class FilterRegionViewModel(
 
 
     fun saveSettings(area: Area) {
-        Log.d("MY", "saveSettings currentRegions = ${currentRegions}")
-        Log.d("MY", "saveSettings currentAreas = ${currentAreas}")
-        Log.d("MY", "saveSettings area = ${area}")
-        val region = currentRegions.filter { region -> region.id.equals(area.parentId) }.first()
-        Log.d("MY", "saveSettings region = ${region}")
+        val region = currentRegions.filter { region -> region.id == area.parentId }.first()
         settingsInteractor.write(WriteRequest.WriteCountry(Country(region.id, region.name)))
         settingsInteractor.write(WriteRequest.WriteArea(area))
     }

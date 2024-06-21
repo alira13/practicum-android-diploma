@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.filter.ui.region
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,7 +68,6 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
     }
 
     private fun onUiState(state: AreaUiState) {
-        Log.d("MY", "*****onUiState ${state}")
         dataToBeResumed = state.dataToBeResumed
         when (state) {
             is AreaUiState.Default -> onDefaultState(state)
@@ -160,7 +158,6 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchResult(result: AreaUiState.SearchResult) {
-        Log.d("MY", "F showSearchResult")
         adapter.content = result.content.toMutableList()
         with(binding) {
             regionListRv.apply {
