@@ -153,10 +153,10 @@ class SearchVacanciesViewModel(
 
     private fun isSettingsEmpty(filterSettings: Settings) {
         _filterOnState.value = !(!filterSettings.onlyWithSalary &&
-                filterSettings.salary == 0 &&
-                filterSettings.area.id.isEmpty() &&
-                filterSettings.country.id.isEmpty() &&
-                filterSettings.industry.id.isEmpty())
+            filterSettings.salary == 0 &&
+            filterSettings.area.id.isEmpty() &&
+            filterSettings.country.id.isEmpty() &&
+            filterSettings.industry.id.isEmpty())
     }
 
     companion object {

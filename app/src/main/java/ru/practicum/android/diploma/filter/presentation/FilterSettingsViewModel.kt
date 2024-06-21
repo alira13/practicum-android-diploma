@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.filter.domain.models.WriteRequest
 
 class FilterSettingsViewModel(
     private val settingsInteractor: SettingsInteractor
-): ViewModel() {
+) : ViewModel() {
 
     private val _settingsState: MutableLiveData<Settings> = MutableLiveData()
     fun getSettingsState(): LiveData<Settings> = _settingsState
@@ -33,7 +33,7 @@ class FilterSettingsViewModel(
     }
 
     fun clearPlaceWork() {
-        with( settingsInteractor) {
+        with(settingsInteractor) {
             write(WriteRequest.WriteArea(Area("", "")))
             read()
         }
@@ -41,7 +41,7 @@ class FilterSettingsViewModel(
 
     fun clearIndustry() {
         with(settingsInteractor) {
-            write(WriteRequest.WriteIndustry(Industry("","")))
+            write(WriteRequest.WriteIndustry(Industry("", "")))
             read()
         }
     }

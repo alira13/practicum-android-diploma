@@ -82,6 +82,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         binding.fsEtSalary.addTextChangedListener(
             object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    //
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -94,6 +95,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 }
 
                 override fun afterTextChanged(s: Editable?) {
+                    //
                 }
             }
         )
