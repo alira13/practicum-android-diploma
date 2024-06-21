@@ -12,6 +12,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterLocationBinding
 import ru.practicum.android.diploma.filter.presentation.FilterLocationViewModel
+import ru.practicum.android.diploma.filter.ui.models.FilterItem
+import ru.practicum.android.diploma.filter.ui.models.FilterLocationUiEvent
 import ru.practicum.android.diploma.filter.ui.models.FilterLocationUiState
 import ru.practicum.android.diploma.util.BindingFragment
 
@@ -34,7 +36,7 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
 
     override fun onResume() {
         super.onResume()
-        viewModel.updateFilters()
+        viewModel.onUiEvent(FilterLocationUiEvent.UpdateData)
     }
 
     private fun subscribeOnViewModel() {
@@ -46,32 +48,54 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
     }
 
     private fun onUiState(state: FilterLocationUiState) {
+        val condition1 = state.item1 is FilterItem.Absent
+        val condition2 = state.item2 is FilterItem.Absent
         with(binding) {
+            flCountryEndIcon.apply{
+                setOnClickListener {
+                    setCountryEndIconClickListener(condition1)
+                }
+                setImageResource(state.item1.endIconRes)
+            }
+            flRegionEndIcon.apply{
+                setOnClickListener {
+                    setRegionEndIconClickListener(condition2)
+                }
+                setImageResource(state.item2.endIconRes)
+            }
             flApproveButton.isVisible = state.approveButtonVisibility
-            if (state.item1.itemName == null) {
+            if (condition1) {
                 flEtCountryName.text = null
             } else {
                 flEtCountryName.setText(state.item1.itemName)
             }
-            if (state.item2.itemName == null) {
+            if (condition2) {
                 flEtRegionName.text = null
             } else {
                 flEtRegionName.setText(state.item2.itemName)
             }
-            flCountryEndIcon.setImageResource(state.item1.endIconRes)
             flTilCountryElement.setHintTextAppearance(state.item1.hintTextAppearance)
-            flRegionEndIcon.setImageResource(state.item2.endIconRes)
             flTilRegionElement.setHintTextAppearance(state.item2.hintTextAppearance)
         }
     }
 
-    private fun setNavigation() {
-        binding.flCountryEndIcon.setOnClickListener {
+    private fun setCountryEndIconClickListener(condition: Boolean) {
+        if (condition) {
             findNavController().navigate(R.id.action_filterLocationFragment_to_filterCountryFragment)
+        } else {
+            viewModel.onUiEvent(FilterLocationUiEvent.ClearCountry)
         }
-        binding.flRegionEndIcon.setOnClickListener {
+    }
+
+    private fun setRegionEndIconClickListener(condition: Boolean) {
+        if (condition) {
             findNavController().navigate(R.id.action_filterLocationFragment_to_filterRegionFragment)
+        } else {
+            viewModel.onUiEvent(FilterLocationUiEvent.ClearRegion)
         }
+    }
+
+    private fun setNavigation() {
         binding.flIvBack.setOnClickListener {
             findNavController().popBackStack()
         }

@@ -3,12 +3,15 @@ package ru.practicum.android.diploma.filter.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
+import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.filter.domain.models.Country
+import ru.practicum.android.diploma.filter.domain.models.WriteRequest
 import ru.practicum.android.diploma.filter.ui.models.FilterItem
+import ru.practicum.android.diploma.filter.ui.models.FilterLocationUiEvent
 import ru.practicum.android.diploma.filter.ui.models.FilterLocationUiState
 
 class FilterLocationViewModel(
@@ -23,7 +26,43 @@ class FilterLocationViewModel(
     )
     val uiState = _uiState.asStateFlow()
 
-    fun updateFilters() {
+    fun onUiEvent(event: FilterLocationUiEvent) {
+        when (event) {
+            FilterLocationUiEvent.ClearCountry -> clearCountry()
+            FilterLocationUiEvent.ClearRegion -> clearRegion()
+            FilterLocationUiEvent.UpdateData -> updateFilters()
+        }
+    }
+
+    private fun clearCountry() {
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsInteractor.write(
+                WriteRequest.WriteCountry(
+                    Country(
+                        id = "",
+                        name = ""
+                    )
+                )
+            )
+        }
+        updateFilters()
+    }
+
+    private fun clearRegion() {
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsInteractor.write(
+                WriteRequest.WriteArea(
+                    Area(
+                        id = "",
+                        name = ""
+                    )
+                )
+            )
+            updateFilters()
+        }
+    }
+
+    private fun updateFilters() {
         viewModelScope.launch(Dispatchers.IO) {
             val settings = settingsInteractor.read()
             val countryName = settings.country.name
