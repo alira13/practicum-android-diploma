@@ -49,11 +49,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
+        checkFilterState()
     }
 
     override fun onStart() {
         super.onStart()
         subscribeOnViewModel()
+        subscribeOnFilterState()
     }
 
     override fun onStop() {
@@ -67,6 +69,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect {
                 onUiState(it)
+            }
+        }
+    }
+
+    private fun subscribeOnFilterState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.filterOnState.collect { filterState ->
+                renderFilter(filterState)
             }
         }
     }
@@ -167,8 +177,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun setOnClickListeners() {
         with(binding) {
-            searchFilterBt.setOnClickListener {
-                findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
+            searchFilterOffBt.setOnClickListener {
+                toSettingsFilter()
+            }
+            searchFilterOnBt.setOnClickListener {
+                toSettingsFilter()
             }
             searchClearIv.setOnClickListener {
                 viewModel.onUiEvent(SearchUiEvent.ClearText)
@@ -212,6 +225,22 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         })
     }
 
+    private fun checkFilterState() {
+        viewModel.readSettings()
+    }
+
+    private fun renderFilter(isFilterOn: Boolean) {
+        with(binding) {
+            if (isFilterOn) {
+                searchFilterOnBt.isVisible = true
+                searchFilterOffBt.isVisible = false
+            } else {
+                searchFilterOnBt.isVisible = false
+                searchFilterOffBt.isVisible = true
+            }
+        }
+    }
+
     private fun showToast(message: String) {
         val snackBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
         snackBar.setTextColor(requireContext().getColor(R.color.white))
@@ -233,6 +262,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             binding.searchInputEt.windowToken,
             0
         )
+    }
+
+    private fun toSettingsFilter() {
+        findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
     }
 
     private fun toVacancyFullInfo(vacancyID: String) {

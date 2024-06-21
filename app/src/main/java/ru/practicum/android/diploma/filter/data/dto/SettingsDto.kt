@@ -6,5 +6,7 @@ data class SettingsDto(
     val industry: IndustryDto,
     val country: CountryDto,
     val area: AreaDto,
-    val salary: Int
+    val salary: Int,
+    val onlyWithSalary: Boolean,
+    val filterOn: Boolean
 )
