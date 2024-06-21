@@ -40,6 +40,7 @@ class FilterCountryFragment : BindingFragment<FragmentFilterCountryBinding>() {
     private fun setupSetOnClickListeners() {
         countryAdapter.onCountryClickListener = { country -> onCountryClick(country) }
         countryAdapter.onOtherRegionClickListener = { region -> Log.e("FilterCountryFragment999", region.name) }
+        binding.backButton.setOnClickListener { findNavController().navigateUp() }
     }
 
     private fun onCountryClick(region: Region) {
