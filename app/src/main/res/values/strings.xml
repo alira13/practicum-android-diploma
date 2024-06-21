@@ -67,4 +67,5 @@
     <string name="apply">Применить</string>
     <string name="no_region">Такого региона нет</string>
     <string name="back_btn_description">Кнопка Назад</string>
+    <string name="region_error_text">Не удалось получить список</string>
 </resources>

@@ -19,8 +19,8 @@ import ru.practicum.android.diploma.databinding.FragmentFilterRegionBinding
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.FilterRegionViewModel
 import ru.practicum.android.diploma.filter.ui.region.adapter.RegionAdapter
-import ru.practicum.android.diploma.filter.ui.region.models.RegionUiEvent
 import ru.practicum.android.diploma.filter.ui.region.models.AreaUiState
+import ru.practicum.android.diploma.filter.ui.region.models.RegionUiEvent
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.util.BindingFragment
 
@@ -72,7 +72,7 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
         Log.d("MY", "*****onUiState ${state}")
         dataToBeResumed = state.dataToBeResumed
         when (state) {
-            is AreaUiState.Default -> onDefaultState()
+            is AreaUiState.Default -> onDefaultState(state)
             is AreaUiState.EmptyResult -> onEmptyResult()
             is AreaUiState.Error -> onFirstRequestError(state.error)
             is AreaUiState.Loading -> onLoading()
@@ -98,11 +98,15 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
         }
     }
 
-    private fun onDefaultState() {
+    private fun onDefaultState(result: AreaUiState.Default) {
+        adapter.content = result.content.toMutableList()
         with(binding) {
             regionFieldEt.apply {
                 text = null
                 clearFocus()
+            }
+            regionListRv.apply {
+                adapter?.notifyDataSetChanged()
             }
         }
     }
@@ -115,10 +119,10 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
 
     private fun onErrorMessage(error: Errors): String {
         return when (error) {
-            is Errors.ConnectionError -> getString(R.string.no_internet)
-            is Errors.ServerError -> getString(R.string.server_error_text)
-            is Errors.IncorrectRequest -> getString(R.string.incorrect_request_text)
-            is Errors.Error404 -> getString(R.string.server_error_text)
+            is Errors.ConnectionError -> getString(R.string.region_error_text)
+            is Errors.ServerError -> getString(R.string.region_error_text)
+            is Errors.IncorrectRequest -> getString(R.string.region_error_text)
+            is Errors.Error404 -> getString(R.string.region_error_text)
         }
     }
 
