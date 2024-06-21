@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -8,6 +9,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
+import ru.practicum.android.diploma.filter.domain.models.Settings
 import ru.practicum.android.diploma.search.domain.api.SearchInteractor
 import ru.practicum.android.diploma.search.domain.models.SearchResult
 import ru.practicum.android.diploma.search.domain.models.VacanciesSearchRequest
@@ -16,7 +19,8 @@ import ru.practicum.android.diploma.search.ui.models.SearchUiEvent
 import ru.practicum.android.diploma.search.ui.models.SearchUiState
 
 class SearchVacanciesViewModel(
-    private val searchInteractor: SearchInteractor
+    private val searchInteractor: SearchInteractor,
+    private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
     private var pageToRequest = 0
@@ -28,6 +32,9 @@ class SearchVacanciesViewModel(
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
+
+    private val _filterOnState = MutableStateFlow<Boolean>(false)
+    val filterOnState = _filterOnState.asStateFlow()
 
     private var lastSearchRequest: String? = null
 
@@ -136,6 +143,20 @@ class SearchVacanciesViewModel(
                 isNextPageLoading = false
             }
         }
+    }
+
+    fun readSettings() {
+        val filterSettings = settingsInteractor.read()
+        Log.i("alex", "$filterSettings")
+        isSettingsEmpty(filterSettings)
+    }
+
+    private fun isSettingsEmpty(filterSettings: Settings) {
+        _filterOnState.value = !(!filterSettings.onlyWithSalary &&
+                filterSettings.salary == 0 &&
+                filterSettings.area.id.isEmpty() &&
+                filterSettings.country.id.isEmpty() &&
+                filterSettings.industry.id.isEmpty())
     }
 
     companion object {
