@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
@@ -46,6 +47,7 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
 
     private fun onUiState(state: FilterLocationUiState) {
         with(binding) {
+            flApproveButton.isVisible = state.approveButtonVisibility
             if (state.item1.itemName == null) {
                 flEtCountryName.text = null
             } else {
@@ -71,6 +73,9 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
             findNavController().navigate(R.id.action_filterLocationFragment_to_filterRegionFragment)
         }
         binding.flIvBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.flApproveButton.setOnClickListener {
             findNavController().popBackStack()
         }
     }

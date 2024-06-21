@@ -64,4 +64,5 @@
     <string name="apply">Применить</string>
     <string name="country">Страна</string>
     <string name="region">Регион</string>
+    <string name="choose">Выбрать</string>
 </resources>

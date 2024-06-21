@@ -4,7 +4,8 @@ import ru.practicum.android.diploma.R
 
 data class FilterLocationUiState(
     val item1: FilterItem,
-    val item2: FilterItem
+    val item2: FilterItem,
+    val approveButtonVisibility: Boolean
 )
 
 sealed class FilterItem(

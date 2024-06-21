@@ -13,58 +13,33 @@ import ru.practicum.android.diploma.filter.ui.models.FilterLocationUiState
 
 class FilterLocationViewModel(
     private val settingsInteractor: SettingsInteractor
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(
         FilterLocationUiState(
-            FilterItem.Absent,
-            FilterItem.Absent
+            item1 = FilterItem.Absent,
+            item2 = FilterItem.Absent,
+            approveButtonVisibility = false
         )
     )
     val uiState = _uiState.asStateFlow()
-
-    /*init{
-        viewModelScope.launch {
-            while(true) {
-                _uiState.value = FilterLocationUiState(
-                    FilterItem.Absent,
-                    FilterItem.Absent
-                )
-                delay(1000L)
-                _uiState.value = FilterLocationUiState(
-                    FilterItem.Present(itemName = "Russia"),
-                    FilterItem.Absent
-                )
-                delay(1000L)
-                _uiState.value = FilterLocationUiState(
-                    FilterItem.Absent,
-                    FilterItem.Present(itemName = "Moskow")
-                )
-                delay(1000L)
-                _uiState.value = FilterLocationUiState(
-                    FilterItem.Present(itemName = "Russia"),
-                    FilterItem.Present(itemName = "Moskow")
-                )
-                delay(1000L)
-            }
-        }
-    }*/
 
     fun updateFilters() {
         viewModelScope.launch(Dispatchers.IO) {
             val settings = settingsInteractor.read()
             val countryName = settings.country.name
-            val item1 = if(countryName.isEmpty()) {
+            val item1 = if (countryName.isEmpty()) {
                 FilterItem.Absent
             } else {
                 FilterItem.Present(itemName = countryName)
             }
             val regionName = settings.area.name
-            val item2 = if(regionName.isEmpty()) {
+            val item2 = if (regionName.isEmpty()) {
                 FilterItem.Absent
             } else {
                 FilterItem.Present(itemName = regionName)
             }
-            _uiState.value = FilterLocationUiState(item1, item2)
+            val buttonVisibility = !(countryName.isEmpty() && regionName.isEmpty())
+            _uiState.value = FilterLocationUiState(item1, item2, buttonVisibility)
         }
     }
 }

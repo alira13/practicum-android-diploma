@@ -87,5 +87,18 @@
         app:layout_constraintTop_toTopOf="@id/fl_til_region_element"
         app:tint="?attr/colorOnPrimary" />
 
+    <TextView
+        android:id="@+id/fl_approve_button"
+        style="@style/BlueButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_24"
+        android:background="@drawable/background_blue_button"
+        android:text="@string/choose"
+        android:layout_marginHorizontal="@dimen/spacing_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
