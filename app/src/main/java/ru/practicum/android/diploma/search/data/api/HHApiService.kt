@@ -24,7 +24,7 @@ interface HHApiService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int = ELEMENTS_COUNT,
         @QueryMap options: Map<String, String>
-    ): VacanciesResponse
+    ): Response<VacanciesResponse>
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
         "HH-User-Agent: $APP_NAME"
@@ -42,7 +42,7 @@ interface HHApiService {
     @GET("/areas")
     suspend fun getRegions(
         @QueryMap options: Map<String, String>
-    ): List<RegionDto>
+    ): Response<List<RegionDto>>
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
@@ -51,5 +51,5 @@ interface HHApiService {
     @GET("/areas")
     suspend fun getIndustries(
         @QueryMap options: Map<String, String>
-    ): List<IndustryDto>
+    ): Response<List<IndustryDto>>
 }

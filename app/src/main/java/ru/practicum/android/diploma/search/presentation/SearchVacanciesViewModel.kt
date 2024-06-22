@@ -87,7 +87,7 @@ class SearchVacanciesViewModel(
         searchRequest: String,
         withDelay: Boolean
     ) {
-        searchJob = viewModelScope.launch(Dispatchers.IO) {
+        searchJob = viewModelScope.launch {
             if (withDelay) {
                 delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
             }
