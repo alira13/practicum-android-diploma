@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.color.MaterialColors
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -198,7 +197,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
     private fun renderSalary(settingsState: Settings) {
         with(binding) {
             if (settingsState.salary != 0L) {
-                oldEditData = settingsState.salary.toLong()
+                oldEditData = settingsState.salary
                 fsEtSalary.setText(settingsState.salary.toString())
                 editTextFocus = false
             }
