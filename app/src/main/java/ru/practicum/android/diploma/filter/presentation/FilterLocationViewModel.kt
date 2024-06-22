@@ -28,14 +28,16 @@ class FilterLocationViewModel(
 
     fun onUiEvent(event: FilterLocationUiEvent) {
         when (event) {
-            FilterLocationUiEvent.ClearCountry -> clearFilterItem(
-                WriteRequest.WriteCountry(
-                    Country(
-                        id = DEFAULT_STRING_VALUE,
-                        name = DEFAULT_STRING_VALUE
+            FilterLocationUiEvent.ClearCountry -> {
+                clearFilterItem(
+                    WriteRequest.WriteCountry(
+                        Country(
+                            id = DEFAULT_STRING_VALUE,
+                            name = DEFAULT_STRING_VALUE
+                        )
                     )
                 )
-            )
+            }
 
             FilterLocationUiEvent.ClearRegion -> clearFilterItem(
                 WriteRequest.WriteArea(
@@ -53,8 +55,8 @@ class FilterLocationViewModel(
     private fun clearFilterItem(item: WriteRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             settingsInteractor.write(item)
+            updateFilters()
         }
-        updateFilters()
     }
 
     private fun updateFilters() {

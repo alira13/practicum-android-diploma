@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -48,34 +51,52 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
     }
 
     private fun onUiState(state: FilterLocationUiState) {
-        val condition1 = state.item1 is FilterItem.Absent
-        val condition2 = state.item2 is FilterItem.Absent
-        with(binding) {
-            flCountryEndIcon.apply{
-                setOnClickListener {
-                    setCountryEndIconClickListener(condition1)
-                }
-                setImageResource(state.item1.endIconRes)
+        binding.flApproveButton.isVisible = state.approveButtonVisibility
+        customizeElement(
+            item = state.item1,
+            endIcon = binding.flCountryEndIcon,
+            itemName = binding.flEtCountryName,
+            element = binding.flTilCountryElement,
+            elementType = ELEMENT_TYPE_COUNTRY
+        )
+        customizeElement(
+            item = state.item2,
+            endIcon = binding.flRegionEndIcon,
+            itemName = binding.flEtRegionName,
+            element = binding.flTilRegionElement,
+            elementType = ELEMENT_TYPE_REGION
+        )
+    }
+
+    private fun customizeElement(
+        item: FilterItem,
+        endIcon: ImageView,
+        itemName: TextInputEditText,
+        element: TextInputLayout,
+        elementType: Int
+    ) {
+        val condition = item is FilterItem.Absent
+        endIcon.apply {
+            setOnClickListener {
+                chooseOnClickListeners(condition, elementType)
             }
-            flRegionEndIcon.apply{
-                setOnClickListener {
-                    setRegionEndIconClickListener(condition2)
-                }
-                setImageResource(state.item2.endIconRes)
-            }
-            flApproveButton.isVisible = state.approveButtonVisibility
-            if (condition1) {
-                flEtCountryName.text = null
-            } else {
-                flEtCountryName.setText(state.item1.itemName)
-            }
-            if (condition2) {
-                flEtRegionName.text = null
-            } else {
-                flEtRegionName.setText(state.item2.itemName)
-            }
-            flTilCountryElement.setHintTextAppearance(state.item1.hintTextAppearance)
-            flTilRegionElement.setHintTextAppearance(state.item2.hintTextAppearance)
+            setImageResource(item.endIconRes)
+        }
+        if (condition) {
+            itemName.text = null
+        } else {
+            itemName.setText(item.itemName)
+        }
+        element.setHintTextAppearance(item.hintTextAppearance)
+    }
+
+    private fun chooseOnClickListeners(
+        condition: Boolean,
+        elementType: Int
+    ) {
+        when (elementType) {
+            ELEMENT_TYPE_COUNTRY -> setCountryEndIconClickListener(condition)
+            ELEMENT_TYPE_REGION -> setRegionEndIconClickListener(condition)
         }
     }
 
@@ -102,5 +123,10 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
         binding.flApproveButton.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    companion object {
+        private const val ELEMENT_TYPE_COUNTRY = 1
+        private const val ELEMENT_TYPE_REGION = 2
     }
 }
