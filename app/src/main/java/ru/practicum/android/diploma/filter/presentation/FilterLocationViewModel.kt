@@ -43,7 +43,8 @@ class FilterLocationViewModel(
                 WriteRequest.WriteArea(
                     Area(
                         id = DEFAULT_STRING_VALUE,
-                        name = DEFAULT_STRING_VALUE
+                        name = DEFAULT_STRING_VALUE,
+                        parentId = DEFAULT_STRING_VALUE
                     )
                 )
             )
