@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -147,16 +146,11 @@ class SearchVacanciesViewModel(
 
     fun readSettings() {
         val filterSettings = settingsInteractor.read()
-        Log.i("alex", "$filterSettings")
         isSettingsEmpty(filterSettings)
     }
 
     private fun isSettingsEmpty(filterSettings: Settings) {
-        _filterOnState.value = !(!filterSettings.onlyWithSalary &&
-            filterSettings.salary == 0 &&
-            filterSettings.area.id.isEmpty() &&
-            filterSettings.country.id.isEmpty() &&
-            filterSettings.industry.id.isEmpty())
+        _filterOnState.value = filterSettings.filterOn
     }
 
     companion object {

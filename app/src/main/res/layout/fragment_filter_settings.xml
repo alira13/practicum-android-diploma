@@ -152,6 +152,7 @@
         android:background="@drawable/edit_text_background"
         android:hint="@string/input_amount"
         android:inputType="number"
+        android:maxLength="18"
         android:maxLines="1"
         android:paddingStart="@dimen/spacing_16"
         android:paddingTop="@dimen/item_size_22dp"
