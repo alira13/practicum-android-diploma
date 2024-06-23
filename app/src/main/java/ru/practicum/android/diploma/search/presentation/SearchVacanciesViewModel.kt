@@ -50,7 +50,7 @@ class SearchVacanciesViewModel(
             is SearchUiEvent.QueryInput -> onQueryInput(event.expression)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
             SearchUiEvent.ResumeData -> resumeData()
-            is SearchUiEvent.OnFragmentResume -> onFragmentResume(event.expression)
+            SearchUiEvent.OnFragmentResume -> onFragmentResume()
         }
     }
 
@@ -79,7 +79,7 @@ class SearchVacanciesViewModel(
                 _uiState.value = SearchUiState.EditingRequest
                 resetSearchParams(expression)
                 searchJob?.cancel()
-                search(lastSearchRequest!!, true)
+                search(true)
             }
         }
     }
@@ -93,7 +93,6 @@ class SearchVacanciesViewModel(
     }
 
     private fun search(
-        searchRequest: String,
         withDelay: Boolean
     ) {
         searchJob = viewModelScope.launch {
@@ -103,7 +102,13 @@ class SearchVacanciesViewModel(
             if (pageToRequest == 0) {
                 _uiState.value = SearchUiState.Loading()
             }
-            val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
+            val result = searchInteractor.searchVacancies(
+                VacanciesSearchRequest(
+                    page = pageToRequest,
+                    searchString = lastSearchRequest!!,
+                    filterSettings = lastFilterSettings!!
+                )
+            )
             isNextPageLoading = true
             _uiState.value = convertResult(result)
         }
@@ -148,19 +153,21 @@ class SearchVacanciesViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (isNextPageLoading) {
                 pageToRequest += 1
-                search(lastSearchRequest!!, false)
+                search(false)
                 isNextPageLoading = false
             }
         }
     }
 
-    private fun onFragmentResume(expression: String) {
+    private fun onFragmentResume() {
         val newSettings = settingsInteractor.read()
         val condition = newSettings != lastFilterSettings
         if (condition) {
             lastFilterSettings = newSettings
             _filterOnState.value = isSettingsEmpty(lastFilterSettings!!)
+            search(false)
         }
+
     }
 
     private fun isSettingsEmpty(filterSettings: Settings) =

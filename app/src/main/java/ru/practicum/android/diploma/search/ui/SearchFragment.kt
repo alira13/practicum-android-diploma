@@ -270,7 +270,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             || expression == "null"
         if (!condition) {
             viewModel.onUiEvent(
-                SearchUiEvent.OnFragmentResume(expression)
+                SearchUiEvent.OnFragmentResume
             )
         }
     }
