@@ -28,15 +28,14 @@ class SearchVacanciesViewModel(
     private var isNextPageLoading: Boolean = false
     private var isFullLoaded: Boolean = false
     private var count: String? = null
+    private var lastFilterSettings = readSettings()
+    private var lastSearchRequest = DEFAULT_STRING_VALUE
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
 
-    private val _filterOnState = MutableStateFlow<Boolean>(false)
+    private val _filterOnState = MutableStateFlow(false)
     val filterOnState = _filterOnState.asStateFlow()
-    val settings = readSettings()
-
-    private var lastSearchRequest: String? = null
 
     fun onUiEvent(event: SearchUiEvent) {
         when (event) {
@@ -44,6 +43,7 @@ class SearchVacanciesViewModel(
             is SearchUiEvent.QueryInput -> onQueryInput(event.expression)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
             SearchUiEvent.ResumeData -> resumeData()
+            SearchUiEvent.OnFragmentResume -> onFragmentResume()
         }
     }
 
@@ -71,7 +71,7 @@ class SearchVacanciesViewModel(
             _uiState.value = SearchUiState.EditingRequest
             resetSearchParams(expression)
             searchJob?.cancel()
-            search(lastSearchRequest!!, true)
+            search(true)
         }
     }
 
@@ -84,7 +84,6 @@ class SearchVacanciesViewModel(
     }
 
     private fun search(
-        searchRequest: String,
         withDelay: Boolean
     ) {
         searchJob = viewModelScope.launch {
@@ -96,9 +95,9 @@ class SearchVacanciesViewModel(
             }
             val result = searchInteractor.searchVacancies(
                 VacanciesSearchRequest(
-                    pageToRequest,
-                    searchRequest,
-                    settings
+                    page = pageToRequest,
+                    searchString = lastSearchRequest,
+                    filterSettings = lastFilterSettings
                 )
             )
             isNextPageLoading = true
@@ -145,23 +144,34 @@ class SearchVacanciesViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (isNextPageLoading) {
                 pageToRequest += 1
-                search(lastSearchRequest!!, false)
+                search(false)
                 isNextPageLoading = false
             }
         }
     }
 
-    fun readSettings(): Settings {
-        val filterSettings = settingsInteractor.read()
-        isSettingsEmpty(filterSettings)
-        return filterSettings
+    private fun onFragmentResume() {
+        val filterUpdated = updateFilterSettings()
+        if (filterUpdated && lastSearchRequest.isNotEmpty()) {
+                search(false)
+            }
     }
 
-    private fun isSettingsEmpty(filterSettings: Settings) {
-        _filterOnState.value = filterSettings.filterOn
+    private fun updateFilterSettings(): Boolean {
+        val newSettings = readSettings()
+        val condition = newSettings != lastFilterSettings
+        lastFilterSettings = newSettings
+        return condition
+    }
+
+   private fun readSettings(): Settings {
+        val filterSettings = settingsInteractor.read()
+       _filterOnState.value = filterSettings.filterOn
+        return filterSettings
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
+        private const val DEFAULT_STRING_VALUE = ""
     }
 }
