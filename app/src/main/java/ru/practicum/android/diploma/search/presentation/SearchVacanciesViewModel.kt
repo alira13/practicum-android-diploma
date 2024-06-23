@@ -30,7 +30,7 @@ class SearchVacanciesViewModel(
     private var isFullLoaded: Boolean = false
     private var count: String? = null
     private var lastFilterSettings: Settings? = null
-    private var lastSearchRequest: String? = null
+    private var lastSearchRequest = DEFAULT_STRING_VALUE
 
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
@@ -105,7 +105,7 @@ class SearchVacanciesViewModel(
             val result = searchInteractor.searchVacancies(
                 VacanciesSearchRequest(
                     page = pageToRequest,
-                    searchString = lastSearchRequest!!,
+                    searchString = lastSearchRequest,
                     filterSettings = lastFilterSettings!!
                 )
             )
@@ -180,5 +180,6 @@ class SearchVacanciesViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
+        private const val DEFAULT_STRING_VALUE = ""
     }
 }
