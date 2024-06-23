@@ -4,4 +4,9 @@
         <item name="android:navigationIcon">@drawable/ic_arrow_back_white</item>
         <item name="android:contentInsetStartWithNavigation">@dimen/spacing_4</item>
     </style>
+
+    <style name="IndustryToolBarStyle">
+        <item name="android:navigationIcon">@drawable/ic_arrow_back_white</item>
+        <item name="android:contentInsetStartWithNavigation">@dimen/spacing_4</item>
+    </style>
 </resources>

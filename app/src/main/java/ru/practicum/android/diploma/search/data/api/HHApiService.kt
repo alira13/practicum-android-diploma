@@ -47,7 +47,7 @@ interface HHApiService {
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
         "HH-User-Agent: $APP_NAME"
     )
-    @GET("/areas")
+    @GET("/industries")
     suspend fun getIndustries(
         @QueryMap options: Map<String, String>
     ): List<IndustryDto>
