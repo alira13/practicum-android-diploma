@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -29,20 +28,14 @@ class SearchVacanciesViewModel(
     private var isNextPageLoading: Boolean = false
     private var isFullLoaded: Boolean = false
     private var count: String? = null
-    private var lastFilterSettings: Settings? = null
-    private var lastSearchRequest = DEFAULT_STRING_VALUE
-
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
 
-    private val _filterOnState = MutableStateFlow(false)
+    private val _filterOnState = MutableStateFlow<Boolean>(false)
     val filterOnState = _filterOnState.asStateFlow()
 
-    init {
-        lastFilterSettings = settingsInteractor.read()
-        _filterOnState.value = isSettingsEmpty(lastFilterSettings!!)
-    }
+    private var lastSearchRequest: String? = null
 
     fun onUiEvent(event: SearchUiEvent) {
         when (event) {
@@ -50,7 +43,6 @@ class SearchVacanciesViewModel(
             is SearchUiEvent.QueryInput -> onQueryInput(event.expression)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
             SearchUiEvent.ResumeData -> resumeData()
-            SearchUiEvent.OnFragmentResume -> onFragmentResume()
         }
     }
 
@@ -74,13 +66,11 @@ class SearchVacanciesViewModel(
             || expression == "null"
         ) {
             onRequestCleared()
-        } else {
-            if (expression != lastSearchRequest) {
-                _uiState.value = SearchUiState.EditingRequest
-                resetSearchParams(expression)
-                searchJob?.cancel()
-                search(true)
-            }
+        } else if (expression != lastSearchRequest) {
+            _uiState.value = SearchUiState.EditingRequest
+            resetSearchParams(expression)
+            searchJob?.cancel()
+            search(lastSearchRequest!!, true)
         }
     }
 
@@ -93,6 +83,7 @@ class SearchVacanciesViewModel(
     }
 
     private fun search(
+        searchRequest: String,
         withDelay: Boolean
     ) {
         searchJob = viewModelScope.launch {
@@ -102,13 +93,7 @@ class SearchVacanciesViewModel(
             if (pageToRequest == 0) {
                 _uiState.value = SearchUiState.Loading()
             }
-            val result = searchInteractor.searchVacancies(
-                VacanciesSearchRequest(
-                    page = pageToRequest,
-                    searchString = lastSearchRequest,
-                    filterSettings = lastFilterSettings!!
-                )
-            )
+            val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
             isNextPageLoading = true
             _uiState.value = convertResult(result)
         }
@@ -153,33 +138,22 @@ class SearchVacanciesViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (isNextPageLoading) {
                 pageToRequest += 1
-                search(false)
+                search(lastSearchRequest!!, false)
                 isNextPageLoading = false
             }
         }
     }
 
-    private fun onFragmentResume() {
-        val newSettings = settingsInteractor.read()
-        val condition = newSettings != lastFilterSettings
-        if (condition) {
-            lastFilterSettings = newSettings
-            _filterOnState.value = isSettingsEmpty(lastFilterSettings!!)
-            search(false)
-        }
-
+    fun readSettings() {
+        val filterSettings = settingsInteractor.read()
+        isSettingsEmpty(filterSettings)
     }
 
-    private fun isSettingsEmpty(filterSettings: Settings) =
-        !filterSettings.onlyWithSalary &&
-            filterSettings.salary == 0 &&
-            filterSettings.area.id.isEmpty() &&
-            filterSettings.country.id.isEmpty() &&
-            filterSettings.industry.id.isEmpty()
-
+    private fun isSettingsEmpty(filterSettings: Settings) {
+        _filterOnState.value = filterSettings.filterOn
+    }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
-        private const val DEFAULT_STRING_VALUE = ""
     }
 }
