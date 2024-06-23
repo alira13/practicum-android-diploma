@@ -41,9 +41,7 @@ class SearchVacanciesViewModel(
 
     init {
         lastFilterSettings = settingsInteractor.read()
-        _filterOnState.value = if (lastFilterSettings != null) {
-            isSettingsEmpty(lastFilterSettings!!)
-        } else false
+        _filterOnState.value = isSettingsEmpty(lastFilterSettings!!)
     }
 
     fun onUiEvent(event: SearchUiEvent) {
@@ -52,6 +50,7 @@ class SearchVacanciesViewModel(
             is SearchUiEvent.QueryInput -> onQueryInput(event.expression)
             is SearchUiEvent.LastItemReached -> onLastItemReached()
             SearchUiEvent.ResumeData -> resumeData()
+            is SearchUiEvent.OnFragmentResume -> onFragmentResume(event.expression)
         }
     }
 
@@ -76,7 +75,6 @@ class SearchVacanciesViewModel(
         ) {
             onRequestCleared()
         } else {
-val condition = checkSettings()
             if (expression != lastSearchRequest) {
                 _uiState.value = SearchUiState.EditingRequest
                 resetSearchParams(expression)
@@ -156,14 +154,13 @@ val condition = checkSettings()
         }
     }
 
-    private fun checkSettings(): Boolean {
+    private fun onFragmentResume(expression: String) {
         val newSettings = settingsInteractor.read()
         val condition = newSettings != lastFilterSettings
         if (condition) {
             lastFilterSettings = newSettings
             _filterOnState.value = isSettingsEmpty(lastFilterSettings!!)
         }
-        return condition
     }
 
     private fun isSettingsEmpty(filterSettings: Settings) =

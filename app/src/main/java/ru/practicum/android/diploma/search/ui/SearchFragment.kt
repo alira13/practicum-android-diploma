@@ -59,9 +59,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.onUiEvent(SearchUiEvent.QueryInput(
-            binding.searchInputEt.text.toString()
-        ))
+        refreshSearchRequest()
     }
 
     override fun onStop() {
@@ -264,6 +262,17 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             binding.searchInputEt.windowToken,
             0
         )
+    }
+
+    private fun refreshSearchRequest() {
+        val expression = binding.searchInputEt.text.toString()
+        val condition = expression.isEmpty()
+            || expression == "null"
+        if (!condition) {
+            viewModel.onUiEvent(
+                SearchUiEvent.OnFragmentResume(expression)
+            )
+        }
     }
 
     private fun toSettingsFilter() {
