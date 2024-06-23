@@ -1,17 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/colorPrimary"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary">
+
+    <Toolbar
+        android:id="@+id/toolbar"
+        style="@style/IndustryToolBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/fi_tv_header"
+            style="@style/MediumTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_industry" />
+    </Toolbar>
+
+    <View
+        android:id="@+id/field_cl"
+        style="@style/BackgroundSearchRequestStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/item_size_48"
+        android:layout_marginHorizontal="@dimen/spacing_16"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:background="@drawable/background_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <EditText
+        android:id="@+id/field_et"
+        style="@style/RegularTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_8"
+        android:autofillHints="name"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:hint="@string/industry_text_view_hint"
+        android:inputType="text"
+        android:maxLength="40"
+        android:maxLines="1"
+        android:minHeight="@dimen/item_size_48"
+        android:singleLine="true"
+        android:textAppearance="@style/RegularTextStyle"
+        android:textColor="@color/black"
+        android:textColorHint="?attr/colorOnSecondary"
+        app:layout_constraintBottom_toBottomOf="@+id/field_cl"
+        app:layout_constraintEnd_toStartOf="@+id/clear_icon_iv"
+        app:layout_constraintStart_toStartOf="@+id/field_cl"
+        app:layout_constraintTop_toTopOf="@id/field_cl" />
+
+    <ImageView
+        android:id="@+id/clear_icon_iv"
+        android:layout_width="@dimen/item_size_48"
+        android:layout_height="@dimen/item_size_48"
+        android:contentDescription="@string/clear_region_btn_description"
+        android:scaleType="center"
+        android:src="@drawable/ic_close"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/field_cl"
+        app:layout_constraintEnd_toEndOf="@+id/field_cl"
+        app:layout_constraintTop_toTopOf="@+id/field_cl" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/spacing_8"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/field_cl">
+
+        <LinearLayout
+            android:id="@+id/industry_error_place_holder_layout"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/industry_error_image"
+                android:layout_width="328dp"
+                android:layout_height="223dp"
+                android:src="@drawable/placeholder_empty_location_list"/>
+
+            <TextView
+                android:id="@+id/industry_error_text"
+                style="@style/MediumTextStyle"
+                tools:text="@string/cant_get_list"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:layout_marginEnd="@dimen/spacing_4"
+            tools:listitem="@layout/view_item_industry" />
+    </FrameLayout>
 
     <TextView
-        android:id="@+id/fi_tv_header"
-        style="@style/MediumTextStyle"
-        android:paddingStart="@dimen/spacing_16"
+        android:id="@+id/button"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_size_64"
-        android:text="@string/filter_industry"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="59dp"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:layout_marginHorizontal="@dimen/spacing_17dp"
+        android:layout_marginBottom="@dimen/spacing_24"
+        android:textColor="@color/white"
+        android:fontFamily="@font/ys_display_medium"
+        android:backgroundTint="@color/blue"
+        android:background="@drawable/background_blue_button"
+        android:visibility="gone"
+        android:text="@string/industry_confirm_button_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
