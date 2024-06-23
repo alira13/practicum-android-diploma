@@ -38,7 +38,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     override fun createBinding(
-        inflater: LayoutInflater, container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?
     ): FragmentSearchBinding {
         return FragmentSearchBinding.inflate(inflater, container, false)
     }
@@ -248,9 +249,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         val inputMethodManager = requireContext().getSystemService(
             Context.INPUT_METHOD_SERVICE
         ) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow(
-            binding.searchInputEt.windowToken, 0
-        )
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchInputEt.windowToken, 0)
     }
 
     private fun toSettingsFilter() {
@@ -259,7 +258,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun toVacancyFullInfo(vacancyID: String) {
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyFragment, VacancyFragment.createArgs(vacancyID)
+            R.id.action_searchFragment_to_vacancyFragment,
+            VacancyFragment.createArgs(vacancyID)
         )
     }
 }
