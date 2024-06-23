@@ -68,6 +68,9 @@
     <string name="no_region">Такого региона нет</string>
     <string name="back_btn_description">Кнопка Назад</string>
     <string name="region_error_text">Не удалось получить список</string>
+    <string name="country">Страна</string>
+    <string name="region">Регион</string>
+    <string name="choose">Выбрать</string>
     <string name="industry_confirm_button_text">Выбрать</string>
     <string name="industry_text_view_hint">Введите отрасль</string>
 </resources>

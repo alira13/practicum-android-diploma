@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.data.api
 
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -23,7 +24,7 @@ interface HHApiService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int = ELEMENTS_COUNT,
         @QueryMap options: Map<String, String>
-    ): VacanciesResponse
+    ): Response<VacanciesResponse>
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
         "HH-User-Agent: $APP_NAME"
@@ -32,7 +33,7 @@ interface HHApiService {
     suspend fun getVacancyDetails(
         @Path("id") id: String,
         @QueryMap options: Map<String, String>
-    ): VacancyDetailsResponse
+    ): Response<VacancyDetailsResponse>
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
@@ -41,7 +42,7 @@ interface HHApiService {
     @GET("/areas")
     suspend fun getRegions(
         @QueryMap options: Map<String, String>
-    ): List<RegionDto>
+    ): Response<List<RegionDto>>
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
@@ -50,5 +51,5 @@ interface HHApiService {
     @GET("/industries")
     suspend fun getIndustries(
         @QueryMap options: Map<String, String>
-    ): List<IndustryDto>
+    ): Response<List<IndustryDto>>
 }

@@ -14,6 +14,10 @@ import ru.practicum.android.diploma.vacancy.presentation.VacancyDetailsViewModel
 val viewModelModule = module {
 
     viewModel {
+        FilterLocationViewModel(get())
+    }
+
+    viewModel {
         FavoritesViewModel(
             interactor = get()
         )
@@ -61,13 +65,6 @@ val viewModelModule = module {
         FilterRegionViewModel(
             interactor = get(),
             settingsInteractor = get()
-        )
-    }
-
-    viewModel {
-        FilterIndustryViewModel(
-            settingsInteractor = get(),
-            filterInteractor = get()
         )
     }
 }
