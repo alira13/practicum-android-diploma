@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.filter.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.ViewItemIndustryBinding
 import ru.practicum.android.diploma.filter.domain.models.Industry
