@@ -14,8 +14,8 @@
     <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />
 
     <style name="SnackbarStyle">
-        <item name="android:padding">@dimen/item_size_4dp</item>
-        <item name="android:radius">@dimen/item_size_12dp</item>
+        <item name="android:padding">@dimen/spacing_4</item>
+        <item name="android:radius">@dimen/radius_12dp</item>
         <item name="android:background">@drawable/background_red_snackbar</item>
         <item name="android:layout_marginHorizontal">@dimen/spacing_16</item>
         <item name="android:layout_marginVertical">@dimen/spacing_16</item>
