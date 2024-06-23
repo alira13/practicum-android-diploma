@@ -29,14 +29,22 @@ class SearchVacanciesViewModel(
     private var isNextPageLoading: Boolean = false
     private var isFullLoaded: Boolean = false
     private var count: String? = null
+    private var lastFilterSettings: Settings? = null
+    private var lastSearchRequest: String? = null
+
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
     val uiState = _uiState.asStateFlow()
 
-    private val _filterOnState = MutableStateFlow<Boolean>(false)
+    private val _filterOnState = MutableStateFlow(false)
     val filterOnState = _filterOnState.asStateFlow()
 
-    private var lastSearchRequest: String? = null
+    init {
+        lastFilterSettings = settingsInteractor.read()
+        _filterOnState.value = if (lastFilterSettings != null) {
+            isSettingsEmpty(lastFilterSettings!!)
+        } else false
+    }
 
     fun onUiEvent(event: SearchUiEvent) {
         when (event) {
@@ -67,11 +75,14 @@ class SearchVacanciesViewModel(
             || expression == "null"
         ) {
             onRequestCleared()
-        } else if (expression != lastSearchRequest) {
-            _uiState.value = SearchUiState.EditingRequest
-            resetSearchParams(expression)
-            searchJob?.cancel()
-            search(lastSearchRequest!!, true)
+        } else {
+val condition = checkSettings()
+            if (expression != lastSearchRequest) {
+                _uiState.value = SearchUiState.EditingRequest
+                resetSearchParams(expression)
+                searchJob?.cancel()
+                search(lastSearchRequest!!, true)
+            }
         }
     }
 
@@ -145,19 +156,23 @@ class SearchVacanciesViewModel(
         }
     }
 
-    fun readSettings() {
-        val filterSettings = settingsInteractor.read()
-        Log.i("alex", "$filterSettings")
-        isSettingsEmpty(filterSettings)
+    private fun checkSettings(): Boolean {
+        val newSettings = settingsInteractor.read()
+        val condition = newSettings != lastFilterSettings
+        if (condition) {
+            lastFilterSettings = newSettings
+            _filterOnState.value = isSettingsEmpty(lastFilterSettings!!)
+        }
+        return condition
     }
 
-    private fun isSettingsEmpty(filterSettings: Settings) {
-        _filterOnState.value = !(!filterSettings.onlyWithSalary &&
+    private fun isSettingsEmpty(filterSettings: Settings) =
+        !filterSettings.onlyWithSalary &&
             filterSettings.salary == 0 &&
             filterSettings.area.id.isEmpty() &&
             filterSettings.country.id.isEmpty() &&
-            filterSettings.industry.id.isEmpty())
-    }
+            filterSettings.industry.id.isEmpty()
+
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
