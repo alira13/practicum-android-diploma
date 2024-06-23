@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.filter.data.dto.RegionsRequestDto
 import ru.practicum.android.diploma.filter.data.dto.RegionsResponse
 import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
 import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
+import ru.practicum.android.diploma.search.data.SERVER_ERROR
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
@@ -82,7 +83,7 @@ class RetrofitNetworkClient(
                 }
             } catch (e: IOException) {
                 Log.e("RetrofitNetworkClient", "exception handled $e")
-                Response().apply { resultCode = CONNECTION_ERROR }
+                Response().apply { resultCode = SERVER_ERROR }
             }
         }
     }
