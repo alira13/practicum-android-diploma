@@ -38,8 +38,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     override fun createBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
+        inflater: LayoutInflater, container: ViewGroup?
     ): FragmentSearchBinding {
         return FragmentSearchBinding.inflate(inflater, container, false)
     }
@@ -213,9 +212,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0) {
-                    val pos = (
-                        listRV.layoutManager as LinearLayoutManager
-                        ).findLastVisibleItemPosition()
+                    val pos = (listRV.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacanciesAdapter.itemCount
                     if (pos >= itemsCount - 1) {
                         viewModel.onUiEvent(SearchUiEvent.LastItemReached)
@@ -231,8 +228,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun renderFilter(isFilterOn: Boolean) {
         with(binding) {
-                searchFilterOnBt.isVisible = isFilterOn
-                searchFilterOffBt.isVisible = !isFilterOn
+            searchFilterOnBt.isVisible = isFilterOn
+            searchFilterOffBt.isVisible = !isFilterOn
         }
     }
 
@@ -243,19 +240,16 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         val viewSnackbar = snackBar.view.apply {
             setBackgroundResource(R.drawable.background_red_snackbar)
         }
-        val textSnackbar: TextView =
-            viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
+        val textSnackbar: TextView = viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
         textSnackbar.textAlignment = View.TEXT_ALIGNMENT_CENTER
     }
 
     private fun hideKeyboard() {
-        val inputMethodManager =
-            requireContext().getSystemService(
-                Context.INPUT_METHOD_SERVICE
-            ) as? InputMethodManager
+        val inputMethodManager = requireContext().getSystemService(
+            Context.INPUT_METHOD_SERVICE
+        ) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(
-            binding.searchInputEt.windowToken,
-            0
+            binding.searchInputEt.windowToken, 0
         )
     }
 
@@ -265,8 +259,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun toVacancyFullInfo(vacancyID: String) {
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyFragment,
-            VacancyFragment.createArgs(vacancyID)
+            R.id.action_searchFragment_to_vacancyFragment, VacancyFragment.createArgs(vacancyID)
         )
     }
 }

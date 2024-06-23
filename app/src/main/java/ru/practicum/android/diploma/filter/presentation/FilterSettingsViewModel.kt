@@ -23,7 +23,6 @@ class FilterSettingsViewModel(
     private val _industryState: MutableLiveData<Settings> = MutableLiveData()
     fun getIndustryState(): LiveData<Settings> = _industryState
 
-
     fun saveSalarySettings(salary: Long) {
         settingsInteractor.write(WriteRequest.WriteSalary(salary))
     }

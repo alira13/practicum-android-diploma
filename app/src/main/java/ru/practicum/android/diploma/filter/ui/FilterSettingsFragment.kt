@@ -61,6 +61,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             fsCbWithSalaryCheckbox.setOnClickListener {
                 buttonGroup.isVisible = true
                 onlyWithSalary = fsCbWithSalaryCheckbox.isChecked
+                viewModel.savaOnlyWithSalary(onlyWithSalary)
             }
             fsIvClearPlaceWorkButton.setOnClickListener {
                 viewModel.clearPlaceWork()
@@ -72,7 +73,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             }
             fsTvApplyButton.setOnClickListener {
                 viewModel.saveSalarySettings(newEditData)
-                viewModel.savaOnlyWithSalary(onlyWithSalary)
+//                viewModel.savaOnlyWithSalary(onlyWithSalary)
                 viewModel.saveFilterSettings()
                 findNavController().popBackStack()
             }

@@ -72,7 +72,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintTop_toBottomOf="@id/fs_tv_place_work_top_title"
-        tools:text="Россия, Москва" />
+        tools:text="Россия, Москва"
+        android:maxLines="1"
+        android:ellipsize="end"
+        />
 
     <ImageView
         android:id="@+id/fs_iv_toPlaceWorkButton"
@@ -121,7 +124,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintTop_toBottomOf="@id/fs_tv_industry_top_title"
-        tools:text="IT" />
+        tools:text="IT"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
     <ImageView
         android:id="@+id/fs_iv_toIndustryButton"
