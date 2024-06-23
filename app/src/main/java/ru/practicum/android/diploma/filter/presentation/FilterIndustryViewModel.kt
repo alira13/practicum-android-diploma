@@ -27,6 +27,7 @@ class FilterIndustryViewModel(
     fun getWriteComplete(): LiveData<Boolean> = writeCompleteState
 
     var industries = mutableListOf<Industry>()
+
     init {
         viewModelScope.launch {
             uiState.value = FilterUIState.Loading
@@ -46,7 +47,7 @@ class FilterIndustryViewModel(
                 uiState.value = FilterUIState.Error(result.error)
             }
 
-            else ->{}
+            else -> {}
         }
     }
 
