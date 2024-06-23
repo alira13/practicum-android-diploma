@@ -68,14 +68,15 @@
     <TextView
         android:id="@+id/fs_tv_place_work_value"
         style="@style/RegularTextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_16"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@+id/fs_iv_toPlaceWorkButton"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintTop_toBottomOf="@id/fs_tv_place_work_top_title"
-        tools:text="Россия, Москва"
-        android:maxLines="1"
-        android:ellipsize="end"
-        />
+        tools:text="@tools:sample/lorem/random" />
 
     <ImageView
         android:id="@+id/fs_iv_toPlaceWorkButton"
@@ -120,13 +121,15 @@
     <TextView
         android:id="@+id/fs_tv_industry_value"
         style="@style/RegularTextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_16"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@+id/fs_iv_toIndustryButton"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
         app:layout_constraintTop_toBottomOf="@id/fs_tv_industry_top_title"
-        tools:text="IT"
-        android:maxLines="1"
-        android:ellipsize="end"/>
+        tools:text="@tools:sample/lorem/random" />
 
     <ImageView
         android:id="@+id/fs_iv_toIndustryButton"
