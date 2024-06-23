@@ -28,7 +28,7 @@ class SearchVacanciesViewModel(
     private var isNextPageLoading: Boolean = false
     private var isFullLoaded: Boolean = false
     private var count: String? = null
-    private var lastFilterSettings : Settings? = null
+    private var lastFilterSettings: Settings? = null
     private var lastSearchRequest = DEFAULT_STRING_VALUE
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default())
