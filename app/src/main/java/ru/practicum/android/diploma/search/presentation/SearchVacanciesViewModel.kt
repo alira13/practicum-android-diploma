@@ -153,8 +153,8 @@ class SearchVacanciesViewModel(
     private fun onFragmentResume() {
         val filterUpdated = updateFilterSettings()
         if (filterUpdated && lastSearchRequest.isNotEmpty()) {
-                search(false)
-            }
+            search(false)
+        }
     }
 
     private fun updateFilterSettings(): Boolean {
@@ -164,9 +164,9 @@ class SearchVacanciesViewModel(
         return condition
     }
 
-   private fun readSettings(): Settings {
+    private fun readSettings(): Settings {
         val filterSettings = settingsInteractor.read()
-       _filterOnState.value = filterSettings.filterOn
+        _filterOnState.value = filterSettings.filterOn
         return filterSettings
     }
 
