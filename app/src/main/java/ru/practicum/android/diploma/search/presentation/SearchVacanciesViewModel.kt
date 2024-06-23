@@ -34,6 +34,7 @@ class SearchVacanciesViewModel(
 
     private val _filterOnState = MutableStateFlow<Boolean>(false)
     val filterOnState = _filterOnState.asStateFlow()
+    val settings = readSettings()
 
     private var lastSearchRequest: String? = null
 
@@ -93,7 +94,13 @@ class SearchVacanciesViewModel(
             if (pageToRequest == 0) {
                 _uiState.value = SearchUiState.Loading()
             }
-            val result = searchInteractor.searchVacancies(VacanciesSearchRequest(pageToRequest, searchRequest))
+            val result = searchInteractor.searchVacancies(
+                VacanciesSearchRequest(
+                    pageToRequest,
+                    searchRequest,
+                    settings
+                )
+            )
             isNextPageLoading = true
             _uiState.value = convertResult(result)
         }
@@ -144,9 +151,10 @@ class SearchVacanciesViewModel(
         }
     }
 
-    fun readSettings() {
+    fun readSettings(): Settings {
         val filterSettings = settingsInteractor.read()
         isSettingsEmpty(filterSettings)
+        return filterSettings
     }
 
     private fun isSettingsEmpty(filterSettings: Settings) {
