@@ -17,6 +17,8 @@ import ru.practicum.android.diploma.filter.ui.models.FilterLocationUiState
 class FilterLocationViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
+    private var tempCountry: Country? = null
+    private var tempArea: Area? = null
     private val _uiState = MutableStateFlow(
         FilterLocationUiState(
             item1 = FilterItem.Absent,
@@ -26,10 +28,14 @@ class FilterLocationViewModel(
     )
     val uiState = _uiState.asStateFlow()
 
+    init {
+        setTempValues()
+    }
+
     fun onUiEvent(event: FilterLocationUiEvent) {
         when (event) {
             FilterLocationUiEvent.ClearCountry -> {
-                clearFilterItem(
+                rewriteFilterItem(
                     WriteRequest.WriteCountry(
                         Country(
                             id = DEFAULT_STRING_VALUE,
@@ -39,7 +45,7 @@ class FilterLocationViewModel(
                 )
             }
 
-            FilterLocationUiEvent.ClearRegion -> clearFilterItem(
+            FilterLocationUiEvent.ClearRegion -> rewriteFilterItem(
                 WriteRequest.WriteArea(
                     Area(
                         id = DEFAULT_STRING_VALUE,
@@ -50,10 +56,16 @@ class FilterLocationViewModel(
             )
 
             FilterLocationUiEvent.UpdateData -> updateFilters()
+            FilterLocationUiEvent.ExitWithoutSavingChanges -> restorePreviousValues()
         }
     }
 
-    private fun clearFilterItem(item: WriteRequest) {
+    private fun restorePreviousValues() {
+        tempCountry?.let { rewriteFilterItem(WriteRequest.WriteCountry(it)) }
+        tempArea?.let { rewriteFilterItem(WriteRequest.WriteArea(it)) }
+    }
+
+    private fun rewriteFilterItem(item: WriteRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             settingsInteractor.write(item)
             updateFilters()
@@ -78,6 +90,12 @@ class FilterLocationViewModel(
             val buttonVisibility = !(countryName.isEmpty() && regionName.isEmpty())
             _uiState.value = FilterLocationUiState(item1, item2, buttonVisibility)
         }
+    }
+
+    private fun setTempValues() {
+        val settings = settingsInteractor.read()
+        tempCountry = settings.country
+        tempArea = settings.area
     }
 
     companion object {
