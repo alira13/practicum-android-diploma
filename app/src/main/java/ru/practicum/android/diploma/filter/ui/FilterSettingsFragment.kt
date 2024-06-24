@@ -3,9 +3,11 @@ package ru.practicum.android.diploma.filter.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -14,6 +16,7 @@ import com.google.android.material.color.MaterialColors
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterSettingsBinding
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.domain.models.Settings
 import ru.practicum.android.diploma.filter.presentation.FilterSettingsViewModel
 import ru.practicum.android.diploma.util.BindingFragment
@@ -41,6 +44,25 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         inputSalary()
         setOnClickListener()
         salaryFocusChangeListener()
+
+        findNavController().addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.action_filterIndustryFragment_to_filterSettingsFragment) {
+                val industry by lazy { requireArguments().getString(INDUSTRY) }
+                binding.fsTvIndustryValue.text = industry
+            }
+        }
+
+        val fragmentName = findNavController().previousBackStackEntry?.destination?.id
+
+        Log.i("alex", "$fragmentName")
+
+        if (findNavController().previousBackStackEntry?.destination?.id == R.id.filterIndustryFragment) {
+            val industry by lazy { requireArguments().getString(INDUSTRY) }
+            viewModel.readIndustrySettings(industry!!)
+            Log.i("alex", industry!!)
+        }
+
+//        binding.fsTvIndustryValue.addTextChangedListener { binding.buttonGroup.isVisible = true }
     }
 
     private fun setOnClickListener() {
@@ -50,9 +72,11 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             }
             fsIvToIndustryButton.setOnClickListener {
                 findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
+//                fsIvToIndustryButton.isVisible = true
+//                fsIvClearIndustryButton.isInvisible = true
             }
             backArrowButton.setOnClickListener {
-                findNavController().popBackStack()
+                findNavController().navigate(R.id.searchFragment)
             }
             fsIvClearTextButton.setOnClickListener {
                 fsEtSalary.text.clear()
@@ -61,21 +85,22 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             fsCbWithSalaryCheckbox.setOnClickListener {
                 buttonGroup.isVisible = true
                 onlyWithSalary = fsCbWithSalaryCheckbox.isChecked
-                viewModel.savaOnlyWithSalary(onlyWithSalary)
+                viewModel.saveOnlyWithSalary(onlyWithSalary)
             }
             fsIvClearPlaceWorkButton.setOnClickListener {
                 viewModel.clearPlaceWork()
                 buttonGroup.isVisible = true
             }
             fsIvClearIndustryButton.setOnClickListener {
-                viewModel.clearIndustry()
+//                viewModel.clearIndustry()
                 buttonGroup.isVisible = true
+                viewModel.clearIndustry()
             }
             fsTvApplyButton.setOnClickListener {
                 viewModel.saveSalarySettings(newEditData)
 //                viewModel.savaOnlyWithSalary(onlyWithSalary)
                 viewModel.saveFilterSettings()
-                findNavController().popBackStack()
+                findNavController().navigate(R.id.searchFragment)
             }
             fsTvResetButton.setOnClickListener {
                 viewModel.resetSettings()
@@ -212,12 +237,12 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         }
     }
 
-    private fun renderIndustry(settingsState: Settings) {
+    private fun renderIndustry(industryState: Industry) {
         with(binding) {
-            if (settingsState.industry.id.isNotEmpty()) {
+            if (industryState.id.isNotEmpty()) {
                 industryValueGroup.isVisible = true
                 industryTitleGroup.isInvisible = true
-                fsTvIndustryValue.text = settingsState.industry.name
+                fsTvIndustryValue.text = industryState.name
             } else {
                 industryValueGroup.isInvisible = true
                 industryTitleGroup.isVisible = true
@@ -238,6 +263,13 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             }
             fsTvPlaceWorkValue.addTextChangedListener { buttonGroup.isVisible = true }
         }
+    }
+
+    companion object {
+        private const val INDUSTRY = "industry"
+
+        fun createArgs(industry: String): Bundle =
+            bundleOf(INDUSTRY to industry)
     }
 
 }

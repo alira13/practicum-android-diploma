@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filter.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.serialization.json.Json
 import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
@@ -14,25 +15,39 @@ class FilterSettingsViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
+    private var industryString: String = ""
+
     private val _salaryState: MutableLiveData<Settings> = MutableLiveData()
     fun getSalaryState(): LiveData<Settings> = _salaryState
 
     private val _placeWorkState: MutableLiveData<String> = MutableLiveData()
     fun getPlaceWorkState(): LiveData<String> = _placeWorkState
 
-    private val _industryState: MutableLiveData<Settings> = MutableLiveData()
-    fun getIndustryState(): LiveData<Settings> = _industryState
+    private val _industryState: MutableLiveData<Industry> = MutableLiveData()
+    fun getIndustryState(): LiveData<Industry> = _industryState
+
+    private fun convertIndustryString (industryString: String) : Industry {
+        return Json.decodeFromString(industryString)
+    }
+
+    fun readIndustrySettings(industry: String) {
+        industryString = industry
+        convertIndustryString(industry)
+        _industryState.postValue(convertIndustryString(industry))
+    }
 
     fun saveSalarySettings(salary: Long) {
         settingsInteractor.write(WriteRequest.WriteSalary(salary))
     }
 
-    fun savaOnlyWithSalary(onlyWithSalary: Boolean) {
+    fun saveOnlyWithSalary(onlyWithSalary: Boolean) {
         settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary))
     }
 
     fun saveFilterSettings() {
         val filterSettings = settingsInteractor.read()
+        val industry = convertIndustryString(industryString)
+        if (filterSettings.industry.id != industry.id) settingsInteractor.write(WriteRequest.WriteIndustry(industry))
         val filterOn = isSettingsEmpty(filterSettings)
         settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn))
     }
@@ -40,7 +55,7 @@ class FilterSettingsViewModel(
     fun readSettings() {
         _salaryState.postValue(settingsInteractor.read())
         _placeWorkState.postValue(formatterPlaceWork(settingsInteractor.read()))
-        _industryState.postValue(settingsInteractor.read())
+        _industryState.postValue(settingsInteractor.read().industry)
     }
 
     fun resetSettings() {
@@ -57,8 +72,9 @@ class FilterSettingsViewModel(
 
     fun clearIndustry() {
         with(settingsInteractor) {
-            write(WriteRequest.WriteIndustry(Industry("", "")))
-            _industryState.postValue(settingsInteractor.read())
+//            write(WriteRequest.WriteIndustry(Industry("", "")))
+
+            _industryState.postValue(Industry("",""))
         }
     }
 

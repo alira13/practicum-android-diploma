@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("ru.practicum.android.diploma.plugins.developproperties")
     id("kotlin-kapt")
+    id ("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -90,4 +91,8 @@ dependencies {
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
     // endregion
+
+    //serialization
+    implementation (libs.kotlinx.serialization.json)
+
 }

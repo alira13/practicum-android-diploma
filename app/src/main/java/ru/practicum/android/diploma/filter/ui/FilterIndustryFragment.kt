@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.android.ext.android.inject
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
@@ -34,6 +36,14 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
         adapter.update()
         viewModel.industry = industry
         binding.button.isVisible = true
+
+        binding.button.setOnClickListener {
+            val industryString = Json.encodeToString(industry)
+            findNavController().navigate(
+                R.id.action_filterIndustryFragment_to_filterSettingsFragment,
+                FilterSettingsFragment.createArgs(industryString)
+            )
+        }
     }
 
     private var adapter: IndustryAdapter = IndustryAdapter(clickListener)
@@ -78,7 +88,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
                 fieldEt.text.clear()
             }
             button.setOnClickListener {
-                viewModel.writeIndustry()
+//                viewModel.writeIndustry()
             }
             toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
@@ -145,6 +155,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
                     industryErrorImage.setImageResource(R.drawable.placeholder_server_error)
                     industryErrorText.setText(R.string.server_error_text)
                 }
+
                 else -> {}
             }
         }
@@ -166,4 +177,5 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
             industryErrorPlaceHolderLayout.isVisible = false
         }
     }
+
 }

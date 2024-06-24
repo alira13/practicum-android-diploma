@@ -60,7 +60,11 @@
     <fragment
         android:id="@+id/filterIndustryFragment"
         android:name="ru.practicum.android.diploma.filter.ui.FilterIndustryFragment"
-        android:label="FilterIndustryFragment" />
+        android:label="FilterIndustryFragment" >
+        <action
+            android:id="@+id/action_filterIndustryFragment_to_filterSettingsFragment"
+            app:destination="@id/filterSettingsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/filterCountryFragment"
         android:name="ru.practicum.android.diploma.filter.ui.FilterCountryFragment"
