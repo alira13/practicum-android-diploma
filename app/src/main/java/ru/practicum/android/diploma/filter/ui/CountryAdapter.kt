@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.filter.domain.models.Region
 class CountryAdapter : RecyclerView.Adapter<CountryViewHolder>() {
 
     var onCountryClickListener: ((Region) -> Unit)? = null
-    var onOtherRegionClickListener: ((Region) -> Unit)? = null
+
     var countries = mutableListOf<Region>()
         set(value) {
             var otherRegionIndex: Int? = null
@@ -40,14 +40,8 @@ class CountryAdapter : RecyclerView.Adapter<CountryViewHolder>() {
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         val item = countries[position]
         holder.bind(item)
-        if (item.name == OTHER_REGION) {
-            holder.itemView.setOnClickListener {
-                onOtherRegionClickListener?.invoke(item)
-            }
-        } else {
-            holder.itemView.setOnClickListener {
-                onCountryClickListener?.invoke(item)
-            }
+        holder.itemView.setOnClickListener {
+            onCountryClickListener?.invoke(item)
         }
     }
 
