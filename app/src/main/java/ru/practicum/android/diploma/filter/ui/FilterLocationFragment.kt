@@ -118,6 +118,7 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
 
     private fun setNavigation() {
         binding.flIvBack.setOnClickListener {
+            viewModel.onUiEvent(FilterLocationUiEvent.ExitWithoutSavingChanges)
             findNavController().popBackStack()
         }
         binding.flApproveButton.setOnClickListener {

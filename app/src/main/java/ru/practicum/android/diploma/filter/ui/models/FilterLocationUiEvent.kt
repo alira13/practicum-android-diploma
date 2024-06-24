@@ -4,4 +4,5 @@ sealed interface FilterLocationUiEvent {
     data object UpdateData : FilterLocationUiEvent
     data object ClearCountry : FilterLocationUiEvent
     data object ClearRegion : FilterLocationUiEvent
+    data object ExitWithoutSavingChanges : FilterLocationUiEvent
 }
