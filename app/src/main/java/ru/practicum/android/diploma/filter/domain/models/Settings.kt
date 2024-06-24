@@ -7,4 +7,17 @@ data class Settings(
     val salary: Long,
     val onlyWithSalary: Boolean,
     val filterOn: Boolean
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Settings) return false
+        return (
+            industry.id == other.industry.id
+                && country.id == other.country.id
+                && area.id == other.area.id
+                && salary == other.salary
+                && onlyWithSalary == other.onlyWithSalary
+                && filterOn == other.filterOn
+            )
+    }
+}
