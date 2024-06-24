@@ -5,4 +5,5 @@ interface SearchUiEvent {
     data class QueryInput(val expression: String) : SearchUiEvent
     data object LastItemReached : SearchUiEvent
     data object ResumeData : SearchUiEvent
+    data object OnFragmentResume : SearchUiEvent
 }

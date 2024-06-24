@@ -49,13 +49,17 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setOnClickListeners()
         initializeVacanciesList()
         setRequestInputBehaviour()
-        checkFilterState()
     }
 
     override fun onStart() {
         super.onStart()
         subscribeOnViewModel()
         subscribeOnFilterState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onUiEvent(SearchUiEvent.OnFragmentResume)
     }
 
     override fun onStop() {
@@ -221,10 +225,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 }
             }
         })
-    }
-
-    private fun checkFilterState() {
-        viewModel.readSettings()
     }
 
     private fun renderFilter(isFilterOn: Boolean) {
