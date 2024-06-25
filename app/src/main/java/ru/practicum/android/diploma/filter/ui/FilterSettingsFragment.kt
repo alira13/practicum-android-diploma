@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -74,13 +76,22 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 buttonGroup.isVisible = true
             }
             fsTvApplyButton.setOnClickListener {
-                viewModel.saveSalarySettings(newEditData)
                 viewModel.saveFilterSettings()
                 findNavController().popBackStack()
             }
             fsTvResetButton.setOnClickListener {
                 viewModel.resetSettings()
+                viewModel.readSavedSettings()
             }
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        viewModel.returnSavedSettings()
+                        findNavController().popBackStack()
+                    }
+                }
+            )
         }
     }
 
@@ -108,6 +119,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
     }
 
     private fun salaryChangedListener(newEditData: Long) {
+        viewModel.saveSalary(newEditData)
         with(binding) {
             fsIvClearTextButton.isVisible = newEditData != 0L
             buttonGroup.isVisible = newEditData != oldEditData
@@ -135,7 +147,11 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
     private fun subscribeOnSettingsState() {
         viewModel.getSalaryState().observe(viewLifecycleOwner) { settingsState ->
             renderSalary(settingsState)
-            binding.fsTvResetButton.isVisible = settingsState.filterOn
+            if (settingsState.filterOn) {
+                binding.fsTvResetButton.isVisible = true
+            } else {
+                binding.buttonGroup.isVisible = false
+            }
         }
         viewModel.getOnlyWithSalaryState().observe(viewLifecycleOwner) { onlyWithSalary ->
             renderOnlyWithSalary(onlyWithSalary)
@@ -196,11 +212,14 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
     }
 
     private fun renderSalary(settingsState: Settings) {
-        if (settingsState.salary != 0L) {
-            with(binding) {
+        with(binding) {
+            if (settingsState.salary != 0L) {
                 oldEditData = settingsState.salary
                 fsEtSalary.setText(settingsState.salary.toString())
                 editTextFocus = false
+
+            } else {
+                fsEtSalary.text = null
             }
         }
     }

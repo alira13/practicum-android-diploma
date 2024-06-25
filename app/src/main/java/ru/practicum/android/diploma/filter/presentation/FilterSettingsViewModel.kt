@@ -17,10 +17,12 @@ class FilterSettingsViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
-    private var savedOnlyWithSalary = false
-    private var savedIndustry = EMPTY_INDUSTRY
     private var savedCountry = EMPTY_COUNTRY
     private var savedArea = EMPTY_AREA
+    private var savedIndustry = EMPTY_INDUSTRY
+    private var savedSalary = 0L
+    private var savedOnlyWithSalary = false
+
 
     private val _placeWorkState: MutableLiveData<String> = MutableLiveData()
     fun getPlaceWorkState(): LiveData<String> = _placeWorkState
@@ -38,7 +40,7 @@ class FilterSettingsViewModel(
         readSavedSettings()
     }
 
-    fun saveSalarySettings(salary: Long) {
+    fun saveSalary(salary: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             settingsInteractor.write(WriteRequest.WriteSalary(salary))
         }
@@ -64,31 +66,33 @@ class FilterSettingsViewModel(
                 write(WriteRequest.WriteCountry(savedCountry))
                 write(WriteRequest.WriteArea(savedArea))
                 write(WriteRequest.WriteIndustry(savedIndustry))
+                write(WriteRequest.WriteSalary(savedSalary))
                 write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
             }
         }
     }
 
-    private fun readSavedSettings() {
+    fun readSavedSettings() {
         viewModelScope.launch(Dispatchers.IO) {
             with(settingsInteractor) {
                 savedCountry = read().country
                 savedArea = read().area
                 savedIndustry = read().industry
+                savedSalary = read().salary
                 savedOnlyWithSalary = read().onlyWithSalary
                 _salaryState.postValue(read())
                 _placeWorkState.postValue(formatterPlaceWork(read()))
                 _industryState.postValue(savedIndustry)
+                _onlyWithSalaryState.postValue(savedOnlyWithSalary)
             }
         }
     }
 
     fun readNewSettings() {
-        viewModelScope.launch(Dispatchers.IO) {
             _placeWorkState.postValue(formatterPlaceWork(settingsInteractor.read()))
             _industryState.postValue(settingsInteractor.read().industry)
             _onlyWithSalaryState.postValue(settingsInteractor.read().onlyWithSalary)
-        }
+            _salaryState.postValue(settingsInteractor.read())
     }
 
     fun resetSettings() {
