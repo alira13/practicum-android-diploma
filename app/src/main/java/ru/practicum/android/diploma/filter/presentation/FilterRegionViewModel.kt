@@ -32,6 +32,7 @@ class FilterRegionViewModel(
     private var settings: Settings? = null
 
     private var lastSearchRequest: String? = null
+    private var isFirstRequest = true
 
     private val _uiState = MutableStateFlow<AreaUiState>(AreaUiState.Default(content = currentAreas))
     val uiState = _uiState.asStateFlow()
@@ -51,11 +52,14 @@ class FilterRegionViewModel(
 
             is FilterResult.Regions -> {
                 applySettings(result.regions)
-                if (currentAreas.isEmpty()) {
-                    AreaUiState.EmptyResult()
-                } else {
-                    applySettings(result.regions)
-                    AreaUiState.SearchResult(true, currentAreas)
+                when {
+                    currentAreas.isNotEmpty() && isFirstRequest -> {
+                        isFirstRequest = false
+                        AreaUiState.Default(true, content = currentAreas)
+                    }
+
+                    currentAreas.isEmpty() -> AreaUiState.EmptyResult()
+                    else -> AreaUiState.SearchResult(true, currentAreas)
                 }
             }
 
