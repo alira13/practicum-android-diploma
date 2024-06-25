@@ -89,10 +89,10 @@ class FilterSettingsViewModel(
     }
 
     fun readNewSettings() {
-            _placeWorkState.postValue(formatterPlaceWork(settingsInteractor.read()))
-            _industryState.postValue(settingsInteractor.read().industry)
-            _onlyWithSalaryState.postValue(settingsInteractor.read().onlyWithSalary)
-            _salaryState.postValue(settingsInteractor.read())
+        _placeWorkState.postValue(formatterPlaceWork(settingsInteractor.read()))
+        _industryState.postValue(settingsInteractor.read().industry)
+        _onlyWithSalaryState.postValue(settingsInteractor.read().onlyWithSalary)
+        _salaryState.postValue(settingsInteractor.read())
     }
 
     fun resetSettings() {
