@@ -80,7 +80,6 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             }
             fsTvResetButton.setOnClickListener {
                 viewModel.resetSettings()
-                findNavController().popBackStack()
             }
         }
     }
