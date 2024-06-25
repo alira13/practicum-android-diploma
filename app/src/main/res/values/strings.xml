@@ -73,4 +73,5 @@
     <string name="choose">Выбрать</string>
     <string name="industry_confirm_button_text">Выбрать</string>
     <string name="industry_text_view_hint">Введите отрасль</string>
+    <string name="search_region_description">Иконка поиска региона</string>
 </resources>
