@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
 import ru.practicum.android.diploma.filter.domain.models.FilterResult
 import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.domain.models.WriteRequest
-import ru.practicum.android.diploma.filter.ui.model.FilterUIState
+import ru.practicum.android.diploma.filter.ui.models.FilterUIState
 
 class FilterIndustryViewModel(
     private val settingsInteractor: SettingsInteractor,

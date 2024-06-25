@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.ui.region
+package ru.practicum.android.diploma.filter.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,9 +17,9 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterRegionBinding
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.FilterRegionViewModel
-import ru.practicum.android.diploma.filter.ui.region.adapter.RegionAdapter
-import ru.practicum.android.diploma.filter.ui.region.models.AreaUiState
-import ru.practicum.android.diploma.filter.ui.region.models.RegionUiEvent
+import ru.practicum.android.diploma.filter.ui.adapters.RegionAdapter
+import ru.practicum.android.diploma.filter.ui.models.AreaUiState
+import ru.practicum.android.diploma.filter.ui.models.RegionUiEvent
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.util.BindingFragment
 

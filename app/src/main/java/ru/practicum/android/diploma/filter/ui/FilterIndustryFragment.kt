@@ -16,7 +16,7 @@ import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
 import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.FilterIndustryViewModel
 import ru.practicum.android.diploma.filter.ui.adapters.IndustryAdapter
-import ru.practicum.android.diploma.filter.ui.model.FilterUIState
+import ru.practicum.android.diploma.filter.ui.models.FilterUIState
 import ru.practicum.android.diploma.search.domain.models.Errors
 import ru.practicum.android.diploma.util.BindingFragment
 
