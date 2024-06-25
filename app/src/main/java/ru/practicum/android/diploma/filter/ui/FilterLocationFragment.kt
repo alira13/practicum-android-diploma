@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -84,8 +85,10 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
         }
         if (condition) {
             itemName.text = null
+            element.defaultHintTextColor = ContextCompat.getColorStateList(requireContext(), R.color.grey)
         } else {
             itemName.setText(item.itemName)
+            element.defaultHintTextColor = ContextCompat.getColorStateList(requireContext(), R.color.hint)
         }
         element.setHintTextAppearance(item.hintTextAppearance)
     }
