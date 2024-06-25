@@ -40,9 +40,9 @@ class FilterSettingsViewModel(
 
     fun saveSalarySettings(salary: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-        settingsInteractor.write(WriteRequest.WriteSalary(salary))
-    }
+            settingsInteractor.write(WriteRequest.WriteSalary(salary))
         }
+    }
 
     fun saveOnlyWithSalary(onlyWithSalary: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
