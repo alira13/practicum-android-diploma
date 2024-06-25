@@ -66,6 +66,18 @@
         android:contentDescription="@string/clear_region_btn_description"
         android:scaleType="center"
         android:src="@drawable/ic_close"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/field_cl"
+        app:layout_constraintEnd_toEndOf="@+id/field_cl"
+        app:layout_constraintTop_toTopOf="@+id/field_cl" />
+
+    <ImageView
+        android:id="@+id/search_icon_iv"
+        android:layout_width="@dimen/item_size_48"
+        android:layout_height="@dimen/item_size_48"
+        android:contentDescription="@string/search_region_description"
+        android:scaleType="center"
+        android:src="@drawable/ic_search"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/field_cl"
         app:layout_constraintEnd_toEndOf="@+id/field_cl"

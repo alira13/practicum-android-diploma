@@ -224,7 +224,6 @@
         android:layout_marginBottom="@dimen/spacing_8"
         android:background="@drawable/background_blue_button"
         android:text="@string/apply"
-        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/fs_tv_resetButton"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder" />
@@ -237,7 +236,6 @@
         android:layout_marginBottom="@dimen/item_size_24"
         android:background="@drawable/background_transparent_button"
         android:text="@string/reset"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder" />

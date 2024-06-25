@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,10 +44,16 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (s.isNullOrEmpty()) {
-                showContent(viewModel.industries)
-            } else {
-                viewModel.filterIndustries(s.toString())
+            binding.apply {
+                if (s.isNullOrEmpty()) {
+                    showContent(viewModel.industries)
+                    clearIconIv.isInvisible = true
+                    searchIconIv.isVisible = true
+                } else {
+                    viewModel.filterIndustries(s.toString())
+                    clearIconIv.isVisible = true
+                    searchIconIv.isInvisible = true
+                }
             }
         }
 
@@ -76,6 +83,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
             fieldEt.addTextChangedListener(textWatcher)
             clearIconIv.setOnClickListener {
                 fieldEt.text.clear()
+                clearIconIv.isInvisible = true
             }
             button.setOnClickListener {
                 viewModel.writeIndustry()
@@ -145,6 +153,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
                     industryErrorImage.setImageResource(R.drawable.placeholder_server_error)
                     industryErrorText.setText(R.string.server_error_text)
                 }
+
                 else -> {}
             }
         }
