@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.filter.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import ru.practicum.android.diploma.databinding.FragmentFilterCountryBinding
 import ru.practicum.android.diploma.filter.domain.models.FilterCountryState
 import ru.practicum.android.diploma.filter.domain.models.Region
 import ru.practicum.android.diploma.filter.presentation.FilterCountryViewModel
+import ru.practicum.android.diploma.filter.ui.adapters.CountryAdapter
 import ru.practicum.android.diploma.util.BindingFragment
 
 class FilterCountryFragment : BindingFragment<FragmentFilterCountryBinding>() {

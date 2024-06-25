@@ -16,8 +16,8 @@ import ru.practicum.android.diploma.filter.domain.models.FilterResult
 import ru.practicum.android.diploma.filter.domain.models.Region
 import ru.practicum.android.diploma.filter.domain.models.Settings
 import ru.practicum.android.diploma.filter.domain.models.WriteRequest
-import ru.practicum.android.diploma.filter.ui.region.models.AreaUiState
-import ru.practicum.android.diploma.filter.ui.region.models.RegionUiEvent
+import ru.practicum.android.diploma.filter.ui.models.AreaUiState
+import ru.practicum.android.diploma.filter.ui.models.RegionUiEvent
 
 class FilterRegionViewModel(
     private val interactor: FilterInteractor,

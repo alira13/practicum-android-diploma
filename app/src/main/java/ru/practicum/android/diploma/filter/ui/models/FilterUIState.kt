@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.ui.model
+package ru.practicum.android.diploma.filter.ui.models
 
 import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.search.domain.models.Errors

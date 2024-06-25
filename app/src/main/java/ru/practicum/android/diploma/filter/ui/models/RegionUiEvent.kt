@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.ui.region.models
+package ru.practicum.android.diploma.filter.ui.models
 
 interface RegionUiEvent {
     data object ClearText : RegionUiEvent
