@@ -41,6 +41,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         inputSalary()
         setOnClickListener()
         salaryFocusChangeListener()
+        setNavigationClickListeners()
     }
 
     private fun setOnClickListener() {
@@ -50,10 +51,6 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             }
             fsIvToIndustryButton.setOnClickListener {
                 findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
-            }
-            backArrowButton.setOnClickListener {
-                viewModel.returnSavedSettings()
-                findNavController().popBackStack()
             }
             fsIvClearTextButton.setOnClickListener {
                 fsEtSalary.text.clear()
@@ -81,15 +78,22 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 readNewSettings()
                 viewModel.buttonGroupOn()
             }
-            requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        viewModel.returnSavedSettings()
-                        findNavController().popBackStack()
-                    }
+        }
+    }
+
+    private fun setNavigationClickListeners() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.returnSavedSettings()
+                    findNavController().popBackStack()
                 }
-            )
+            }
+        )
+        binding.backArrowButton.setOnClickListener {
+            viewModel.returnSavedSettings()
+            findNavController().popBackStack()
         }
     }
 
