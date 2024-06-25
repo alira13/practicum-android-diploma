@@ -1,8 +1,14 @@
 package ru.practicum.android.diploma.search.data.network
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
+import ru.practicum.android.diploma.search.data.ERROR_404
+import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
+import ru.practicum.android.diploma.search.data.SERVER_ERROR
+import ru.practicum.android.diploma.search.data.SUCCESS
 import ru.practicum.android.diploma.search.data.api.HHApiService
 import ru.practicum.android.diploma.search.data.api.NetworkClient
 import ru.practicum.android.diploma.search.data.dto.VacancySearchRequest
@@ -41,8 +47,12 @@ class RetrofitNetworkClient(
                 }
 
             } catch (e: HttpException) {
-                println("exception handled $e")
-                Response().apply { resultCode = SERVER_ERROR }
+                Log.e("RetrofitNetworkClient", "exception handled $e")
+                Log.e("RetrofitNetworkClient", "Code - ${e.code()}")
+                when (e.code()) {
+                    ERROR_404 -> Response().apply { resultCode = ERROR_404 }
+                    else -> Response().apply { resultCode = SERVER_ERROR }
+                }
             }
         }
     }

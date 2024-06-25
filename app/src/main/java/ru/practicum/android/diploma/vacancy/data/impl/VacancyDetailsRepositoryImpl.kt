@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.vacancy.data.impl
 
 import ru.practicum.android.diploma.search.data.CONNECTION_ERROR
+import ru.practicum.android.diploma.search.data.ERROR_404
 import ru.practicum.android.diploma.search.data.INCORRECT_REQUEST
 import ru.practicum.android.diploma.search.data.SUCCESS
 import ru.practicum.android.diploma.search.data.api.NetworkClient
@@ -41,6 +42,10 @@ class VacancyDetailsRepositoryImpl(
 
             INCORRECT_REQUEST -> {
                 Resource.Error(Errors.IncorrectRequest)
+            }
+
+            ERROR_404 -> {
+                Resource.Error(Errors.Error404)
             }
 
             else -> {

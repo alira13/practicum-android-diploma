@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="VacancyToolBarStyle">
+        <item name="android:navigationIcon">@drawable/ic_arrow_back_white</item>
+        <item name="android:contentInsetStartWithNavigation">@dimen/spacing_4</item>
+    </style>
+</resources>

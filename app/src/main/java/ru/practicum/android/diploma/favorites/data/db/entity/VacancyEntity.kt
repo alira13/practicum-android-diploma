@@ -5,17 +5,22 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "vacancy_table")
 data class VacancyEntity(
-    @PrimaryKey
-    val id: Long,
-    val billingName: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    val vacancyId: String,
+    val name: String,
+    val employerName: String?,
+    val employerLogo: String?,
+    val alternateUrl: String,
     val areaName: String,
-    val relationsName: String,
-    val salary: String,
-    val experience: String,
-    val schedule: String,
-    val employment: String,
-    val contacts: String,
+    val experience: String?,
+    val salary: String?,
+    val employment: String?,
     val description: String,
-    val keySkills: String,
-    val logoUrls: String
+    val keySkills: String?,
+    val contactName: String?,
+    val contactPhone: String?,
+    val contactEmail: String?,
+    val comment: String?,
+    val isFavorite: Boolean,
 )
