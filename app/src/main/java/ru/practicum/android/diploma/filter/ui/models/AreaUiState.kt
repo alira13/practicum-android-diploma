@@ -43,7 +43,8 @@ sealed class AreaUiState(
         override val placeholderImageIsVisible: Boolean = true,
         override val placeholderImageIcon: Int? = R.drawable.placeholder_empty_location_list,
         override val placeholderMessageIsVisible: Boolean = true,
+        override val clearEnabled: Boolean = false,
+        override val clearIcon: Int = R.drawable.ic_search,
         val error: Errors
     ) : AreaUiState()
-
 }
