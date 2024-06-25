@@ -54,12 +54,14 @@ class FilterRegionViewModel(
                 applySettings(result.regions)
                 if (currentAreas.isEmpty()) {
                     AreaUiState.EmptyResult()
-                } else {
+                }
+                else {
                     applySettings(result.regions)
                     if (isFirstRequest) {
                         isFirstRequest = false
                         AreaUiState.Default(true, content = currentAreas)
-                    } else AreaUiState.SearchResult(true, currentAreas)
+                    }
+                    else AreaUiState.SearchResult(true, currentAreas)
                 }
             }
 
