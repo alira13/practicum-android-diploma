@@ -39,25 +39,33 @@ class FilterSettingsViewModel(
     }
 
     fun saveSalarySettings(salary: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
         settingsInteractor.write(WriteRequest.WriteSalary(salary))
     }
+        }
 
     fun saveOnlyWithSalary(onlyWithSalary: Boolean) {
-        settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary))
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary))
+        }
     }
 
     fun saveFilterSettings() {
-        val filterSettings = settingsInteractor.read()
-        val filterOn = isSettingsEmpty(filterSettings)
-        settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn))
+        viewModelScope.launch(Dispatchers.IO) {
+            val filterSettings = settingsInteractor.read()
+            val filterOn = isSettingsEmpty(filterSettings)
+            settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn))
+        }
     }
 
     fun returnSavedSettings() {
-        with(settingsInteractor) {
-            write(WriteRequest.WriteCountry(savedCountry))
-            write(WriteRequest.WriteArea(savedArea))
-            write(WriteRequest.WriteIndustry(savedIndustry))
-            write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
+        viewModelScope.launch(Dispatchers.IO) {
+            with(settingsInteractor) {
+                write(WriteRequest.WriteCountry(savedCountry))
+                write(WriteRequest.WriteArea(savedArea))
+                write(WriteRequest.WriteIndustry(savedIndustry))
+                write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
+            }
         }
     }
 
@@ -76,27 +84,35 @@ class FilterSettingsViewModel(
     }
 
     fun readNewSettings() {
-        _placeWorkState.postValue(formatterPlaceWork(settingsInteractor.read()))
-        _industryState.postValue(settingsInteractor.read().industry)
-        _onlyWithSalaryState.postValue(settingsInteractor.read().onlyWithSalary)
+        viewModelScope.launch(Dispatchers.IO) {
+            _placeWorkState.postValue(formatterPlaceWork(settingsInteractor.read()))
+            _industryState.postValue(settingsInteractor.read().industry)
+            _onlyWithSalaryState.postValue(settingsInteractor.read().onlyWithSalary)
+        }
     }
 
     fun resetSettings() {
-        settingsInteractor.clear()
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsInteractor.clear()
+        }
     }
 
     fun clearPlaceWork() {
-        with(settingsInteractor) {
-            write(WriteRequest.WriteCountry(EMPTY_COUNTRY))
-            write(WriteRequest.WriteArea(EMPTY_AREA))
-            _placeWorkState.postValue(formatterPlaceWork(read()))
+        viewModelScope.launch(Dispatchers.IO) {
+            with(settingsInteractor) {
+                write(WriteRequest.WriteCountry(EMPTY_COUNTRY))
+                write(WriteRequest.WriteArea(EMPTY_AREA))
+                _placeWorkState.postValue(formatterPlaceWork(read()))
+            }
         }
     }
 
     fun clearIndustry() {
-        with(settingsInteractor) {
-            write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY))
-            _industryState.postValue(EMPTY_INDUSTRY)
+        viewModelScope.launch(Dispatchers.IO) {
+            with(settingsInteractor) {
+                write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY))
+                _industryState.postValue(EMPTY_INDUSTRY)
+            }
         }
     }
 
