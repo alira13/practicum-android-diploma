@@ -6,15 +6,15 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.color.MaterialColors
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterSettingsBinding
-import ru.practicum.android.diploma.filter.domain.models.Settings
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.FilterSettingsViewModel
 import ru.practicum.android.diploma.util.BindingFragment
 
@@ -36,7 +36,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        readSettings()
+        readNewSettings()
         subscribeOnSettingsState()
         inputSalary()
         setOnClickListener()
@@ -52,6 +52,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
             }
             backArrowButton.setOnClickListener {
+                viewModel.returnSavedSettings()
                 findNavController().popBackStack()
             }
             fsIvClearTextButton.setOnClickListener {
@@ -61,7 +62,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             fsCbWithSalaryCheckbox.setOnClickListener {
                 buttonGroup.isVisible = true
                 onlyWithSalary = fsCbWithSalaryCheckbox.isChecked
-                viewModel.savaOnlyWithSalary(onlyWithSalary)
+                viewModel.saveOnlyWithSalary(onlyWithSalary)
             }
             fsIvClearPlaceWorkButton.setOnClickListener {
                 viewModel.clearPlaceWork()
@@ -72,15 +73,23 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 buttonGroup.isVisible = true
             }
             fsTvApplyButton.setOnClickListener {
-                viewModel.saveSalarySettings(newEditData)
-//                viewModel.savaOnlyWithSalary(onlyWithSalary)
-                viewModel.saveFilterSettings()
+                viewModel.saveFilterOnState()
                 findNavController().popBackStack()
             }
             fsTvResetButton.setOnClickListener {
                 viewModel.resetSettings()
-                findNavController().popBackStack()
+                readNewSettings()
+                viewModel.buttonGroupOn()
             }
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        viewModel.returnSavedSettings()
+                        findNavController().popBackStack()
+                    }
+                }
+            )
         }
     }
 
@@ -108,6 +117,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
     }
 
     private fun salaryChangedListener(newEditData: Long) {
+        viewModel.saveSalary(newEditData)
         with(binding) {
             fsIvClearTextButton.isVisible = newEditData != 0L
             buttonGroup.isVisible = newEditData != oldEditData
@@ -128,13 +138,19 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         }
     }
 
-    private fun readSettings() {
-        viewModel.readSettings()
+    private fun readNewSettings() {
+        viewModel.readNewSettings()
     }
 
     private fun subscribeOnSettingsState() {
-        viewModel.getSalaryState().observe(viewLifecycleOwner) { settingsState ->
-            renderSalaryState(settingsState)
+        viewModel.getButtonState().observe(viewLifecycleOwner) { buttonState ->
+            binding.buttonGroup.isVisible = buttonState
+        }
+        viewModel.getSalaryState().observe(viewLifecycleOwner) { salary ->
+            renderSalary(salary)
+        }
+        viewModel.getOnlyWithSalaryState().observe(viewLifecycleOwner) { onlyWithSalary ->
+            renderOnlyWithSalary(onlyWithSalary)
         }
         viewModel.getPlaceWorkState().observe(viewLifecycleOwner) { placeWork ->
             renderPlaceWork(placeWork)
@@ -142,16 +158,20 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         viewModel.getIndustryState().observe(viewLifecycleOwner) { industry ->
             renderIndustry(industry)
         }
+
     }
 
     private fun renderEditTextFocusOffTextOff(
         focus: Boolean,
         salary: Long
     ) {
-        with(binding) {
-            if (!focus && salary == 0L) {
-                fsTvHintTitle.setTextColor(MaterialColors.getColor(fsTvHintTitle, R.attr.colorOnSecondary))
-            }
+        if (!focus && salary == 0L) {
+            binding.fsTvHintTitle.setTextColor(
+                MaterialColors.getColor(
+                    binding.fsTvHintTitle,
+                    R.attr.colorOnSecondary
+                )
+            )
         }
     }
 
@@ -159,10 +179,8 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         focus: Boolean,
         salary: Long
     ) {
-        with(binding) {
-            if (focus && salary == 0L) {
-                fsTvHintTitle.setTextColor(resources.getColor(R.color.blue, null))
-            }
+        if (focus && salary == 0L) {
+            binding.fsTvHintTitle.setTextColor(resources.getColor(R.color.blue, null))
         }
     }
 
@@ -170,8 +188,8 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         focus: Boolean,
         salary: Long
     ) {
-        with(binding) {
-            if (focus && salary != 0L) {
+        if (focus && salary != 0L) {
+            with(binding) {
                 fsTvHintTitle.setTextColor(resources.getColor(R.color.blue, null))
                 fsIvClearTextButton.isVisible = true
             }
@@ -182,47 +200,41 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         focus: Boolean,
         salary: Long
     ) {
-        with(binding) {
-            if (!focus && salary != 0L) {
+        if (!focus && salary != 0L) {
+            with(binding) {
                 fsTvHintTitle.setTextColor(resources.getColor(R.color.black, null))
                 fsIvClearTextButton.isVisible = false
             }
         }
     }
 
-    private fun renderSalaryState(settingsState: Settings) {
-        renderSalary(settingsState)
-        renderOnlyWithSalary(settingsState)
-    }
-
-    private fun renderSalary(settingsState: Settings) {
+    private fun renderSalary(salary: Long) {
+        editTextFocus = false
         with(binding) {
-            if (settingsState.salary != 0L) {
-                oldEditData = settingsState.salary
-                fsEtSalary.setText(settingsState.salary.toString())
-                editTextFocus = false
+            if (salary != 0L) {
+                fsEtSalary.setText(salary.toString())
+            } else {
+                fsEtSalary.text = null
             }
+            oldEditData = salary
         }
     }
 
-    private fun renderOnlyWithSalary(settingsState: Settings) {
-        with(binding) {
-            fsCbWithSalaryCheckbox.isChecked = settingsState.onlyWithSalary
-            onlyWithSalary = settingsState.onlyWithSalary
-        }
+    private fun renderOnlyWithSalary(onlyWithSalary: Boolean) {
+        this.onlyWithSalary = onlyWithSalary
+        binding.fsCbWithSalaryCheckbox.isChecked = onlyWithSalary
     }
 
-    private fun renderIndustry(settingsState: Settings) {
+    private fun renderIndustry(industry: Industry) {
         with(binding) {
-            if (settingsState.industry.id.isNotEmpty()) {
+            if (industry.id.isNotEmpty()) {
                 industryValueGroup.isVisible = true
                 industryTitleGroup.isInvisible = true
-                fsTvIndustryValue.text = settingsState.industry.name
+                fsTvIndustryValue.text = industry.name
             } else {
                 industryValueGroup.isInvisible = true
                 industryTitleGroup.isVisible = true
             }
-            fsTvIndustryValue.addTextChangedListener { buttonGroup.isVisible = true }
         }
     }
 
@@ -236,8 +248,6 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 placeWorkValueGroup.isInvisible = true
                 placeWorkTitleGroup.isVisible = true
             }
-            fsTvPlaceWorkValue.addTextChangedListener { buttonGroup.isVisible = true }
         }
     }
-
 }
