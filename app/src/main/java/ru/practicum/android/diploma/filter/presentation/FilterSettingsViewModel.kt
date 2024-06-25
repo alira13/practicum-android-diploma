@@ -3,9 +3,6 @@ package ru.practicum.android.diploma.filter.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
@@ -30,93 +27,88 @@ class FilterSettingsViewModel(
     private val _industryState: MutableLiveData<Industry> = MutableLiveData()
     fun getIndustryState(): LiveData<Industry> = _industryState
 
-    private val _salaryState: MutableLiveData<Settings> = MutableLiveData()
-    fun getSalaryState(): LiveData<Settings> = _salaryState
+    private val _salaryState: MutableLiveData<Long> = MutableLiveData()
+    fun getSalaryState(): LiveData<Long> = _salaryState
 
     private val _onlyWithSalaryState: MutableLiveData<Boolean> = MutableLiveData()
     fun getOnlyWithSalaryState(): LiveData<Boolean> = _onlyWithSalaryState
+
+    private val _buttonState: MutableLiveData<Boolean> = MutableLiveData()
+    fun getButtonState(): LiveData<Boolean> = _buttonState
 
     init {
         readSavedSettings()
     }
 
     fun saveSalary(salary: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            settingsInteractor.write(WriteRequest.WriteSalary(salary))
-        }
+        settingsInteractor.write(WriteRequest.WriteSalary(salary))
     }
 
     fun saveOnlyWithSalary(onlyWithSalary: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary))
-        }
+        settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary))
     }
 
-    fun saveFilterSettings() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val filterSettings = settingsInteractor.read()
-            val filterOn = isSettingsEmpty(filterSettings)
-            settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn))
-        }
+    fun saveFilterOnState() {
+        val filterSettings = settingsInteractor.read()
+        val filterOn = isSettingsEmpty(filterSettings)
+        settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn))
     }
 
     fun returnSavedSettings() {
-        viewModelScope.launch(Dispatchers.IO) {
-            with(settingsInteractor) {
-                write(WriteRequest.WriteCountry(savedCountry))
-                write(WriteRequest.WriteArea(savedArea))
-                write(WriteRequest.WriteIndustry(savedIndustry))
-                write(WriteRequest.WriteSalary(savedSalary))
-                write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
-            }
+        with(settingsInteractor) {
+            write(WriteRequest.WriteCountry(savedCountry))
+            write(WriteRequest.WriteArea(savedArea))
+            write(WriteRequest.WriteIndustry(savedIndustry))
+            write(WriteRequest.WriteSalary(savedSalary))
+            write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
         }
     }
 
-    fun readSavedSettings() {
-        viewModelScope.launch(Dispatchers.IO) {
-            with(settingsInteractor) {
-                savedCountry = read().country
-                savedArea = read().area
-                savedIndustry = read().industry
-                savedSalary = read().salary
-                savedOnlyWithSalary = read().onlyWithSalary
-                _salaryState.postValue(read())
-                _placeWorkState.postValue(formatterPlaceWork(read()))
-                _industryState.postValue(savedIndustry)
-                _onlyWithSalaryState.postValue(savedOnlyWithSalary)
-            }
-        }
+    private fun readSavedSettings() {
+        val savedFilterSettings = settingsInteractor.read()
+        savedCountry = savedFilterSettings.country
+        savedArea = savedFilterSettings.area
+        savedIndustry = savedFilterSettings.industry
+        savedSalary = savedFilterSettings.salary
+        savedOnlyWithSalary = savedFilterSettings.onlyWithSalary
     }
 
     fun readNewSettings() {
-        _placeWorkState.postValue(formatterPlaceWork(settingsInteractor.read()))
-        _industryState.postValue(settingsInteractor.read().industry)
-        _onlyWithSalaryState.postValue(settingsInteractor.read().onlyWithSalary)
-        _salaryState.postValue(settingsInteractor.read())
+        val newFilterSettings = settingsInteractor.read()
+        _placeWorkState.postValue(formatterPlaceWork(newFilterSettings))
+        _industryState.postValue(newFilterSettings.industry)
+        _onlyWithSalaryState.postValue(newFilterSettings.onlyWithSalary)
+        _salaryState.postValue(newFilterSettings.salary)
+        _buttonState.postValue(compareValueSettings(newFilterSettings) && isSettingsEmpty(newFilterSettings))
+    }
+
+    private fun compareValueSettings(newSettings: Settings): Boolean {
+        return !(savedCountry.id != newSettings.country.id &&
+            savedIndustry.id != newSettings.industry.id &&
+            savedSalary != newSettings.salary &&
+            savedOnlyWithSalary != newSettings.onlyWithSalary)
     }
 
     fun resetSettings() {
-        viewModelScope.launch(Dispatchers.IO) {
-            settingsInteractor.clear()
-        }
+        settingsInteractor.clear()
+    }
+
+    fun buttonGroupOn() {
+        _buttonState.postValue(true)
     }
 
     fun clearPlaceWork() {
-        viewModelScope.launch(Dispatchers.IO) {
-            with(settingsInteractor) {
-                write(WriteRequest.WriteCountry(EMPTY_COUNTRY))
-                write(WriteRequest.WriteArea(EMPTY_AREA))
-                _placeWorkState.postValue(formatterPlaceWork(read()))
-            }
+        with(settingsInteractor) {
+            write(WriteRequest.WriteCountry(EMPTY_COUNTRY))
+            write(WriteRequest.WriteArea(EMPTY_AREA))
+            _placeWorkState.postValue(formatterPlaceWork(read()))
         }
     }
 
     fun clearIndustry() {
-        viewModelScope.launch(Dispatchers.IO) {
-            with(settingsInteractor) {
-                write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY))
-                _industryState.postValue(EMPTY_INDUSTRY)
-            }
+        with(settingsInteractor) {
+            write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY))
+            _industryState.postValue(EMPTY_INDUSTRY)
         }
     }
 
