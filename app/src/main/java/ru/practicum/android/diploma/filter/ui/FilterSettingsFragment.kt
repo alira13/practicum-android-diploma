@@ -64,12 +64,10 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 viewModel.clearIndustry()
             }
             fsTvApplyButton.setOnClickListener {
-//                viewModel.saveFilterOnState()
                 findNavController().popBackStack()
             }
             fsTvResetButton.setOnClickListener {
                 viewModel.resetSettings()
-//                readNewSettings()
             }
         }
     }

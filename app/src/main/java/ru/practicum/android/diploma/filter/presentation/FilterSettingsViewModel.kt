@@ -71,6 +71,7 @@ class FilterSettingsViewModel(
                 write(WriteRequest.WriteIndustry(savedIndustry))
                 write(WriteRequest.WriteSalary(savedSalary))
                 write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
+                write(WriteRequest.WriteFilterOn(getFilterOn()))
             }
         }
     }
