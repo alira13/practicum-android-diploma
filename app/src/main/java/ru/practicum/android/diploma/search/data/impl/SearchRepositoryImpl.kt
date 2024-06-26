@@ -57,7 +57,7 @@ class SearchRepositoryImpl(
             options["area"] = areaId
         }
         if (countryId.isNotEmpty()) {
-            options["areas"] = countryId
+            options["area"] = countryId
         }
         if (salary > 0) {
             options["salary"] = salary.toString()
