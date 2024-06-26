@@ -44,6 +44,7 @@ class SearchRepositoryImpl(
     private fun createOptionalFields(request: VacanciesSearchRequest): HashMap<String, String> {
         val industryId: String = request.filterSettings.industry.id
         val onlyWithSalary: Boolean = request.filterSettings.onlyWithSalary
+        val countryId: String = request.filterSettings.country.id
         val areaId: String = request.filterSettings.area.id
         val salary: Long = request.filterSettings.salary
         val options: HashMap<String, String> = HashMap()
@@ -54,6 +55,9 @@ class SearchRepositoryImpl(
         }
         if (areaId.isNotEmpty()) {
             options["area"] = areaId
+        }
+        if (countryId.isNotEmpty()) {
+            options["area"] = countryId
         }
         if (salary > 0) {
             options["salary"] = salary.toString()
