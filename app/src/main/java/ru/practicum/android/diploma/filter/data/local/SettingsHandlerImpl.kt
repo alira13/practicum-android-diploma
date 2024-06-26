@@ -23,7 +23,8 @@ class SettingsHandlerImpl(
                 salary = 0,
                 area = AreaDto("", ""),
                 onlyWithSalary = false,
-                filterOn = false
+                filterOn = false,
+                isRequest = false
             )
         }
     }

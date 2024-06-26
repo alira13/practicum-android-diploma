@@ -8,5 +8,6 @@ data class SettingsDto(
     val area: AreaDto,
     val salary: Long,
     val onlyWithSalary: Boolean,
-    val filterOn: Boolean
+    val filterOn: Boolean,
+    val isRequest: Boolean
 )

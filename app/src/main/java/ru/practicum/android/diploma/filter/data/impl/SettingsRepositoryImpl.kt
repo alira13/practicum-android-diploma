@@ -46,6 +46,11 @@ class SettingsRepositoryImpl(
                 val settingsToWrite = writeFilterOn(writeRequest)
                 settingsHandler.write(settingsToWrite)
             }
+
+            is WriteRequest.WriteIsRequest -> {
+                val settingsToWrite = writeIsRequest(writeRequest)
+                settingsHandler.write(settingsToWrite)
+            }
         }
     }
 
@@ -58,6 +63,7 @@ class SettingsRepositoryImpl(
             salary = settingsDto.salary,
             onlyWithSalary = settingsDto.onlyWithSalary,
             filterOn = settingsDto.filterOn,
+            isRequest = settingsDto.isRequest,
         )
     }
 
@@ -70,6 +76,7 @@ class SettingsRepositoryImpl(
             area = settingsDto.area,
             onlyWithSalary = settingsDto.onlyWithSalary,
             filterOn = settingsDto.filterOn,
+            isRequest = settingsDto.isRequest,
         )
     }
 
@@ -82,6 +89,7 @@ class SettingsRepositoryImpl(
             area = settingsDto.area,
             onlyWithSalary = settingsDto.onlyWithSalary,
             filterOn = settingsDto.filterOn,
+            isRequest = settingsDto.isRequest,
         )
     }
 
@@ -94,6 +102,7 @@ class SettingsRepositoryImpl(
             area = converter.mapArea(writeRequest.area),
             onlyWithSalary = settingsDto.onlyWithSalary,
             filterOn = settingsDto.filterOn,
+            isRequest = settingsDto.isRequest,
         )
     }
 
@@ -106,6 +115,7 @@ class SettingsRepositoryImpl(
             area = settingsDto.area,
             onlyWithSalary = writeRequest.onlyWithSalary,
             filterOn = settingsDto.filterOn,
+            isRequest = settingsDto.isRequest,
         )
     }
 
@@ -118,6 +128,20 @@ class SettingsRepositoryImpl(
             area = settingsDto.area,
             onlyWithSalary = settingsDto.onlyWithSalary,
             filterOn = writeRequest.filterOn,
+            isRequest = settingsDto.isRequest
+        )
+    }
+
+    private fun writeIsRequest(writeRequest: WriteRequest.WriteIsRequest): SettingsDto {
+        val settingsDto = settingsHandler.read()
+        return SettingsDto(
+            industry = settingsDto.industry,
+            country = settingsDto.country,
+            salary = settingsDto.salary,
+            area = settingsDto.area,
+            onlyWithSalary = settingsDto.onlyWithSalary,
+            filterOn = settingsDto.filterOn,
+            isRequest = writeRequest.isRequest
         )
     }
 

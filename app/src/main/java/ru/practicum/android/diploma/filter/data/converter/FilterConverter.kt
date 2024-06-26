@@ -57,7 +57,8 @@ class FilterConverter {
             ),
             salary = dto.salary,
             onlyWithSalary = dto.onlyWithSalary,
-            filterOn = dto.filterOn
+            filterOn = dto.filterOn,
+            isRequest = dto.isRequest
         )
     }
 
