@@ -90,7 +90,7 @@ class FilterSettingsViewModel(
     }
 
     private fun compareValueSettings(newSettings: Settings): Boolean {
-        return savedCountry.id != newSettings.country.id ||
+        return savedArea.id != newSettings.area.id ||
             savedIndustry.id != newSettings.industry.id ||
             savedSalary != newSettings.salary ||
             savedOnlyWithSalary != newSettings.onlyWithSalary
