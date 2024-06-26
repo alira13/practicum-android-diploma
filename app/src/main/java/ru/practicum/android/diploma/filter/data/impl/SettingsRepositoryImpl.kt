@@ -11,46 +11,50 @@ class SettingsRepositoryImpl(
     private val converter: FilterConverter,
     private val settingsHandler: SettingsHandler,
 ) : SettingsRepository {
-    override fun read(): Settings {
-        return converter.mapSettings(settingsHandler.read())
+    override fun read(settingsKey: String): Settings {
+        return converter.mapSettings(settingsHandler.read(settingsKey))
     }
 
-    override fun write(writeRequest: WriteRequest): Boolean {
+    override fun write(writeRequest: WriteRequest, settingsKey: String): Boolean {
         return when (writeRequest) {
             is WriteRequest.WriteIndustry -> {
-                val settingsToWrite = writeIndustry(writeRequest)
-                settingsHandler.write(settingsToWrite)
+                val settingsToWrite = writeIndustry(writeRequest, settingsKey)
+                settingsHandler.write(settingsToWrite, settingsKey)
             }
 
             is WriteRequest.WriteCountry -> {
-                val settingsToWrite = writeCountry(writeRequest)
-                settingsHandler.write(settingsToWrite)
+                val settingsToWrite = writeCountry(writeRequest, settingsKey)
+                settingsHandler.write(settingsToWrite, settingsKey)
             }
 
             is WriteRequest.WriteSalary -> {
-                val settingsToWrite = writeSalary(writeRequest)
-                settingsHandler.write(settingsToWrite)
+                val settingsToWrite = writeSalary(writeRequest, settingsKey)
+                settingsHandler.write(settingsToWrite, settingsKey)
             }
 
             is WriteRequest.WriteArea -> {
-                val settingsToWrite = writeArea(writeRequest)
-                settingsHandler.write(settingsToWrite)
+                val settingsToWrite = writeArea(writeRequest, settingsKey)
+                settingsHandler.write(settingsToWrite, settingsKey)
             }
 
             is WriteRequest.WriteOnlyWithSalary -> {
-                val settingsToWrite = writeOnlyWithSalary(writeRequest)
-                settingsHandler.write(settingsToWrite)
+                val settingsToWrite = writeOnlyWithSalary(writeRequest, settingsKey)
+                settingsHandler.write(settingsToWrite, settingsKey)
             }
 
             is WriteRequest.WriteFilterOn -> {
-                val settingsToWrite = writeFilterOn(writeRequest)
-                settingsHandler.write(settingsToWrite)
+                val settingsToWrite = writeFilterOn(writeRequest, settingsKey)
+                settingsHandler.write(settingsToWrite, settingsKey)
+            }
+
+            is WriteRequest.WriteSettings -> {
+                settingsHandler.write(converter.mapSettings(writeRequest.settings), settingsKey)
             }
         }
     }
 
-    private fun writeIndustry(writeRequest: WriteRequest.WriteIndustry): SettingsDto {
-        val settingsDto = settingsHandler.read()
+    private fun writeIndustry(writeRequest: WriteRequest.WriteIndustry, settingsKey: String): SettingsDto {
+        val settingsDto = settingsHandler.read(settingsKey)
         return SettingsDto(
             industry = converter.mapIndustry(writeRequest.industry),
             country = settingsDto.country,
@@ -61,8 +65,8 @@ class SettingsRepositoryImpl(
         )
     }
 
-    private fun writeCountry(writeRequest: WriteRequest.WriteCountry): SettingsDto {
-        val settingsDto = settingsHandler.read()
+    private fun writeCountry(writeRequest: WriteRequest.WriteCountry, settingsKey: String): SettingsDto {
+        val settingsDto = settingsHandler.read(settingsKey)
         return SettingsDto(
             industry = settingsDto.industry,
             country = converter.mapCountry(writeRequest.country),
@@ -73,8 +77,8 @@ class SettingsRepositoryImpl(
         )
     }
 
-    private fun writeSalary(writeRequest: WriteRequest.WriteSalary): SettingsDto {
-        val settingsDto = settingsHandler.read()
+    private fun writeSalary(writeRequest: WriteRequest.WriteSalary, settingsKey: String): SettingsDto {
+        val settingsDto = settingsHandler.read(settingsKey)
         return SettingsDto(
             industry = settingsDto.industry,
             country = settingsDto.country,
@@ -85,8 +89,8 @@ class SettingsRepositoryImpl(
         )
     }
 
-    private fun writeArea(writeRequest: WriteRequest.WriteArea): SettingsDto {
-        val settingsDto = settingsHandler.read()
+    private fun writeArea(writeRequest: WriteRequest.WriteArea, settingsKey: String): SettingsDto {
+        val settingsDto = settingsHandler.read(settingsKey)
         return SettingsDto(
             industry = settingsDto.industry,
             country = settingsDto.country,
@@ -97,8 +101,8 @@ class SettingsRepositoryImpl(
         )
     }
 
-    private fun writeOnlyWithSalary(writeRequest: WriteRequest.WriteOnlyWithSalary): SettingsDto {
-        val settingsDto = settingsHandler.read()
+    private fun writeOnlyWithSalary(writeRequest: WriteRequest.WriteOnlyWithSalary, settingsKey: String): SettingsDto {
+        val settingsDto = settingsHandler.read(settingsKey)
         return SettingsDto(
             industry = settingsDto.industry,
             country = settingsDto.country,
@@ -109,8 +113,8 @@ class SettingsRepositoryImpl(
         )
     }
 
-    private fun writeFilterOn(writeRequest: WriteRequest.WriteFilterOn): SettingsDto {
-        val settingsDto = settingsHandler.read()
+    private fun writeFilterOn(writeRequest: WriteRequest.WriteFilterOn, settingsKey: String): SettingsDto {
+        val settingsDto = settingsHandler.read(settingsKey)
         return SettingsDto(
             industry = settingsDto.industry,
             country = settingsDto.country,

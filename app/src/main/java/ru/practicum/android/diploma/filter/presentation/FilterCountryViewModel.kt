@@ -32,7 +32,7 @@ class FilterCountryViewModel(
                 region.name
             )
         )
-        settingsInteractor.write(request)
+        settingsInteractor.write(request, SETTINGS_KEY)
     }
 
     private fun getCountyList() {
@@ -48,5 +48,9 @@ class FilterCountryViewModel(
             is FilterResult.Error -> _uiState.value = FilterCountryState.Error
             is FilterResult.Industries -> _uiState.value = FilterCountryState.Error
         }
+    }
+
+    companion object {
+        const val SETTINGS_KEY = "settings key"
     }
 }

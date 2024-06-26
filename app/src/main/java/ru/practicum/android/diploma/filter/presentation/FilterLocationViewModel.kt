@@ -67,14 +67,14 @@ class FilterLocationViewModel(
 
     private fun rewriteFilterItem(item: WriteRequest) {
         viewModelScope.launch(Dispatchers.IO) {
-            settingsInteractor.write(item)
+            settingsInteractor.write(item, SETTINGS_KEY)
             updateFilters()
         }
     }
 
     private fun updateFilters() {
         viewModelScope.launch(Dispatchers.IO) {
-            val settings = settingsInteractor.read()
+            val settings = settingsInteractor.read(SETTINGS_KEY)
             val countryName = settings.country.name
             val item1 = if (countryName.isEmpty()) {
                 FilterItem.Absent
@@ -93,12 +93,13 @@ class FilterLocationViewModel(
     }
 
     private fun setTempValues() {
-        val settings = settingsInteractor.read()
+        val settings = settingsInteractor.read(SETTINGS_KEY)
         tempCountry = settings.country
         tempArea = settings.area
     }
 
     companion object {
         private const val DEFAULT_STRING_VALUE = ""
+        const val SETTINGS_KEY = "settings key"
     }
 }

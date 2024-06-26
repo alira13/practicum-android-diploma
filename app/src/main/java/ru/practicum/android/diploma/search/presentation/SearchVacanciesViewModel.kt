@@ -166,7 +166,7 @@ class SearchVacanciesViewModel(
     }
 
     private fun readSettings(): Settings {
-        val filterSettings = settingsInteractor.read()
+        val filterSettings = settingsInteractor.read(APPLIED_SETTINGS_KEY)
         _filterOnState.value = filterSettings.filterOn
         return filterSettings
     }
@@ -174,5 +174,6 @@ class SearchVacanciesViewModel(
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
         private const val DEFAULT_STRING_VALUE = ""
+        const val APPLIED_SETTINGS_KEY = "applied settings key"
     }
 }

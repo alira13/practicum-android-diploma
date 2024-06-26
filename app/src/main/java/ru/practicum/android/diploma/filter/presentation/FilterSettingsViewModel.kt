@@ -14,11 +14,13 @@ class FilterSettingsViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
-    private var savedCountry = EMPTY_COUNTRY
+    /*private var savedCountry = EMPTY_COUNTRY
     private var savedArea = EMPTY_AREA
     private var savedIndustry = EMPTY_INDUSTRY
     private var savedSalary = 0L
-    private var savedOnlyWithSalary = false
+    private var savedOnlyWithSalary = false*/
+    private lateinit var savedSettings: Settings
+
 
     private val _placeWorkState: MutableLiveData<String> = MutableLiveData()
     fun getPlaceWorkState(): LiveData<String> = _placeWorkState
@@ -40,52 +42,45 @@ class FilterSettingsViewModel(
     }
 
     fun saveSalary(salary: Long) {
-        settingsInteractor.write(WriteRequest.WriteSalary(salary))
+        settingsInteractor.write(WriteRequest.WriteSalary(salary), SETTINGS_KEY)
     }
 
     fun saveOnlyWithSalary(onlyWithSalary: Boolean) {
-        settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary))
+        settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary), SETTINGS_KEY)
     }
 
     fun saveFilterOnState() {
-        val filterSettings = settingsInteractor.read()
+        val filterSettings = settingsInteractor.read(SETTINGS_KEY)
         val filterOn = isSettingsEmpty(filterSettings)
-        settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn))
+        settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn), APPLIED_SETTINGS_KEY)
     }
 
     fun returnSavedSettings() {
         with(settingsInteractor) {
-            write(WriteRequest.WriteCountry(savedCountry))
-            write(WriteRequest.WriteArea(savedArea))
-            write(WriteRequest.WriteIndustry(savedIndustry))
-            write(WriteRequest.WriteSalary(savedSalary))
-            write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
+            write(WriteRequest.WriteCountry(savedSettings.country), SETTINGS_KEY)
+            write(WriteRequest.WriteArea(savedSettings.area), SETTINGS_KEY)
+            write(WriteRequest.WriteIndustry(savedSettings.industry), SETTINGS_KEY)
+            write(WriteRequest.WriteSalary(savedSettings.salary), SETTINGS_KEY)
+            write(WriteRequest.WriteOnlyWithSalary(savedSettings.onlyWithSalary), SETTINGS_KEY)
         }
     }
 
     private fun readSavedSettings() {
-        val savedFilterSettings = settingsInteractor.read()
-        savedCountry = savedFilterSettings.country
-        savedArea = savedFilterSettings.area
-        savedIndustry = savedFilterSettings.industry
-        savedSalary = savedFilterSettings.salary
-        savedOnlyWithSalary = savedFilterSettings.onlyWithSalary
+        savedSettings = settingsInteractor.read(SETTINGS_KEY)
     }
 
     fun readNewSettings() {
-        val newFilterSettings = settingsInteractor.read()
+        val newFilterSettings = settingsInteractor.read(SETTINGS_KEY)
         _placeWorkState.postValue(formatterPlaceWork(newFilterSettings))
         _industryState.postValue(newFilterSettings.industry)
         _onlyWithSalaryState.postValue(newFilterSettings.onlyWithSalary)
         _salaryState.postValue(newFilterSettings.salary)
         _buttonState.postValue(compareValueSettings(newFilterSettings) && isSettingsEmpty(newFilterSettings))
+        settingsInteractor.write(WriteRequest.WriteSettings(newFilterSettings), SETTINGS_KEY)
     }
 
     private fun compareValueSettings(newSettings: Settings): Boolean {
-        return !(savedCountry.id != newSettings.country.id &&
-            savedIndustry.id != newSettings.industry.id &&
-            savedSalary != newSettings.salary &&
-            savedOnlyWithSalary != newSettings.onlyWithSalary)
+        return savedSettings != newSettings
     }
 
     fun resetSettings() {
@@ -98,15 +93,15 @@ class FilterSettingsViewModel(
 
     fun clearPlaceWork() {
         with(settingsInteractor) {
-            write(WriteRequest.WriteCountry(EMPTY_COUNTRY))
-            write(WriteRequest.WriteArea(EMPTY_AREA))
-            _placeWorkState.postValue(formatterPlaceWork(read()))
+            write(WriteRequest.WriteCountry(EMPTY_COUNTRY), SETTINGS_KEY)
+            write(WriteRequest.WriteArea(EMPTY_AREA), SETTINGS_KEY)
+            _placeWorkState.postValue(formatterPlaceWork(read(SETTINGS_KEY)))
         }
     }
 
     fun clearIndustry() {
         with(settingsInteractor) {
-            write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY))
+            write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY), SETTINGS_KEY)
             _industryState.postValue(EMPTY_INDUSTRY)
         }
     }
@@ -140,5 +135,7 @@ class FilterSettingsViewModel(
         val EMPTY_INDUSTRY = Industry(EMPTY_VALUE, EMPTY_VALUE)
         val EMPTY_AREA = Area(EMPTY_VALUE, EMPTY_VALUE, EMPTY_VALUE)
         val EMPTY_COUNTRY = Country(EMPTY_VALUE, EMPTY_VALUE)
+        const val SETTINGS_KEY = "settings key"
+        const val APPLIED_SETTINGS_KEY = "applied settings key"
     }
 }

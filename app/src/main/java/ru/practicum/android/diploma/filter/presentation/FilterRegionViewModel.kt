@@ -70,7 +70,7 @@ class FilterRegionViewModel(
     }
 
     private fun applySettings(regions: List<Region>) {
-        settings = settingsInteractor.read()
+        settings = settingsInteractor.read(SETTINGS_KEY)
         getAllAreas(regions)
         when {
             settings == null -> getAllAreas(regions)
@@ -153,11 +153,12 @@ class FilterRegionViewModel(
 
     fun saveSettings(area: Area) {
         val region = currentRegions.filter { region -> region.id == area.parentId }.first()
-        settingsInteractor.write(WriteRequest.WriteCountry(Country(region.id, region.name)))
-        settingsInteractor.write(WriteRequest.WriteArea(area))
+        settingsInteractor.write(WriteRequest.WriteCountry(Country(region.id, region.name)), SETTINGS_KEY)
+        settingsInteractor.write(WriteRequest.WriteArea(area), SETTINGS_KEY)
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
+        const val SETTINGS_KEY = "settings key"
     }
 }

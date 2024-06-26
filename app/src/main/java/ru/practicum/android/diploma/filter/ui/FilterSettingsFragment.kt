@@ -86,13 +86,13 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    viewModel.returnSavedSettings()
+                    //viewModel.returnSavedSettings()
                     findNavController().popBackStack()
                 }
             }
         )
         binding.backArrowButton.setOnClickListener {
-            viewModel.returnSavedSettings()
+            //viewModel.returnSavedSettings()
             findNavController().popBackStack()
         }
     }
@@ -162,7 +162,6 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         viewModel.getIndustryState().observe(viewLifecycleOwner) { industry ->
             renderIndustry(industry)
         }
-
     }
 
     private fun renderEditTextFocusOffTextOff(

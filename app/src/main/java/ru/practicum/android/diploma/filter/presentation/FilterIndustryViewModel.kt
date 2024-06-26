@@ -67,9 +67,13 @@ class FilterIndustryViewModel(
     fun writeIndustry() {
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
-                settingsInteractor.write(WriteRequest.WriteIndustry(industry))
+                settingsInteractor.write(WriteRequest.WriteIndustry(industry), SETTINGS_KEY)
             }
             writeCompleteState.value = result
         }
+    }
+
+    companion object {
+        const val SETTINGS_KEY = "settings key"
     }
 }
