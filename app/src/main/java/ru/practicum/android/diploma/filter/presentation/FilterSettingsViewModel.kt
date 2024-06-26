@@ -32,8 +32,11 @@ class FilterSettingsViewModel(
     private val _onlyWithSalaryState: MutableLiveData<Boolean> = MutableLiveData()
     fun getOnlyWithSalaryState(): LiveData<Boolean> = _onlyWithSalaryState
 
-    private val _buttonState: MutableLiveData<Boolean> = MutableLiveData()
-    fun getButtonState(): LiveData<Boolean> = _buttonState
+    private val _applyButtonState: MutableLiveData<Boolean> = MutableLiveData()
+    fun getApplyButtonState(): LiveData<Boolean> = _applyButtonState
+
+    private val _resetButtonState: MutableLiveData<Boolean> = MutableLiveData()
+    fun getResetButtonState(): LiveData<Boolean> = _resetButtonState
 
     init {
         readSavedSettings()
@@ -41,16 +44,20 @@ class FilterSettingsViewModel(
 
     fun saveSalary(salary: Long) {
         settingsInteractor.write(WriteRequest.WriteSalary(salary))
+        setButtonState()
     }
 
     fun saveOnlyWithSalary(onlyWithSalary: Boolean) {
         settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary))
+        _onlyWithSalaryState.postValue(onlyWithSalary)
+        setButtonState()
     }
 
-    fun saveFilterOnState() {
-        val filterSettings = settingsInteractor.read()
-        val filterOn = isSettingsEmpty(filterSettings)
+    private fun setButtonState() {
+        val filterOn = getFilterOn()
         settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn))
+        _resetButtonState.postValue(filterOn)
+        _applyButtonState.postValue(compareValueSettings(settingsInteractor.read()))
     }
 
     fun returnSavedSettings() {
@@ -78,22 +85,20 @@ class FilterSettingsViewModel(
         _industryState.postValue(newFilterSettings.industry)
         _onlyWithSalaryState.postValue(newFilterSettings.onlyWithSalary)
         _salaryState.postValue(newFilterSettings.salary)
-        _buttonState.postValue(compareValueSettings(newFilterSettings) && isSettingsEmpty(newFilterSettings))
+        _applyButtonState.postValue(compareValueSettings(newFilterSettings))
+        _resetButtonState.postValue(isSettingsEmpty(newFilterSettings))
     }
 
     private fun compareValueSettings(newSettings: Settings): Boolean {
-        return !(savedCountry.id != newSettings.country.id &&
-            savedIndustry.id != newSettings.industry.id &&
-            savedSalary != newSettings.salary &&
-            savedOnlyWithSalary != newSettings.onlyWithSalary)
+        return savedCountry.id != newSettings.country.id ||
+            savedIndustry.id != newSettings.industry.id ||
+            savedSalary != newSettings.salary ||
+            savedOnlyWithSalary != newSettings.onlyWithSalary
     }
 
     fun resetSettings() {
         settingsInteractor.clear()
-    }
-
-    fun buttonGroupOn() {
-        _buttonState.postValue(true)
+        readNewSettings()
     }
 
     fun clearPlaceWork() {
@@ -102,13 +107,18 @@ class FilterSettingsViewModel(
             write(WriteRequest.WriteArea(EMPTY_AREA))
             _placeWorkState.postValue(formatterPlaceWork(read()))
         }
+        setButtonState()
     }
 
     fun clearIndustry() {
-        with(settingsInteractor) {
-            write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY))
-            _industryState.postValue(EMPTY_INDUSTRY)
-        }
+        settingsInteractor.write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY))
+        _industryState.postValue(EMPTY_INDUSTRY)
+        setButtonState()
+    }
+
+    private fun getFilterOn(): Boolean {
+        val filterSettings = settingsInteractor.read()
+        return isSettingsEmpty(filterSettings)
     }
 
     private fun isSettingsEmpty(filterSettings: Settings): Boolean {
