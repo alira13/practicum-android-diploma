@@ -3,6 +3,9 @@ package ru.practicum.android.diploma.filter.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
@@ -61,12 +64,14 @@ class FilterSettingsViewModel(
     }
 
     fun returnSavedSettings() {
-        with(settingsInteractor) {
-            write(WriteRequest.WriteCountry(savedCountry))
-            write(WriteRequest.WriteArea(savedArea))
-            write(WriteRequest.WriteIndustry(savedIndustry))
-            write(WriteRequest.WriteSalary(savedSalary))
-            write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
+        viewModelScope.launch(Dispatchers.IO) {
+            with(settingsInteractor) {
+                write(WriteRequest.WriteCountry(savedCountry))
+                write(WriteRequest.WriteArea(savedArea))
+                write(WriteRequest.WriteIndustry(savedIndustry))
+                write(WriteRequest.WriteSalary(savedSalary))
+                write(WriteRequest.WriteOnlyWithSalary(savedOnlyWithSalary))
+            }
         }
     }
 
