@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -152,8 +151,6 @@ class SearchVacanciesViewModel(
     }
 
     private fun onFragmentResume() {
-        Log.i("alex", "${settingsInteractor.read(OLD_SETTINGS_KEY)}")
-        Log.i("alex", "${settingsInteractor.read(NEW_SETTINGS_KEY)}")
         val filterUpdated = updateFilterSettings()
         if (filterUpdated && lastSearchRequest.isNotEmpty()) {
             resetSearchParams(lastSearchRequest)

@@ -39,6 +39,7 @@ class FilterSettingsViewModel(
     fun getResetButtonState(): LiveData<Boolean> = _resetButtonState
 
     init {
+        rewriteSettingsNewToOld()
         readSavedSettings()
     }
 
@@ -59,10 +60,6 @@ class FilterSettingsViewModel(
         _resetButtonState.postValue(filterOn)
         _applyButtonState.postValue(compareValueSettings(settingsInteractor.read(NEW_SETTINGS_KEY)))
     }
-
-//    fun setIsRequest(isRequest: Boolean) {
-//        settingsInteractor.write(WriteRequest.WriteIsRequest(isRequest))
-//    }
 
     private fun readSavedSettings() {
         val savedFilterSettings = settingsInteractor.read(OLD_SETTINGS_KEY)
@@ -108,6 +105,11 @@ class FilterSettingsViewModel(
         settingsInteractor.write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY), NEW_SETTINGS_KEY)
         _industryState.postValue(EMPTY_INDUSTRY)
         setButtonState()
+    }
+
+    private fun rewriteSettingsNewToOld() {
+        val previousSettindg = settingsInteractor.read(NEW_SETTINGS_KEY)
+        settingsInteractor.write(WriteRequest.WriteSettings(previousSettindg), OLD_SETTINGS_KEY)
     }
 
     private fun getFilterOn(): Boolean {

@@ -40,8 +40,4 @@ class SettingsHandlerImpl(
         preferences.edit().remove(settingsKey).apply()
     }
 
-//    companion object {
-//        const val SETTINGS_KEY = "settings key"
-//        const val APPLIED_SETTINGS_KEY = "applied settings key"
-//    }
 }
