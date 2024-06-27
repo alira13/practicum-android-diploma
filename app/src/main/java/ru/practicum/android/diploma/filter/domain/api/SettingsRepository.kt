@@ -4,7 +4,7 @@ import ru.practicum.android.diploma.filter.domain.models.Settings
 import ru.practicum.android.diploma.filter.domain.models.WriteRequest
 
 interface SettingsRepository {
-    fun read(): Settings
-    fun write(writeRequest: WriteRequest): Boolean
-    fun clear()
+    fun read(settingsKey: String): Settings
+    fun write(writeRequest: WriteRequest, settingsKey: String): Boolean
+    fun clear(settingsKey: String)
 }

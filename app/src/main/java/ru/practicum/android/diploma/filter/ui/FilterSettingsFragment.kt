@@ -64,7 +64,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 viewModel.clearIndustry()
             }
             fsTvApplyButton.setOnClickListener {
-                viewModel.setIsRequest(true)
+//                viewModel.setIsRequest(true)
                 findNavController().popBackStack()
             }
             fsTvResetButton.setOnClickListener {
@@ -79,13 +79,13 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    viewModel.setIsRequest(false)
+//                    viewModel.setIsRequest(false)
                     findNavController().popBackStack()
                 }
             }
         )
         binding.backArrowButton.setOnClickListener {
-            viewModel.setIsRequest(false)
+//            viewModel.setIsRequest(false)
             findNavController().popBackStack()
         }
     }

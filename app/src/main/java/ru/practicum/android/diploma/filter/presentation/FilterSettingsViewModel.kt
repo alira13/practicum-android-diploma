@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,30 +43,29 @@ class FilterSettingsViewModel(
     }
 
     fun saveSalary(salary: Long) {
-        settingsInteractor.write(WriteRequest.WriteSalary(salary))
+        settingsInteractor.write(WriteRequest.WriteSalary(salary), NEW_SETTINGS_KEY)
         setButtonState()
     }
 
     fun saveOnlyWithSalary(onlyWithSalary: Boolean) {
-        settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary))
+        settingsInteractor.write(WriteRequest.WriteOnlyWithSalary(onlyWithSalary), NEW_SETTINGS_KEY)
         _onlyWithSalaryState.postValue(onlyWithSalary)
         setButtonState()
     }
 
     private fun setButtonState() {
         val filterOn = getFilterOn()
-        Log.i("alex", "$filterOn")
-        settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn))
+        settingsInteractor.write(WriteRequest.WriteFilterOn(filterOn), NEW_SETTINGS_KEY)
         _resetButtonState.postValue(filterOn)
-        _applyButtonState.postValue(compareValueSettings(settingsInteractor.read()))
+        _applyButtonState.postValue(compareValueSettings(settingsInteractor.read(NEW_SETTINGS_KEY)))
     }
 
-    fun setIsRequest(isRequest: Boolean) {
-        settingsInteractor.write(WriteRequest.WriteIsRequest(isRequest))
-    }
+//    fun setIsRequest(isRequest: Boolean) {
+//        settingsInteractor.write(WriteRequest.WriteIsRequest(isRequest))
+//    }
 
     private fun readSavedSettings() {
-        val savedFilterSettings = settingsInteractor.read()
+        val savedFilterSettings = settingsInteractor.read(OLD_SETTINGS_KEY)
         savedCountry = savedFilterSettings.country
         savedArea = savedFilterSettings.area
         savedIndustry = savedFilterSettings.industry
@@ -76,7 +74,7 @@ class FilterSettingsViewModel(
     }
 
     fun readNewSettings() {
-        val newFilterSettings = settingsInteractor.read()
+        val newFilterSettings = settingsInteractor.read(NEW_SETTINGS_KEY)
         _placeWorkState.postValue(formatterPlaceWork(newFilterSettings))
         _industryState.postValue(newFilterSettings.industry)
         _onlyWithSalaryState.postValue(newFilterSettings.onlyWithSalary)
@@ -87,32 +85,33 @@ class FilterSettingsViewModel(
 
     private fun compareValueSettings(newSettings: Settings): Boolean {
         return savedCountry.id != newSettings.country.id ||
+            savedArea.id != newSettings.area.id ||
             savedIndustry.id != newSettings.industry.id ||
             savedSalary != newSettings.salary ||
             savedOnlyWithSalary != newSettings.onlyWithSalary
     }
 
     fun resetSettings() {
-        settingsInteractor.clear()
+        settingsInteractor.clear(NEW_SETTINGS_KEY)
     }
 
     fun clearPlaceWork() {
         with(settingsInteractor) {
-            write(WriteRequest.WriteCountry(EMPTY_COUNTRY))
-            write(WriteRequest.WriteArea(EMPTY_AREA))
-            _placeWorkState.postValue(formatterPlaceWork(read()))
+            write(WriteRequest.WriteCountry(EMPTY_COUNTRY), NEW_SETTINGS_KEY)
+            write(WriteRequest.WriteArea(EMPTY_AREA), NEW_SETTINGS_KEY)
+            _placeWorkState.postValue(formatterPlaceWork(read(NEW_SETTINGS_KEY)))
         }
         setButtonState()
     }
 
     fun clearIndustry() {
-        settingsInteractor.write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY))
+        settingsInteractor.write(WriteRequest.WriteIndustry(EMPTY_INDUSTRY), NEW_SETTINGS_KEY)
         _industryState.postValue(EMPTY_INDUSTRY)
         setButtonState()
     }
 
     private fun getFilterOn(): Boolean {
-        val filterSettings = settingsInteractor.read()
+        val filterSettings = settingsInteractor.read(NEW_SETTINGS_KEY)
         return isSettingsEmpty(filterSettings)
     }
 
@@ -145,5 +144,7 @@ class FilterSettingsViewModel(
         val EMPTY_INDUSTRY = Industry(EMPTY_VALUE, EMPTY_VALUE)
         val EMPTY_AREA = Area(EMPTY_VALUE, EMPTY_VALUE, EMPTY_VALUE)
         val EMPTY_COUNTRY = Country(EMPTY_VALUE, EMPTY_VALUE)
+        const val OLD_SETTINGS_KEY = "old settings"
+        const val NEW_SETTINGS_KEY = "new settings"
     }
 }

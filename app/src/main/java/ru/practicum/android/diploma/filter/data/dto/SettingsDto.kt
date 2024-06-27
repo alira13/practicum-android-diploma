@@ -9,5 +9,4 @@ data class SettingsDto(
     val salary: Long,
     val onlyWithSalary: Boolean,
     val filterOn: Boolean,
-    val isRequest: Boolean
 )

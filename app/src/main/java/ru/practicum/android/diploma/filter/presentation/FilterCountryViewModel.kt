@@ -7,9 +7,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.api.SettingsInteractor
+import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.Country
 import ru.practicum.android.diploma.filter.domain.models.FilterCountryState
 import ru.practicum.android.diploma.filter.domain.models.FilterResult
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.domain.models.Region
 import ru.practicum.android.diploma.filter.domain.models.WriteRequest
 
@@ -32,7 +34,7 @@ class FilterCountryViewModel(
                 region.name
             )
         )
-        settingsInteractor.write(request)
+        settingsInteractor.write(request, NEW_SETTINGS_KEY)
     }
 
     private fun getCountyList() {
@@ -48,5 +50,9 @@ class FilterCountryViewModel(
             is FilterResult.Error -> _uiState.value = FilterCountryState.Error
             is FilterResult.Industries -> _uiState.value = FilterCountryState.Error
         }
+    }
+
+    companion object {
+        const val NEW_SETTINGS_KEY = "new settings"
     }
 }

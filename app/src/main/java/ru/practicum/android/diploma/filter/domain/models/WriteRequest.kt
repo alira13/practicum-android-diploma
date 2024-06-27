@@ -25,7 +25,7 @@ sealed interface WriteRequest {
         val filterOn: Boolean,
     ) : WriteRequest
 
-    data class WriteIsRequest(
-        val isRequest: Boolean
+    data class WriteSettings(
+        val settings: Settings
     ) : WriteRequest
 }

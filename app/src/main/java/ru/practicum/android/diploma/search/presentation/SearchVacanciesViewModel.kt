@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -151,22 +152,32 @@ class SearchVacanciesViewModel(
     }
 
     private fun onFragmentResume() {
-        val filterUpdated = readIsRequest()
+        Log.i("alex", "${settingsInteractor.read(OLD_SETTINGS_KEY)}")
+        Log.i("alex", "${settingsInteractor.read(NEW_SETTINGS_KEY)}")
+        val filterUpdated = updateFilterSettings()
         if (filterUpdated && lastSearchRequest.isNotEmpty()) {
             resetSearchParams(lastSearchRequest)
             search(false)
         }
     }
 
-    private fun readIsRequest(): Boolean {
-        val filterSettings = settingsInteractor.read()
-        lastFilterSettings = filterSettings
+    private fun updateFilterSettings(): Boolean {
+        val newSettings = readSettings()
+        val condition = newSettings != lastFilterSettings
+        lastFilterSettings = newSettings
+        return condition
+    }
+
+    private fun readSettings(): Settings {
+        val filterSettings = settingsInteractor.read(NEW_SETTINGS_KEY)
         _filterOnState.value = filterSettings.filterOn
-        return filterSettings.isRequest
+        return filterSettings
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
         private const val DEFAULT_STRING_VALUE = ""
+        const val OLD_SETTINGS_KEY = "old settings"
+        const val NEW_SETTINGS_KEY = "new settings"
     }
 }

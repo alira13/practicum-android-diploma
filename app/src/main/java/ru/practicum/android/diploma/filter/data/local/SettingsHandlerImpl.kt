@@ -12,8 +12,8 @@ class SettingsHandlerImpl(
     private val preferences: SharedPreferences,
     private val gson: Gson
 ) : SettingsHandler {
-    override fun read(): SettingsDto {
-        val json = preferences.getString(SETTINGS_KEY, null)
+    override fun read(settingsKey: String): SettingsDto {
+        val json = preferences.getString(settingsKey, null)
         return if (json != null) {
             gson.fromJson(json, SettingsDto::class.java)
         } else {
@@ -21,27 +21,27 @@ class SettingsHandlerImpl(
                 industry = IndustryDto("", ""),
                 country = CountryDto("", ""),
                 salary = 0,
-                area = AreaDto("", ""),
+                area = AreaDto("", "", ""),
                 onlyWithSalary = false,
                 filterOn = false,
-                isRequest = false
             )
         }
     }
 
-    override fun write(settingsDto: SettingsDto): Boolean {
+    override fun write(settingsDto: SettingsDto, settingsKey: String): Boolean {
         val json = gson.toJson(settingsDto)
         preferences.edit()
-            .putString(SETTINGS_KEY, json)
+            .putString(settingsKey, json)
             .apply()
         return true
     }
 
-    override fun clear() {
-        preferences.edit().remove(SETTINGS_KEY).apply()
+    override fun clear(settingsKey: String) {
+        preferences.edit().remove(settingsKey).apply()
     }
 
-    companion object {
-        const val SETTINGS_KEY = "settings key"
-    }
+//    companion object {
+//        const val SETTINGS_KEY = "settings key"
+//        const val APPLIED_SETTINGS_KEY = "applied settings key"
+//    }
 }

@@ -25,7 +25,7 @@ class FilterRepositoryImpl(
         val response = networkClient.doRequest(RegionsRequestDto(options))
         return when (response.resultCode) {
             SUCCESS -> {
-                val resultList = (response as RegionsResponse).regions.map { converter.mapRegion(it) }
+                val resultList = (response as RegionsResponse).regions.map { converter.mapRegionDto(it) }
                 FilterResult.Regions(resultList)
             }
             CONNECTION_ERROR -> {

@@ -7,7 +7,6 @@ data class Settings(
     val salary: Long,
     val onlyWithSalary: Boolean,
     val filterOn: Boolean,
-    val isRequest: Boolean
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

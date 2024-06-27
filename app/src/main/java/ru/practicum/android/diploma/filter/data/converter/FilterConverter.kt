@@ -19,7 +19,7 @@ class FilterConverter {
         )
     }
 
-    fun mapRegion(dto: RegionDto): Region {
+    fun mapRegionDto(dto: RegionDto): Region {
         return Region(
             areas = dto.areas.map { areaDto ->
                 Area(
@@ -40,7 +40,7 @@ class FilterConverter {
         )
     }
 
-    fun mapSettings(dto: SettingsDto): Settings {
+    fun mapSettingsDto(dto: SettingsDto): Settings {
         return Settings(
             industry = Industry(
                 id = dto.industry.id,
@@ -58,7 +58,6 @@ class FilterConverter {
             salary = dto.salary,
             onlyWithSalary = dto.onlyWithSalary,
             filterOn = dto.filterOn,
-            isRequest = dto.isRequest
         )
     }
 
@@ -72,7 +71,29 @@ class FilterConverter {
     fun mapArea(area: Area): AreaDto {
         return AreaDto(
             id = area.id,
-            name = area.name
+            name = area.name,
+            parentId = area.parentId
+        )
+    }
+
+    fun mapSettings(settings: Settings): SettingsDto {
+        return SettingsDto(
+            industry = IndustryDto(
+                id = settings.industry.id,
+                name = settings.industry.name
+            ),
+            country = CountryDto(
+                id = settings.country.id,
+                name = settings.country.name
+            ),
+            area = AreaDto(
+                id = settings.area.id,
+                name = settings.area.name,
+                parentId = settings.country.id
+            ),
+            salary = settings.salary,
+            onlyWithSalary = settings.onlyWithSalary,
+            filterOn = settings.filterOn,
         )
     }
 }
