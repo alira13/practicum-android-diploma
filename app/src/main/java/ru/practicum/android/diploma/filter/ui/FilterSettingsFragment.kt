@@ -20,10 +20,8 @@ import ru.practicum.android.diploma.util.BindingFragment
 
 class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() {
 
-    private var oldEditData = 0L
     private var newEditData = 0L
     private var editTextFocus = false
-    private var onlyWithSalary = false
 
     private val viewModel by viewModel<FilterSettingsViewModel>()
 
@@ -57,26 +55,19 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                 newEditData = 0
             }
             fsCbWithSalaryCheckbox.setOnClickListener {
-                buttonGroup.isVisible = true
-                onlyWithSalary = fsCbWithSalaryCheckbox.isChecked
-                viewModel.saveOnlyWithSalary(onlyWithSalary)
+                viewModel.saveOnlyWithSalary(fsCbWithSalaryCheckbox.isChecked)
             }
             fsIvClearPlaceWorkButton.setOnClickListener {
                 viewModel.clearPlaceWork()
-                buttonGroup.isVisible = true
             }
             fsIvClearIndustryButton.setOnClickListener {
                 viewModel.clearIndustry()
-                buttonGroup.isVisible = true
             }
             fsTvApplyButton.setOnClickListener {
-                viewModel.saveFilterOnState()
                 findNavController().popBackStack()
             }
             fsTvResetButton.setOnClickListener {
                 viewModel.resetSettings()
-                readNewSettings()
-                viewModel.buttonGroupOn()
             }
         }
     }
@@ -122,10 +113,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
 
     private fun salaryChangedListener(newEditData: Long) {
         viewModel.saveSalary(newEditData)
-        with(binding) {
-            fsIvClearTextButton.isVisible = newEditData != 0L
-            buttonGroup.isVisible = newEditData != oldEditData
-        }
+        binding.fsIvClearTextButton.isVisible = newEditData != 0L
         renderEditTextFocusOffTextOff(editTextFocus, newEditData)
         renderEditTextFocusOffTextOn(editTextFocus, newEditData)
     }
@@ -147,8 +135,11 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
     }
 
     private fun subscribeOnSettingsState() {
-        viewModel.getButtonState().observe(viewLifecycleOwner) { buttonState ->
-            binding.buttonGroup.isVisible = buttonState
+        viewModel.getApplyButtonState().observe(viewLifecycleOwner) { applyButtonState ->
+            binding.fsTvApplyButton.isVisible = applyButtonState
+        }
+        viewModel.getResetButtonState().observe(viewLifecycleOwner) { resetButtonState ->
+            binding.fsTvResetButton.isVisible = resetButtonState
         }
         viewModel.getSalaryState().observe(viewLifecycleOwner) { salary ->
             renderSalary(salary)
@@ -220,12 +211,10 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             } else {
                 fsEtSalary.text = null
             }
-            oldEditData = salary
         }
     }
 
     private fun renderOnlyWithSalary(onlyWithSalary: Boolean) {
-        this.onlyWithSalary = onlyWithSalary
         binding.fsCbWithSalaryCheckbox.isChecked = onlyWithSalary
     }
 
