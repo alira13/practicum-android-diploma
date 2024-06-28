@@ -35,4 +35,9 @@
     <dimen name="spacing_224">224dp</dimen>
 
     <dimen name="radius_12dp">12dp</dimen>
+    <dimen name="spacing_300dp">300dp</dimen>
+    <dimen name="spacing_160dp">160dp</dimen>
+    <dimen name="spacing_400dp">400dp</dimen>
+    <dimen name="spacing_800dp">800dp</dimen>
+    <dimen name="spacing_200dp">200dp</dimen>
 </resources>
