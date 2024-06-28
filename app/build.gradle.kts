@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.material.v1120)
     implementation(libs.glide)
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.activity)
     annotationProcessor(libs.compiler)
     // Material Design
     implementation(libs.material.v1110)
