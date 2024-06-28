@@ -54,6 +54,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onStart() {
         super.onStart()
         subscribeOnViewModel()
+        subscribeOnFilterState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onUiEvent(SearchUiEvent.OnFragmentResume)
     }
 
     override fun onStop() {
@@ -67,6 +73,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collect {
                 onUiState(it)
+            }
+        }
+    }
+
+    private fun subscribeOnFilterState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.filterOnState.collect { filterState ->
+                renderFilter(filterState)
             }
         }
     }
@@ -167,8 +181,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun setOnClickListeners() {
         with(binding) {
-            searchFilterBt.setOnClickListener {
-                findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
+            searchFilterOffBt.setOnClickListener {
+                toSettingsFilter()
+            }
+            searchFilterOnBt.setOnClickListener {
+                toSettingsFilter()
             }
             searchClearIv.setOnClickListener {
                 viewModel.onUiEvent(SearchUiEvent.ClearText)
@@ -200,9 +217,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0) {
-                    val pos = (
-                        listRV.layoutManager as LinearLayoutManager
-                        ).findLastVisibleItemPosition()
+                    val pos = (listRV.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacanciesAdapter.itemCount
                     if (pos >= itemsCount - 1) {
                         viewModel.onUiEvent(SearchUiEvent.LastItemReached)
@@ -212,6 +227,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         })
     }
 
+    private fun renderFilter(isFilterOn: Boolean) {
+        with(binding) {
+            searchFilterOnBt.isVisible = isFilterOn
+            searchFilterOffBt.isVisible = !isFilterOn
+        }
+    }
+
     private fun showToast(message: String) {
         val snackBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT)
         snackBar.setTextColor(requireContext().getColor(R.color.white))
@@ -219,20 +241,19 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         val viewSnackbar = snackBar.view.apply {
             setBackgroundResource(R.drawable.background_red_snackbar)
         }
-        val textSnackbar: TextView =
-            viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
+        val textSnackbar: TextView = viewSnackbar.findViewById(com.google.android.material.R.id.snackbar_text)
         textSnackbar.textAlignment = View.TEXT_ALIGNMENT_CENTER
     }
 
     private fun hideKeyboard() {
-        val inputMethodManager =
-            requireContext().getSystemService(
-                Context.INPUT_METHOD_SERVICE
-            ) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow(
-            binding.searchInputEt.windowToken,
-            0
-        )
+        val inputMethodManager = requireContext().getSystemService(
+            Context.INPUT_METHOD_SERVICE
+        ) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(binding.searchInputEt.windowToken, 0)
+    }
+
+    private fun toSettingsFilter() {
+        findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
     }
 
     private fun toVacancyFullInfo(vacancyID: String) {

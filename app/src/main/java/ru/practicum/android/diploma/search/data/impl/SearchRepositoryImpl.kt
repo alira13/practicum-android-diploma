@@ -17,9 +17,7 @@ class SearchRepositoryImpl(
     private val converter: VacancyConverter
 ) : SearchRepository {
     override suspend fun searchVacancies(request: VacanciesSearchRequest): SearchResult {
-        val options: HashMap<String, String> = HashMap()
-        options["text"] = request.searchString
-
+        val options: HashMap<String, String> = createOptionalFields(request)
         val response = networkClient.doRequest(
             VacancySearchRequest(request.page, options)
         )
@@ -43,9 +41,27 @@ class SearchRepositoryImpl(
         }
     }
 
-    companion object {
-        const val INCORRECT_REQUEST = 400
-        const val SUCCESS = 200
-        const val CONNECTION_ERROR = -1
+    private fun createOptionalFields(request: VacanciesSearchRequest): HashMap<String, String> {
+        val industryId: String = request.filterSettings.industry.id
+        val onlyWithSalary: Boolean = request.filterSettings.onlyWithSalary
+        val countryId: String = request.filterSettings.country.id
+        val areaId: String = request.filterSettings.area.id
+        val salary: Long = request.filterSettings.salary
+        val options: HashMap<String, String> = HashMap()
+        options["text"] = request.searchString
+        options["only_with_salary"] = onlyWithSalary.toString()
+        if (industryId.isNotEmpty()) {
+            options["industry"] = industryId
+        }
+        if (areaId.isNotEmpty()) {
+            options["area"] = areaId
+        }
+        if (countryId.isNotEmpty()) {
+            options["area"] = countryId
+        }
+        if (salary > 0) {
+            options["salary"] = salary.toString()
+        }
+        return options
     }
 }

@@ -6,14 +6,16 @@
     <dimen name="text_size_32">32sp</dimen>
 
     <dimen name="item_size_1">1dp</dimen>
+    <dimen name="item_size_2">2dp</dimen>
     <dimen name="item_size_4">4dp</dimen>
     <dimen name="item_size_12">12dp</dimen>
     <dimen name="item_size_16">16dp</dimen>
     <dimen name="item_size_20">20dp</dimen>
     <dimen name="item_size_24">24dp</dimen>
-
     <dimen name="item_size_48">48dp</dimen>
+    <dimen name="item_size_52">52dp</dimen>
     <dimen name="item_size_56">56dp</dimen>
+    <dimen name="item_size_60">60dp</dimen>
     <dimen name="item_size_64">64dp</dimen>
     <dimen name="item_size_92">92dp</dimen>
 
@@ -22,11 +24,15 @@
     <dimen name="spacing_10">10dp</dimen>
     <dimen name="spacing_12">12dp</dimen>
     <dimen name="spacing_16">16dp</dimen>
+    <dimen name="spacing_22">22dp</dimen>
     <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_20">20dp</dimen>
     <dimen name="spacing_32">32dp</dimen>
-    <dimen name="spacing_164dp">164dp</dimen>
+    <dimen name="spacing_36">36dp</dimen>
+    <dimen name="spacing_44">44dp</dimen>
+    <dimen name="spacing_56">56dp</dimen>
+    <dimen name="spacing_164">164dp</dimen>
+    <dimen name="spacing_224">224dp</dimen>
 
     <dimen name="radius_12dp">12dp</dimen>
-    <dimen name="spacing_224dp">224dp</dimen>
-
 </resources>

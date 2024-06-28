@@ -5,11 +5,21 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorAccent">@color/blue</item>
+        <item name="colorSurfaceContainer">@color/grey</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="snackbarStyle">@style/SnackbarStyle</item>
     </style>
 
     <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />
+
+    <style name="SnackbarStyle">
+        <item name="android:padding">@dimen/spacing_4</item>
+        <item name="android:radius">@dimen/radius_12dp</item>
+        <item name="android:background">@drawable/background_red_snackbar</item>
+        <item name="android:layout_marginHorizontal">@dimen/spacing_16</item>
+        <item name="android:layout_marginVertical">@dimen/spacing_16</item>
+    </style>
 
     <style name="BackgroundSearchRequestStyle">
         <item name="android:backgroundTint">@color/grey</item>
