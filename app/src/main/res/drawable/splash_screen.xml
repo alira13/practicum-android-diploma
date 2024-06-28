@@ -8,13 +8,15 @@
         android:gravity="center" />
     <item
         android:width="@dimen/spacing_300dp"
-        android:height="@dimen/item_size_60"
-        android:bottom="@dimen/spacing_160dp"
+        android:height="@dimen/item_size_48"
+        android:bottom="100dp"
         android:drawable="@drawable/splash_screen_name"
         android:gravity="center_horizontal|bottom" />
     <item
-        android:width="@dimen/spacing_200dp"
-        android:height="@dimen/spacing_200dp"
+        android:width="@dimen/spacing_160dp"
+        android:height="@dimen/spacing_32"
         android:drawable="@drawable/splash_screen_logo_yandex_practicum"
-        android:gravity="center_horizontal|bottom" />
+        android:gravity="center_horizontal|bottom"
+        android:bottom="@dimen/item_size_24"
+        />
 </layer-list>
