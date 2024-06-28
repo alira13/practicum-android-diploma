@@ -9,4 +9,6 @@
     <color name="grey_background">#801A1B22</color>
     <color name="item_color">@color/bottom_nav_icon_color</color>
     <color name="hint">#1A1B22</color>
+    <color name="green">#aacb3d</color>
+    <color name="bright_red">#e15537</color>
 </resources>
