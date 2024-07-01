@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/splash_screen_background" />
+    <item
+        android:width="@dimen/spacing_160dp"
+        android:height="@dimen/spacing_160dp"
+        android:drawable="@drawable/splash_screen_logo_diploma"
+        android:gravity="center" />
+    <item
+        android:width="@dimen/spacing_300dp"
+        android:height="@dimen/item_size_48"
+        android:bottom="100dp"
+        android:drawable="@drawable/splash_screen_name"
+        android:gravity="center_horizontal|bottom" />
+    <item
+        android:width="@dimen/spacing_160dp"
+        android:height="@dimen/spacing_32"
+        android:drawable="@drawable/splash_screen_logo_yandex_practicum"
+        android:gravity="center_horizontal|bottom"
+        android:bottom="@dimen/item_size_24"
+        />
+</layer-list>
